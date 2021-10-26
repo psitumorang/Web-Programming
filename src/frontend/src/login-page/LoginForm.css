@@ -1,0 +1,38 @@
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 300px;
+}
+
+.textDiv {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="submit"] {
+    align-self: center;
+    color: #FEFCFB;
+    background-color: #1282A2;
+}
+
+.text {
+    width: 200px;
+    height: 25px;
+}
+
+.LoginForm {
+    border: 0.5px solid rgb(0,31,84);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 500px;
+    width: 500px;
+    justify-content: space-around;
+}
+
+h1 {
+    color: #034078;
+}
