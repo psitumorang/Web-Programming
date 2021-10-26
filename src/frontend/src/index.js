@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import LoginPage from './LoginPage';
+import LoginPage from './login-page/LoginPage';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(

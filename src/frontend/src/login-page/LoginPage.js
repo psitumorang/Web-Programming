@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './LoginPage.css';
 import LoginForm from './LoginForm.js';
 
