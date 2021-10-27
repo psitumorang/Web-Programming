@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import './home-page/home.css';
 
-function homePage() {
+function home() {
   const [userName, setUserName] = useState("");
  
 
