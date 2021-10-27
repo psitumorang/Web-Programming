@@ -22,7 +22,7 @@ input[type="submit"] {
     height: 25px;
 }
 
-.LoginForm {
+.LoginForm, .RegistrationForm {
     border: 0.5px solid rgb(0,31,84);
     border-radius: 5px;
     display: flex;
