@@ -4,15 +4,9 @@ import './LoginPage.css';
 import LoginForm from './LoginForm.js';
 import RegistrationForm from '../registration-page/RegistrationForm.js';
 
-function LoginPage() {
-  const [state, updateState] = useState('/');
+function LoginPage(props) {
+  const { changeLink } = props;
     
-  const changeLink = (link) => {
-      window.history.pushState(null, '', link);
-      updateState(link);
-  };
-    
-  console.log(state);
   return (
     <Router>
       <div className="LoginPage">

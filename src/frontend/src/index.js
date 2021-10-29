@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import LoginPage from './login-page/LoginPage';
+import MainPage from './MainPage';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <LoginPage />
+    <MainPage />
   </React.StrictMode>,
   document.getElementById('root')
 );
