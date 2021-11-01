@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import './home.css';
 
-function Home() {
+function Home(props) {
+  const { changeLink } = props;
+  
   const [userName, setUserName] = useState("");
- 
-
+  
   return (
     <div class="container">
   
