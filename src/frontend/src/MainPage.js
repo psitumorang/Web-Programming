@@ -5,16 +5,16 @@ import Home from './home-page/Home';
 
 function MainPage() {
   const [state, updateState] = useState('/');
-    
+
   const changeLink = (link) => {
-      window.history.pushState(null, '', link);
-      updateState(link);
+    window.history.pushState(null, '', link);
+    updateState(link);
   };
-    
-  console.log(state);
+
   return (
     <Router>
-      {window.location.href.split('/').pop() === '' || window.location.href.split('/').pop() === 'registration' || window.location.href.split('/').pop() === 'invalid' ? <LoginPage changeLink={changeLink}/> : <Home changeLink={changeLink}/>}
+      {window.location.href.split('/').pop() === '' || window.location.href.split('/').pop() === 'registration' || window.location.href.split('/').pop() === 'invalid' ? <LoginPage changeLink={changeLink} /> : <Home changeLink={changeLink} />}
+      {state}
     </Router>
   );
 }

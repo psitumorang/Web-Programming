@@ -1,69 +1,66 @@
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
 import './Home.css';
 
 function Home(props) {
   const { changeLink } = props;
-  
-  const [userName, setUserName] = useState("");
-  
+
   return (
-    <div class="container">
-  
-      <div class="header">
-        <div class="social-media-title">Social Media</div>
-        <div class="profile-picture">
-          <div class="img"></div>
+    <div className="container">
+
+      <div className="header">
+        <div className="social-media-title">Social Media</div>
+        <div className="profile-picture">
+          <div className="img" />
         </div>
-        <div class="username">Hi, username!</div>
+        <div className="username">Hi, username!</div>
       </div>
 
-      <div class="top-navbar">
-        <div class="home-link">Home</div>
-        <div class="profile-link">Profile</div>
+      <div className="top-navbar">
+        <div className="home-link">Home</div>
+        <div className="profile-link">Profile</div>
       </div>
 
-      <div class="main-container">
+      <div className="main-container">
 
-      <div class="side-navbar">
-        <button class="updates">Updates</button>
-        <button class="events">Events</button>
-        <button class="groups">Groups</button>
-        <button class="videos">Videos</button>
-        <button class="photos">Photos</button>
-      </div>
-
-      <div class="main-area">
-
-        <div class="post-area">
-          User can input status update here
-          <div class="text-area"></div>
-          <div class="post-button"></div>
+        <div className="side-navbar">
+          <button type="submit" onClick={() => changeLink('/updates')} className="updates">Updates</button>
+          <button type="submit" className="events">Events</button>
+          <button type="submit" className="groups">Groups</button>
+          <button type="submit" className="videos">Videos</button>
+          <button type="submit" className="photos">Photos</button>
         </div>
 
-        <div class="updates-area">
-          Status updates will be located here
-          <div class="box-1">
-            <div class="poster-picture"></div>
-            <div class="update-text"></div>
-            <div class="reply-button"></div>
+        <div className="main-area">
+
+          <div className="post-area">
+            User can input status update here
+            <div className="text-area" />
+            <div className="post-button" />
           </div>
 
-          <div class="box-2">
-            <div class="poster-picture"></div>
-            <div class="update-text"></div>
-            <div class="reply-button"></div>
+          <div className="updates-area">
+            Status updates will be located here
+            <div className="box-1">
+              <div className="poster-picture" />
+              <div className="update-text" />
+              <div className="reply-button" />
+            </div>
+
+            <div className="box-2">
+              <div className="poster-picture" />
+              <div className="update-text" />
+              <div className="reply-button" />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="live-updates">
-        Live updates
-      </div>
+        <div className="live-updates">
+          Live updates
+        </div>
 
       </div>
-   </div>
-  )
+    </div>
+  );
 }
 
 export default Home;
