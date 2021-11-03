@@ -6,7 +6,7 @@ form {
     height: 300px;
 }
 
-.textDiv {
+label {
     display: flex;
     flex-direction: column;
 }
@@ -20,6 +20,7 @@ input[type="submit"] {
 .text {
     width: 200px;
     height: 25px;
+    
 }
 
 .LoginForm, .RegistrationForm {
