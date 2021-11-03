@@ -6,12 +6,16 @@ cache:
     - node_modules
 jobs:
   include:
-    - stage: Lint, Build
+    - stage: Lint, Test, Build
     - name: Lint
       script:
         - cd src/frontend
         - npm install
         - npm run lint
+    - name: Test
+      script:
+        - npm install
+        - npm test -- --coverage
     - name: Build
       script:
         - cd src/frontend
