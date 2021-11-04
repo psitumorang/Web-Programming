@@ -1,0 +1,34 @@
+USE db1;
+
+INSERT INTO user_lst (user_id, user_name, user_password, registration_date)
+VALUES (1, 'stacey', 'password', STR_TO_DATE('11-04-2021', '%m-%d-%Y')); 
+
+INSERT INTO user_lst (user_id, user_name, user_password, registration_date)
+VALUES (2, 'courtney', 'password123', STR_TO_DATE('11-04-2021', '%m-%d-%Y')); 
+
+INSERT INTO profile_lst (user_id, first_name, last_name, biography)
+VALUES (1, 'stacey', 'shapiro', "Hi! I'm Stacy! I'm an Eat, Pray, Love kind of gal but also like a bit of quantum physics on the side.");
+
+INSERT INTO profile_lst (user_id, first_name, last_name, biography)
+VALUES (2, 'courtney', 'griffin', "Hi! I'm Stacy's BFF.");
+
+INSERT INTO group_lst (group_id, group_name, group_creator, group_description, is_public)
+VALUES (1, 'Fancy Recipes', 1, 'This group is for those who love to cook and would like to share their original recipes to the rest of the world.', 1);
+
+INSERT INTO post_lst (post_id, post_group, posting_user, caption, is_hidden)
+VALUES (1, 1, 1, 'I just made this apple pie and mixed a little bit of rum in it!', 0);
+
+INSERT INTO post_comments (comment_id, post_id, user_id, comment_txt)
+VALUES (1, 1, 2, "OMG Stacey, I can't believe you did that!");
+
+INSERT INTO group_topics (group_id, group_topic)
+VALUES (1, 'Cooking');
+
+INSERT INTO group_topics (group_id, group_topic)
+VALUES (1, 'Recipes');
+
+INSERT INTO group_admins (group_id, admin_id)
+VALUES (1, 1);
+
+INSERT INTO group_members (group_id, member_id)
+VALUES (1, 1), (1, 2);
