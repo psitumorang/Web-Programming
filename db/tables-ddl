@@ -1,0 +1,84 @@
+CREATE DATABASE db1;
+USE db1;
+
+CREATE TABLE user_lst (
+	user_id INT NOT NULL,
+  user_name VARCHAR(25) NOT NULL,
+  user_password VARCHAR(50) NOT NULL,
+  registration_date DATE NOT NULL,
+  PRIMARY KEY (user_id)
+);
+
+CREATE TABLE profile_lst (
+	user_id INT NOT NULL,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  biography LONGTEXT,
+  profile_picture_url LONGTEXT,
+  PRIMARY KEY (user_id),
+  FOREIGN KEY (user_id) REFERENCES user_lst(user_id)
+);
+
+CREATE TABLE post_lst (
+	post_id INT NOT NULL,
+  post_group INT NOT NULL,
+  posting_user INT NOT NULL,
+  caption LONGTEXT NOT NULL,
+  photourl LONGTEXT,
+  is_hidden BOOLEAN NOT NULL,
+  PRIMARY KEY (post_id),
+  FOREIGN KEY (post_group) REFERENCES group_lst(group_id),
+  FOREIGN KEY (posting_user) REFERENCES user_lst(user_id)
+);
+
+CREATE TABLE post_comments (
+	comment_id INT NOT NULL,
+  post_id INT NOT NULL,
+  user_id INT NOT NULL,
+  comment_txt LONGTEXT NOT NULL,
+  PRIMARY KEY (comment_id),
+  FOREIGN KEY (post_id) REFERENCES post_lst(post_id),
+  FOREIGN KEY (user_id) REFERENCES user_lst(user_id)
+);
+
+CREATE TABLE post_flags (
+	post_id INT NOT NULL,
+  flagging_user INT NOT NULL,
+  PRIMARY KEY (post_id, flagging_user),
+  FOREIGN KEY (post_id) REFERENCES post_lst(post_id),
+  FOREIGN KEY (flagging_user) REFERENCES user_lst(user_id)
+);
+
+CREATE TABLE group_lst (
+	group_id INT NOT NULL,
+  group_name VARCHAR(100) NOT NULL,
+  group_creator INT NOT NULL,
+  group_description LONGTEXT,
+  photourl LONGTEXT,
+  is_public BOOLEAN NOT NULL,
+  PRIMARY KEY (group_id),
+  FOREIGN KEY (group_creator) REFERENCES user_lst(user_id)
+);
+
+CREATE TABLE group_topics (
+	group_id INT NOT NULL,
+  group_topic VARCHAR(50),
+  PRIMARY KEY (group_id, group_topic),
+  FOREIGN KEY (group_id) REFERENCES group_lst(group_id)
+);
+
+CREATE TABLE group_admins (
+	group_id INT NOT NULL,
+  admin_id INT NOT NULL,
+  PRIMARY KEY (group_id, admin_id),
+  FOREIGN KEY (group_id) REFERENCES group_lst(group_id),
+  FOREIGN KEY (admin_id) REFERENCES user_lst(user_id)
+);
+
+CREATE TABLE group_members (
+	group_id INT NOT NULL,
+  member_id INT NOT NULL,
+  PRIMARY KEY (group_id, member_id),
+  FOREIGN KEY (group_id) REFERENCES group_lst(group_id),
+  FOREIGN KEY (member_id) REFERENCES user_lst(user_id)
+);
