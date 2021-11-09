@@ -22,10 +22,10 @@ function LoginForm(props) {
       </div>
       <p>
         Not a user?
-        <Link to="/registration" onClick={() => changeLink('/registration')}> Create an account. </Link>
+        <Link id="registrationLink" to="/registration" onClick={() => changeLink('/registration')}> Create an account. </Link>
       </p>
       <Link to="/main" onClick={() => changeLink('/main')}>
-        <input type="submit" value="Login" />
+        <input id="loginButton" type="submit" value="Login" />
       </Link>
     </div>
   );
