@@ -1,0 +1,153 @@
+#cover_space {
+  min-height: 20vh;
+  background-color: rgba(211, 211, 211, 0.2);
+  padding-left: 3vh;
+  padding-top: 3vh;
+  padding-bottom: 3vh;
+  margin-left: 20vw;
+  margin-right: 20vw;
+  text-align: center;
+  font-weight: 600;
+  font-size: 40px;
+}
+
+#main_title {
+  line-height: 180px;
+  height: 180px;
+}
+
+#user_profile_pic {
+  height: 19vh;
+  width: 19vh;
+  background-color: lightblue;
+  border-radius: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: flex;
+  font-weight: 500;
+  float: left;
+}
+
+#nav_button_container {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 20vw;
+  margin-right: 20vw;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+  text-align: center;
+
+}
+
+.nav_button {
+  background-color: lightblue;
+  width: 5vw;
+  color: black;
+  padding-left: 3vw;
+  padding-right: 3vw;
+  padding-top: 3vh;
+  padding-bottom: 3vh;
+  font-weight: 500;
+}
+
+#main_content_container {
+  
+  margin-left: 20vw;
+  margin-right: 20vw;
+}
+
+#key_bio_info {
+  width: 15vw;
+  float: left;
+  
+  padding: 3vh;
+  height: 50%;
+  background-color: rgba(211, 211, 211, 0.2);
+}
+
+#post_container {
+  width: 50%;
+  height: 50%;
+  float: left;
+  background-color: white;
+}
+
+.wall_post {
+  margin-left: 3vh;
+  margin-right: 3vh;
+  margin-bottom: 3vh;
+  background-color: rgba(211, 211, 211, 0.2);
+  width: 37vw;
+  padding-left: 3vh;
+  padding-top: 3vh;
+  padding-right: 3vh;
+  padding-bottom: 2vh;
+
+  display: block;
+}
+
+/**.post_profile_pic_container {
+  height: 50%;
+  float: left;
+  background-color: lightblue;
+  border-radius: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: block;
+}
+
+.post_profile_pic {
+  height: 100%;
+  width: 100%;
+  float: center;
+  background-color: lightblue;
+  border-radius: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: block;
+}
+
+.post_content_container {
+  height: 50%;
+  float: left;
+  display: block;
+} */
+
+.reply_container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post_reply_textbox {
+  border-width: 2px;
+  border-color: grey;
+  border-style: solid;
+  width: 80%;
+  padding: 3px;
+  background-color: white;
+}
+
+.post_reply_button {
+  border-width: 2px;
+  border-color: rgb(157, 200, 214);
+  border-style: solid;
+  width: 15%;
+  padding: 3px;
+  background-color: lightblue;;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

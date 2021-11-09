@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import LoginPage from './login-page/LoginPage';
 import Home from './home-page/Home';
+import ProfilePage from './ProfilePage';
 
 function MainPage() {
   const [state, updateState] = useState('/');
@@ -13,7 +14,14 @@ function MainPage() {
 
   return (
     <Router>
-      {window.location.href.split('/').pop() === '' || window.location.href.split('/').pop() === 'registration' || window.location.href.split('/').pop() === 'invalid' ? <LoginPage changeLink={changeLink} /> : <Home changeLink={changeLink} />}
+      <article>
+        <Route exact path="/" render={() => (<LoginPage changeLink={changeLink} />)} />
+        <Route exact path="/registration" render={() => (<LoginPage changeLink={changeLink} />)} />
+        <Route exact path="/invalid" render={() => (<LoginPage changeLink={changeLink} />)} />
+        <Route exact path="/profile" render={() => (<ProfilePage changeLink={changeLink} />)} />
+        <Route exact path="/home" render={() => (<Home changeLink={changeLink} />)} />
+        <Route exact path="/main" render={() => (<Home changeLink={changeLink} />)} />
+      </article>
       {state}
     </Router>
   );
