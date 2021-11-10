@@ -21,8 +21,17 @@ VALUES (2, 'Wine Lovers', 2, 'This group is for those who enjoy Wine and Wine ta
 INSERT INTO post_lst (post_id, post_group, posting_user, caption, is_hidden)
 VALUES (1, 1, 1, 'I just made this apple pie and mixed a little bit of rum in it!', 0);
 
+INSERT INTO post_lst (post_id, post_group, posting_user, caption, is_hidden)
+VALUES (2, 1, 2, 'Baked this extra fluffy bread today!', 0);
+
+INSERT INTO post_lst (post_id, post_group, posting_user, caption, is_hidden)
+VALUES (3, 2, 2, 'Tried this Malbec the other day. It was smooth!', 0);
+
 INSERT INTO post_comments (comment_id, post_id, user_id, comment_txt)
 VALUES (1, 1, 2, "OMG Stacey, I can't believe you did that!");
+
+INSERT INTO post_comments (comment_id, post_id, user_id, comment_txt)
+VALUES (2, 3, 1, "I tried that wine before! It's delicious!");
 
 INSERT INTO group_topics (group_id, group_topic)
 VALUES (1, 'Cooking');
