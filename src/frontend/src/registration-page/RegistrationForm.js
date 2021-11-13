@@ -34,7 +34,7 @@ function RegistrationForm(props) {
           <input className="text" id="password2" type="password" placeholder="password" />
         </label>
       </div>
-      <input type="submit" value="Create Account" onClick={validatePassword} />
+      <input id="createButton" type="submit" value="Create Account" onClick={validatePassword} />
     </div>
   );
 }
