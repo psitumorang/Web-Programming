@@ -4,21 +4,22 @@ node_js:
 cache:
   directories:
     - node_modules
+
+before_install:
+- cd src/frontend
+
 jobs:
   include:
     - stage: Lint, Test, Build
     - name: Lint
       script:
-        - cd src/frontend
         - npm install
         - npm run lint
     - name: Test
       script:
-        - cd src/frontend
         - npm install
         - npm test -- --coverage
     - name: Build
       script: 
-        - cd src/frontend
         - npm install
         - npm run build
