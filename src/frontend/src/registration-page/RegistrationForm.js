@@ -1,21 +1,56 @@
 import React from 'react';
 import '../login-page/LoginForm.css';
 
+const { createHash } = require('crypto');
+const database = require('../DatabaseModule');
+
 function RegistrationForm(props) {
   const { changeLink } = props;
 
   const validatePassword = () => {
     if (document.getElementById('password1').value !== document.getElementById('password2').value) {
       changeLink('/registration/invalid');
-    } else {
-      changeLink('/main');
+      return false;
     }
+    return true;
+  };
+
+  const createAccount = async () => {
+    if (!validatePassword()) {
+      return;
+    }
+    // eslint-disable-next-line
+    console.log('valid password');
+
+    // username is not taken, we can create the account and empty profile!
+    const newUser = {
+      user_name: document.getElementById('username').value,
+      user_password: createHash('sha256').update(document.getElementById('password1').value).digest('hex'),
+    };
+
+    const response = await database.createUser(newUser);
+    // eslint-disable-next-line
+    console.log(response);
+    if (response.err === undefined) {
+      changeLink('/');
+    } else {
+      changeLink('/registration/user');
+    }
+  };
+
+  const renderWarnings = () => {
+    if (window.location.href.split('/').pop() === 'invalid') {
+      return (<p>Password confirmation does not match password.</p>);
+    } if (window.location.href.split('/').pop() === 'user') {
+      return (<p>This username has already been taken.</p>);
+    }
+    return null;
   };
 
   return (
     <div className="RegistrationForm">
       <h1>Welcome!</h1>
-      {(window.location.href.split('/').pop() !== 'invalid') ? null : <p>Password confirmation does not match password.</p>}
+      {renderWarnings()}
       <div className="textDiv" id="usernameDiv">
         <label htmlFor="username">
           Username:
@@ -34,7 +69,7 @@ function RegistrationForm(props) {
           <input className="text" id="password2" type="password" placeholder="password" />
         </label>
       </div>
-      <input id="createButton" type="submit" value="Create Account" onClick={validatePassword} />
+      <input id="createButton" type="submit" value="Create Account" onClick={createAccount} />
     </div>
   );
 }
