@@ -1,42 +1,8 @@
 import React from 'react';
 import '../login-page/LoginForm.css';
 
-const { createHash } = require('crypto');
-const database = require('../DatabaseModule');
-
 function RegistrationForm(props) {
   const { changeLink } = props;
-
-  const validatePassword = () => {
-    if (document.getElementById('password1').value !== document.getElementById('password2').value) {
-      changeLink('/registration/invalid');
-      return false;
-    }
-    return true;
-  };
-
-  const createAccount = async () => {
-    if (!validatePassword()) {
-      return;
-    }
-    // eslint-disable-next-line
-    console.log('valid password');
-
-    // username is not taken, we can create the account and empty profile!
-    const newUser = {
-      user_name: document.getElementById('username').value,
-      user_password: createHash('sha256').update(document.getElementById('password1').value).digest('hex'),
-    };
-
-    const response = await database.createUser(newUser);
-    // eslint-disable-next-line
-    console.log(response);
-    if (response.err === undefined) {
-      changeLink('/');
-    } else {
-      changeLink('/registration/user');
-    }
-  };
 
   const renderWarnings = () => {
     if (window.location.href.split('/').pop() === 'invalid') {
@@ -69,7 +35,7 @@ function RegistrationForm(props) {
           <input className="text" id="password2" type="password" placeholder="password" />
         </label>
       </div>
-      <input id="createButton" type="submit" value="Create Account" onClick={createAccount} />
+      <input id="createButton" type="submit" value="Create Account" onClick={() => createAccount(changeLink, document.getElementById('username').value, document.getElementById('password1').value, document.getElementById('password2').value)} />
     </div>
   );
 }

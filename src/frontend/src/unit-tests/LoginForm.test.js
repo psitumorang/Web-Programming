@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import renderer from 'react-test-renderer';
 import { BrowserRouter as Router } from 'react-router-dom';
 import LoginForm from '../login-page/LoginForm';
 
@@ -10,6 +11,10 @@ import LoginForm from '../login-page/LoginForm';
 const changeLink = jest.fn();
 
 describe('fetch and DOM testing with mocking', () => {
+  afterEach(() => {
+    changeLink.mockClear();
+  });
+
   test('change link called when login clicked', async () => {
     render(<Router><LoginForm changeLink={changeLink} /></Router>);
     document.getElementById('loginButton').click();
@@ -22,5 +27,11 @@ describe('fetch and DOM testing with mocking', () => {
     document.getElementById('registrationLink').click();
     expect(changeLink).toBeCalled();
     expect(changeLink.mock.calls[0][0]).toBe('/registration');
+  });
+
+  test('Login page renders correctly', () => {
+    const component = renderer.create(<Router><LoginForm changeLink={changeLink} /></Router>);
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
   });
 });
