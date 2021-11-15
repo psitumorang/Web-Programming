@@ -10,7 +10,7 @@ import Home from '../home-page/Home';
 
 const changeLink = jest.fn();
 
-describe('fetch and DOM testing with mocking', () => {
+describe('Test Home Page UI', () => {
   test('change link called when updates button clicked', async () => {
     render(<Router><Home changeLink={changeLink} /></Router>);
     document.getElementsByClassName('updates')[0].click();

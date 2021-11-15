@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`fetch and DOM testing with mocking Login page renders correctly 1`] = `
+exports[`Test Login Form UI Login page renders correctly 1`] = `
 <div
   className="LoginForm"
 >

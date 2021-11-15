@@ -8,7 +8,7 @@ import RegistrationForm from '../registration-page/RegistrationForm';
  * @jest-environment jsdom
  */
 
-describe('fetch and DOM testing with mocking', () => {
+describe('Test RegistrationForm UI', () => {
   const changeLink = jest.fn();
   test('Registration page renders correctly', () => {
     const component = renderer.create(<RegistrationForm changeLink={changeLink} />);
@@ -22,7 +22,7 @@ const database = require('../DatabaseModule');
 const lib = require('../registration-page/RegistrationModule');
 
 describe('tests RegistrationModule', () => {
-  const changeLink = jest.fn().mockImplementation((i) => console.log(i));
+  const changeLink = jest.fn();
 
   afterEach(() => {
     changeLink.mockClear();

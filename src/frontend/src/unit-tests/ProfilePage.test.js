@@ -10,7 +10,7 @@ import ProfilePage from '../ProfilePage';
 
 const changeLink = jest.fn();
 
-describe('fetch and DOM testing with mocking', () => {
+describe('Test Profile Page UI', () => {
   test('Profile page renders correctly', () => {
     const component = renderer.create(<ProfilePage />);
     const tree = component.toJSON();

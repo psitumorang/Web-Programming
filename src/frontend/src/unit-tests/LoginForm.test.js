@@ -10,7 +10,7 @@ import LoginForm from '../login-page/LoginForm';
 
 const changeLink = jest.fn();
 
-describe('fetch and DOM testing with mocking', () => {
+describe('Test Login Form UI', () => {
   afterEach(() => {
     changeLink.mockClear();
   });

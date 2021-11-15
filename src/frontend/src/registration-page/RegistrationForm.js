@@ -1,6 +1,8 @@
 import React from 'react';
 import '../login-page/LoginForm.css';
 
+const lib = require('./RegistrationModule');
+
 function RegistrationForm(props) {
   const { changeLink } = props;
 
@@ -35,7 +37,7 @@ function RegistrationForm(props) {
           <input className="text" id="password2" type="password" placeholder="password" />
         </label>
       </div>
-      <input id="createButton" type="submit" value="Create Account" onClick={() => createAccount(changeLink, document.getElementById('username').value, document.getElementById('password1').value, document.getElementById('password2').value)} />
+      <input id="createButton" type="submit" value="Create Account" onClick={() => lib.createAccount(changeLink, document.getElementById('username').value, document.getElementById('password1').value, document.getElementById('password2').value)} />
     </div>
   );
 }
