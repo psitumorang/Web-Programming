@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Login Form UI Login page renders correctly 1`] = `
+<div
+  className="LoginForm"
+>
+  <h1>
+    Welcome!
+  </h1>
+  <div
+    className="textDiv"
+    id="usernameDiv"
+  >
+    <label
+      htmlFor="username"
+    >
+      Username:
+      <input
+        className="text"
+        id="username"
+        placeholder="username"
+        type="text"
+      />
+    </label>
+  </div>
+  <div
+    className="textDiv"
+    id="passwordDiv"
+  >
+    <label
+      htmlFor="password"
+    >
+      Password:
+      <input
+        className="text"
+        id="password"
+        placeholder="password"
+        type="password"
+      />
+    </label>
+  </div>
+  <p>
+    Not a user?
+    <a
+      href="/registration"
+      id="registrationLink"
+      onClick={[Function]}
+    >
+       Create an account. 
+    </a>
+  </p>
+  <a
+    href="/main"
+    onClick={[Function]}
+  >
+    <input
+      id="loginButton"
+      type="submit"
+      value="Login"
+    />
+  </a>
+</div>
+`;

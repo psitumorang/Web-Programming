@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test RegistrationForm UI Registration page renders correctly 1`] = `
+<div
+  className="RegistrationForm"
+>
+  <h1>
+    Welcome!
+  </h1>
+  <div
+    className="textDiv"
+    id="usernameDiv"
+  >
+    <label
+      htmlFor="username"
+    >
+      Username:
+      <input
+        className="text"
+        id="username"
+        placeholder="username"
+        type="text"
+      />
+    </label>
+  </div>
+  <div
+    className="textDiv"
+    id="passwordDiv"
+  >
+    <label
+      htmlFor="password1"
+    >
+      Password:
+      <input
+        className="text"
+        id="password1"
+        placeholder="password"
+        type="password"
+      />
+    </label>
+  </div>
+  <div
+    className="textDiv"
+    id="passwordDiv"
+  >
+    <label
+      htmlFor="password2"
+    >
+      Confirm Password:
+      <input
+        className="text"
+        id="password2"
+        placeholder="password"
+        type="password"
+      />
+    </label>
+  </div>
+  <input
+    id="createButton"
+    onClick={[Function]}
+    type="submit"
+    value="Create Account"
+  />
+</div>
+`;

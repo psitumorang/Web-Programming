@@ -1,21 +1,24 @@
 import React from 'react';
 import '../login-page/LoginForm.css';
 
+const lib = require('./RegistrationModule');
+
 function RegistrationForm(props) {
   const { changeLink } = props;
 
-  const validatePassword = () => {
-    if (document.getElementById('password1').value !== document.getElementById('password2').value) {
-      changeLink('/registration/invalid');
-    } else {
-      changeLink('/main');
+  const renderWarnings = () => {
+    if (window.location.href.split('/').pop() === 'invalid') {
+      return (<p>Password confirmation does not match password.</p>);
+    } if (window.location.href.split('/').pop() === 'user') {
+      return (<p>This username has already been taken.</p>);
     }
+    return null;
   };
 
   return (
     <div className="RegistrationForm">
       <h1>Welcome!</h1>
-      {(window.location.href.split('/').pop() !== 'invalid') ? null : <p>Password confirmation does not match password.</p>}
+      {renderWarnings()}
       <div className="textDiv" id="usernameDiv">
         <label htmlFor="username">
           Username:
@@ -34,7 +37,7 @@ function RegistrationForm(props) {
           <input className="text" id="password2" type="password" placeholder="password" />
         </label>
       </div>
-      <input id="createButton" type="submit" value="Create Account" onClick={validatePassword} />
+      <input id="createButton" type="submit" value="Create Account" onClick={() => lib.createAccount(changeLink, document.getElementById('username').value, document.getElementById('password1').value, document.getElementById('password2').value)} />
     </div>
   );
 }
