@@ -41,7 +41,7 @@ describe('tests RegistrationModule', () => {
   });
 
   test('createAccount no errors', async () => {
-    database.createUser.mockResolvedValue({});
+    database.sendPostRequest.mockResolvedValue({});
     await lib.createAccount(changeLink, 'mmclees', '1', '1');
     expect(changeLink.mock.calls.length).toBe(1);
     expect(changeLink.mock.calls[0][0]).toBe('/');
@@ -54,7 +54,7 @@ describe('tests RegistrationModule', () => {
   });
 
   test('createAccount username taken', async () => {
-    database.createUser.mockResolvedValue({ err: 'there was an error' });
+    database.sendPostRequest.mockResolvedValue({ err: 'there was an error' });
     await lib.createAccount(changeLink, 'mmclees', '1', '1');
     expect(changeLink.mock.calls.length).toBe(1);
     expect(changeLink.mock.calls[0][0]).toBe('/registration/user');

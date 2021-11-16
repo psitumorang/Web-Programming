@@ -18,7 +18,7 @@ const createAccount = async (changeLink, username, password1, password2) => {
       user_name: username,
       user_password: createHash('sha256').update(password1).digest('hex'),
     };
-    const response = await database.createUser(newUser);
+    const response = await database.sendPostRequest('http://localhost:8080/registration', newUser);
     if (response.err === undefined) {
       changeLink('/');
     } else {

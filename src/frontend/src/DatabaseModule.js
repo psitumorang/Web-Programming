@@ -1,5 +1,4 @@
-const createUser = async function createUser(body) {
-  const url = 'http://localhost:8080/registration';
+const sendPostRequest = async function sendPostRequest(url, body) {
   try {
     const res = await fetch(url, {
       method: 'POST',
@@ -18,5 +17,5 @@ const createUser = async function createUser(body) {
 };
 
 module.exports = {
-  createUser,
+  sendPostRequest,
 };
