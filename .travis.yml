@@ -15,6 +15,9 @@ jobs:
       script:
         - npm install
         - npm run lint
+        - cd ../backend
+        - npm install
+        - npm run lint
     - name: Test
       script:
         - npm install

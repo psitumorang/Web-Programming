@@ -19,7 +19,7 @@ function LoginPage(props) {
           </div>
         </div>
         <div id="loginFormContainer">
-          {window.location.href.split('/').pop() === '' ? (<LoginForm changeLink={(link) => changeLink(link)} id="loginForm" />) : (<RegistrationForm key="registrationForm" changeLink={(link) => changeLink(link)} id="registrationForm" />) }
+          {window.location.href.split('/').pop() === '' || window.location.href.split('/').pop() === 'error' ? (<LoginForm changeLink={(link) => changeLink(link)} id="loginForm" />) : (<RegistrationForm key="registrationForm" changeLink={(link) => changeLink(link)} id="registrationForm" />) }
         </div>
       </div>
     </Router>

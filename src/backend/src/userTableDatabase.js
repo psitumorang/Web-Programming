@@ -23,22 +23,20 @@ const connect = async () => {
 // add a user
 const addUser = async (db, newUser) => {
   const query = 'INSERT INTO user_lst (user_id , user_name, user_password, registration_date) VALUES(?, ?, ?, STR_TO_DATE(?, "%m-%d-%Y"))';
-    
+
   const verifyQuery = 'SELECT COUNT(*) FROM user_lst WHERE user_name=?';
-    
+
   const date = new Date();
   const params = [newUser.user_id, newUser.user_name,
     newUser.user_password, `${date.getUTCMonth() + 1}-${date.getUTCDate()}-${date.getUTCFullYear()}`];
   try {
     const [verifyRow] = await db.execute(verifyQuery, [newUser.user_name]);
-    console.log(verifyRow[0], verifyRow[0]['COUNT(*)'], typeof verifyRow[0]['COUNT(*)']);
-    if (verifyRow[0]['COUNT(*)'] != 0) {
-        //Another user has the same username!
-        console.log('one of the same');
-        return null;
+    if (verifyRow[0]['COUNT(*)'] !== 0) {
+      // Another user has the same username!
+      return null;
     }
-        
-    const [row] = await db.execute(query, params);
+
+    await db.execute(query, params);
     // eslint-disable-next-line no-console
     console.log(`Created user with id: ${newUser.user_id}`);
     return newUser.user_id;
@@ -67,7 +65,7 @@ const getUsers = async (db) => {
 // get all users with same username
 const getUsersWithName = async (db, name) => {
   try {
-    const query = 'SELECT * FROM user_lst WHERE user_list.user_name=?';
+    const query = 'SELECT * FROM user_lst WHERE user_lst.user_name=?';
     const [rows] = await db.execute(query, [name]);
     // eslint-disable-next-line no-console
     console.log(`Users: ${JSON.stringify(rows)}`);
