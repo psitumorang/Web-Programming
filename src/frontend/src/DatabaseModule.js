@@ -17,6 +17,8 @@ const createUser = async function createUser(body) {
   }
 };
 
+// const getComments
+
 module.exports = {
   createUser,
 };
