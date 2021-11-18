@@ -4,7 +4,7 @@ import '../login-page/LoginForm.css';
 const lib = require('./RegistrationModule');
 
 function RegistrationForm(props) {
-  const { changeLink } = props;
+  const { changeState } = props;
 
   const renderWarnings = () => {
     if (window.location.href.split('/').pop() === 'invalid') {
@@ -37,7 +37,7 @@ function RegistrationForm(props) {
           <input className="text" id="password2" type="password" placeholder="password" />
         </label>
       </div>
-      <input id="createButton" type="submit" value="Create Account" onClick={() => lib.createAccount(changeLink, document.getElementById('username').value, document.getElementById('password1').value, document.getElementById('password2').value)} />
+      <input id="createButton" type="submit" value="Create Account" onClick={() => lib.createAccount(changeState, document.getElementById('username').value, document.getElementById('password1').value, document.getElementById('password2').value)} />
     </div>
   );
 }

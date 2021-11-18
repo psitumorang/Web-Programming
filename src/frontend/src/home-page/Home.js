@@ -2,7 +2,7 @@ import React from 'react';
 import './Home.css';
 
 function Home(props) {
-  const { changeLink } = props;
+  const { changeState } = props;
 
   return (
     <div className="container">
@@ -23,7 +23,7 @@ function Home(props) {
       <div className="main-container">
 
         <div className="side-navbar">
-          <button type="submit" onClick={() => changeLink('/updates')} className="updates">Updates</button>
+          <button type="submit" onClick={() => changeState({ link: '/updates' })} className="updates">Updates</button>
           <button type="submit" className="events">Events</button>
           <button type="submit" className="groups">Groups</button>
           <button type="submit" className="videos">Videos</button>
