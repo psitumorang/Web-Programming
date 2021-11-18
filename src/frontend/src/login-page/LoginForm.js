@@ -5,7 +5,7 @@ import './LoginForm.css';
 const lib = require('./LoginModule');
 
 function LoginForm(props) {
-  const { changeLink } = props;
+  const { changeState } = props;
 
   return (
     <div className="LoginForm">
@@ -25,9 +25,9 @@ function LoginForm(props) {
       </div>
       <p>
         Not a user?
-        <Link id="registrationLink" to="/registration" onClick={() => changeLink('/registration')}> Create an account. </Link>
+        <Link id="registrationLink" to="/registration" onClick={() => changeState({ link: '/registration' })}> Create an account. </Link>
       </p>
-      <Link to="/main" onClick={() => lib.verifyUser(changeLink, document.getElementById('username').value, document.getElementById('password').value)}>
+      <Link to="/main" onClick={() => lib.verifyUser(changeState, document.getElementById('username').value, document.getElementById('password').value)}>
         <input id="loginButton" type="submit" value="Login" />
       </Link>
     </div>

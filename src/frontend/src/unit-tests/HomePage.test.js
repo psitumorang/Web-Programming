@@ -8,18 +8,18 @@ import Home from '../home-page/Home';
  * @jest-environment jsdom
  */
 
-const changeLink = jest.fn();
+const changeState = jest.fn();
 
 describe('Test Home Page UI', () => {
   test('change link called when updates button clicked', async () => {
-    render(<Router><Home changeLink={changeLink} /></Router>);
+    render(<Router><Home changeState={changeState} /></Router>);
     document.getElementsByClassName('updates')[0].click();
-    expect(changeLink).toBeCalled();
-    expect(changeLink.mock.calls[0][0]).toBe('/updates');
+    expect(changeState).toBeCalled();
+    expect(changeState.mock.calls[0][0]).toStrictEqual({link: '/updates'});
   });
 
   test('Home page renders correctly', () => {
-    const component = renderer.create(<Home changeLink={changeLink} />);
+    const component = renderer.create(<Home changeState={changeState} />);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });

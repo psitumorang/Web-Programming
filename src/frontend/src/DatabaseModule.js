@@ -8,6 +8,7 @@ const sendPostRequest = async function sendPostRequest(url, body) {
     })
       .then((response) => response.json())
       .then((result) => result);
+
     return res;
   } catch (err) {
     // eslint-disable-next-line

@@ -8,11 +8,11 @@ import LoginForm from '../login-page/LoginForm';
  * @jest-environment jsdom
  */
 
-const changeLink = jest.fn();
+const changeState = jest.fn();
 
 describe('Test Login Form UI', () => {
   test('Login page renders correctly', () => {
-    const component = renderer.create(<Router><LoginForm changeLink={changeLink} /></Router>);
+    const component = renderer.create(<Router><LoginForm changeState={changeState} /></Router>);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
@@ -24,30 +24,30 @@ const lib = require('../login-page/LoginModule');
 
 describe('Test LoginModule', () => {
   afterEach(() => {
-    changeLink.mockClear();
+    changeState.mockClear();
   });
 
   test('verify user success', async () => {
-    database.sendPostRequest.mockResolvedValue({ user: {} });
-    render(<Router><LoginForm changeLink={changeLink} /></Router>);
-    const response = await lib.verifyUser(changeLink, 'mcleesm', 'abc');
-    expect(changeLink).toBeCalled();
-    expect(changeLink.mock.calls[0][0]).toBe('/main');
+    database.sendPostRequest.mockResolvedValue({ profile: {user_id: 3} });
+    render(<Router><LoginForm changeState={changeState} /></Router>);
+    const response = await lib.verifyUser(changeState, 'mcleesm', 'abc');
+    expect(changeState).toBeCalled();
+    expect(changeState.mock.calls[0][0]).toStrictEqual({link: '/main', userId: 3});
   });
 
   test('verify user wrong username', async () => {
     database.sendPostRequest.mockResolvedValue({ err: 'user does not exist' });
-    render(<Router><LoginForm changeLink={changeLink} /></Router>);
-    const response = await lib.verifyUser(changeLink, 'mcleesm', 'abc');
-    expect(changeLink).toBeCalled();
-    expect(changeLink.mock.calls[0][0]).toBe('/error');
+    render(<Router><LoginForm changeState={changeState} /></Router>);
+    const response = await lib.verifyUser(changeState, 'mcleesm', 'abc');
+    expect(changeState).toBeCalled();
+    expect(changeState.mock.calls[0][0]).toStrictEqual({link: '/error'});
   });
 
   test('verify user wrong password', async () => {
     database.sendPostRequest.mockResolvedValue({ err: 'password incorrect' });
-    render(<Router><LoginForm changeLink={changeLink} /></Router>);
-    const response = await lib.verifyUser(changeLink, 'mcleesm', 'abc');
-    expect(changeLink).toBeCalled();
-    expect(changeLink.mock.calls[0][0]).toBe('/error');
+    render(<Router><LoginForm changeState={changeState} /></Router>);
+    const response = await lib.verifyUser(changeState, 'mcleesm', 'abc');
+    expect(changeState).toBeCalled();
+    expect(changeState.mock.calls[0][0]).toStrictEqual({link: '/error'});
   });
 });
