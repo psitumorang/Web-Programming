@@ -1,5 +1,4 @@
-const createUser = async function createUser(body) {
-  const url = 'http://localhost:8080/registration';
+const sendPostRequest = async function sendPostRequest(url, body) {
   try {
     const res = await fetch(url, {
       method: 'POST',
@@ -9,6 +8,7 @@ const createUser = async function createUser(body) {
     })
       .then((response) => response.json())
       .then((result) => result);
+
     return res;
   } catch (err) {
     // eslint-disable-next-line
@@ -20,5 +20,5 @@ const createUser = async function createUser(body) {
 // const getComments
 
 module.exports = {
-  createUser,
+  sendPostRequest,
 };

@@ -5,7 +5,7 @@ import LoginForm from './LoginForm';
 import RegistrationForm from '../registration-page/RegistrationForm';
 
 function LoginPage(props) {
-  const { changeLink } = props;
+  const { changeState } = props;
 
   return (
     <Router>
@@ -19,7 +19,7 @@ function LoginPage(props) {
           </div>
         </div>
         <div id="loginFormContainer">
-          {window.location.href.split('/').pop() === '' ? (<LoginForm changeLink={(link) => changeLink(link)} id="loginForm" />) : (<RegistrationForm key="registrationForm" changeLink={(link) => changeLink(link)} id="registrationForm" />) }
+          {window.location.href.split('/').pop() === '' || window.location.href.split('/').pop() === 'error' ? (<LoginForm changeState={(input) => changeState(input)} id="loginForm" />) : (<RegistrationForm key="registrationForm" changeState={(input) => changeState(input)} id="registrationForm" />) }
         </div>
       </div>
     </Router>
