@@ -19,7 +19,8 @@ exports[`Test Profile Page UI Profile page renders correctly 1`] = `
       <div
         id="main_title"
       >
-        Stacy Shapiro's FaceTok Page
+        Stacy Shapiro
+        's FaceTok Page
       </div>
     </div>
     <div
@@ -57,25 +58,67 @@ exports[`Test Profile Page UI Profile page renders correctly 1`] = `
       <div
         id="key_bio_info"
       >
-        <b>
-           Stacy's bio 
-        </b>
-        <p>
-          I'm just a wild eat pray love gal who also enjoys a bit of nuclear physics on the side!
-        </p>
-        <p>
-           Penn: Class of 2019 
-        </p>
-        <p>
-           NASA: 2020 - 2021 
-        </p>
-        <p>
-           Chardy's with the gals: FOREVER!! 
-        </p>
+        &lt;div&gt; Hi! I'm Stacy! I'm an Eat, Pray, Love kind of gal but also like a bit of quantum physics on the side.&lt;p/&gt; Went to undergrad at Penn and now out to get #whitegirlwasted with my ladies &lt;/div&gt;
       </div>
       <div
         id="post_container"
       >
+        <div
+          className="wall_post"
+        >
+          <img
+            alt=""
+            className="wall_post_pic"
+            src="whitegalwastedv2.jfif"
+          />
+          <p />
+          <div
+            className="post_caption"
+          >
+            It's a dangerous day to be a Whiteclaw! From Sweetgreen to feeling #mean
+          </div>
+          <div
+            className="post_content_container"
+          >
+            <div>
+              <p />
+              <b
+                className="post_content_name"
+              >
+                Yide Zhao
+              </b>
+              <div>
+                OMG! Stacy I can't believe you did that! You absolute menace
+              </div>
+            </div>
+            <div>
+              <p />
+              <b
+                className="post_content_name"
+              >
+                Professor Fouh
+              </b>
+              <div>
+                Have you seen D'Amelio's latest OOTD? Looks just like it!
+              </div>
+            </div>
+            <p />
+            <div
+              className="reply_container"
+            >
+              <div
+                className="post_reply_textbox"
+              >
+                 Type your reply here...
+              </div>
+              <div
+                className="post_reply_button"
+              >
+                Reply!
+              </div>
+            </div>
+          </div>
+        </div>
         <div
           className="wall_post"
         >
