@@ -17,6 +17,8 @@ const sendPostRequest = async function sendPostRequest(url, body) {
   }
 };
 
+// const getComments
+
 module.exports = {
   sendPostRequest,
 };

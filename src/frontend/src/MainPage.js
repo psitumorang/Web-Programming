@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import LoginPage from './login-page/LoginPage';
 import Home from './home-page/Home';
-import ProfilePage from './ProfilePage';
+import ProfilePage from './profile-page/ProfilePage';
 
 function MainPage() {
   const [state, updateState] = useState({ link: '/', userId: -1 });
