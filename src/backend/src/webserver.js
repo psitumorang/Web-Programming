@@ -9,6 +9,8 @@ webapp.use(cors());
 
 const userLib = require('./userTableDatabase');
 const profileLib = require('./profileTableDatabase');
+const postLib = require('./postTableDatabase');
+const postCommentLib = require('./postCommentsTableDatabase');
 
 const port = 8080;
 
@@ -21,10 +23,14 @@ webapp.use(express.urlencoded({
 
 let userDb;
 let profileDb;
+let postDb;
+let postCommentDb;
 
 webapp.listen(port, async () => {
   userDb = await userLib.connect();
   profileDb = await profileLib.connect();
+  postDb = await postLib.connect();
+  postCommentDb = await postCommentLib.connect();
   // eslint-disable-next-line no-console
   console.log('listening');
 });
@@ -58,6 +64,7 @@ webapp.post('/registration', async (req, res) => {
       });
     }
   } catch (err) {
+    console.log("testing to see if control gets to catch in webserver.js for rego post");
     res.status(404).json({ err: err.message });
   }
 });
@@ -85,6 +92,36 @@ webapp.post('/login', async (req, res) => {
   }
 });
 
+webapp.get('/post/:id', async (req, res) => {
+  // estlint-disable-next-line no-console
+  console.log('retrieve the post list of a user for their profile page');
+  try {
+    const id = req.params.id;
+    // assign to res.status
+
+    const postList = await postLib.getUserPosts(postDb, id);
+    console.log('returning postList from webserver of: ', postList);
+    res.status(200).json(postList);
+  } catch (err) {
+  }
+});
+
+webapp.get('/comment/:id', async (req, res) => {
+  // estlint-disable-next-line no-console
+  console.log('retrieve the comments on a post');
+  try {
+    const id = req.params.id;
+    // assign to res.status
+
+    const commentList = await postCommentLib.getPostComments(postDb, id);
+    console.log('returning comment list from webserver: ', commentList);
+    res.status(200).json(commentList);
+  } catch (err) {
+  }
+});
+
+
 webapp.use((req, res) => {
+  console.log("testing to see if control gets to webapp.use");
   res.status(404);
 });
