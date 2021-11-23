@@ -1,6 +1,6 @@
 import './ProfilePage.css';
 import React, { useEffect, useState } from 'react';
-import { getUserPosts, getProfile } from './ProfileModule';
+import { getUserPosts, getProfile, sendReply } from './ProfileModule';
 // import { getProfile, getUserPosts } from './ProfileModule';
 // import './ProfileModule.js';
 // import '../DatabaseModule';
@@ -11,7 +11,7 @@ import { getUserPosts, getProfile } from './ProfileModule';
 function ProfilePage(props) {
   // dummy profile to help implement component frontend with right schema
   // define states
-  const [userProfile, setUserProfile] = useState({ biography: '', username: 'Stacy Shapiro' });
+  const [userProfile, setUserProfile] = useState({ biography: '', username: 'Stacy Shapiro', user_id: 1 });
   const [userPosts, setUserPosts] = useState([]);
 
   useEffect(async () => {
@@ -28,7 +28,9 @@ function ProfilePage(props) {
 
     // update state
     setUserPosts(postsToSet);
-    setUserProfile(profileToSet);
+    // console.log('about to test setUserProfile,
+    // think I\'m accidentally nesting it in an array', profileToSet);
+    setUserProfile(profileToSet[0]);
   }, []);
 
   useEffect(async () => {
@@ -76,7 +78,7 @@ function ProfilePage(props) {
                 <p />
                 <div className="reply_container">
                   <div className="post_reply_textbox"> Type your reply here...</div>
-                  <div className="post_reply_button">Reply!</div>
+                  <div className="post_reply_button" onClick={() => sendReply(post.post_id, userProfile, 'testcommentinsertion!')} onKeyDown={() => sendReply(post.post_id, userProfile, 'testcommentinsertion!')} role="link" tabIndex={0}>Reply!</div>
                 </div>
               </div>
             </div>

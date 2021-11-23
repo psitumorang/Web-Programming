@@ -120,6 +120,23 @@ webapp.get('/comment/:id', async (req, res) => {
   }
 });
 
+webapp.post('/comment', async (req, res) => {
+  //eslint-disable-next-line no-console
+  console.log('control through webserver.js to post at /comment');
+  try {
+    const commentObj = {
+      post_id: req.body.post_id,
+      user_id: req.body.user_id,
+      comment_txt: req.body.comment_txt,
+    }
+    console.log('and now succesful on comment Obj of ', commentObj);
+    const commentInsert = await postCommentLib.makeNewComment(postCommentDb, commentObj);
+    res.status(200).json(commentInsert);
+
+  } catch (err) {
+  }
+})
+
 webapp.get('/profile/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('retrieve profile information for supplied id.');
