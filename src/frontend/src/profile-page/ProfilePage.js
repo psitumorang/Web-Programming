@@ -1,70 +1,11 @@
 import './ProfilePage.css';
 import React, { useEffect, useState } from 'react';
+// import { getProfile, getUserPosts } from './ProfileModule';
+// import './ProfileModule.js';
 // import '../DatabaseModule';
 // import { ReactHtmlParser } from 'react-html-parser';
-
 const database = require('../DatabaseModule');
-
-/**
-const dummyProfile = () => {
-  changes to API
-  // 1) add profile picture
-  // 2) possible to have posts without pictures
-  // 3) make some profile attributes lists of ids rather than actual entire objects.
-  // 4) Is it the picture URL locally on the client-side, or on the server-side/in the DB?
-  // 5) post on ABC's wall
-  // 6) dummy photo list vs. dummy post list
-  // 7) profiles as one big bundle (harder?) vs.
-  // the profile page making 3-4 discrete calls based on userID to different types of content
-
-  const dummyLikesOnPost = [{ id: '213407fv', username: 'Yide Zhao',
-  password: '2394vbkjs' }, { id: '213dg407fv', username: 'Professor Fouh', password: '2394vbkjs' }];
-  const dummyCommentsOnPost = [{ user: 'Yide Zhao', commentary:
-  'OMG! Stacy I can\'t believe you did that! You absolute menace', id: '5h342' },
-    { user: 'Professor Fouh', commentary: 'Have you seen D\'Amelio\'s latest OOTD? \
-    Looks just like it!', id: '923fvh' }]; // user attribute to be updated later
-
-  const dummyID = '1239872sdfgt34518237';
-  const dummyFriendList = [{ id: '213407fv', username: 'Yide Zhao', password: '2394vbkjs' },
-  { id: '213dg407fv', username: 'Professor Fouh', password: '2394vbkjs' }];
-  const dummyUsername = 'Stacy Shapiro';
-  const dummyPostList = [{
-    picture: 'whitegalwastedv2.jfif',
-    id: '0273kjhf',
-    caption: 'It\'s a dangerous day to be a Whiteclaw! From Sweetgreen to feeling #mean',
-    comments: dummyCommentsOnPost,
-    likes: dummyLikesOnPost,
-  }];
-  const dummyGroupList = []; // to be implemented later
-  const dummyBiographicalInfo = function () {
-    (
-      <div>
-        Hi! I&apos;m Stacy!
-        <p />
-        I&apos;m an Eat,
-        <p />
-        Pray
-      </div>
-    );
-  };
-
-  const dummyPhotoList = [{}]; // to be implemented later
-
-  const dummyNotifications = {};// to be implemented later
-
-  const profileToReturn = {
-    friendlist: dummyFriendList,
-    username: dummyUsername,
-    id: dummyID,
-    postList: dummyPostList,
-    groupList: dummyGroupList,
-    biographicalInfo: dummyBiographicalInfo,
-    photoList: dummyPhotoList,
-    notifications: dummyNotifications,
-  };
-
-  return profileToReturn;
-}; */
+// const profileModules = require('./ProfileModule');
 
 // get comments for a post
 const getPostsComments = async (posts) => {
@@ -87,6 +28,71 @@ const getPostsComments = async (posts) => {
   return postsArray;
 };
 
+const getProfile = async (userId) => {
+  const profile = await database.sendGetRequest('http://localhost:8080/profile/', { id: userId });
+  return profile;
+};
+
+const getNamesFromDB = async (postsToSet) => {
+  // set up array of unique userIds for which to retrieve names from Db
+  const userIdsToRetrieve = [];
+
+  console.log('in get names, postsToSet are: ', postsToSet);
+
+  // loop through and get the userIds of the comment-makers
+  for (let i = 0; i < postsToSet.length; i += 1) {
+    // console.log('in get outerloop names, postsToSet[i].comments are: ', postsToSet[i].comments);
+    for (let j = 0; j < postsToSet[i].comments.length; j += 1) {
+      if (userIdsToRetrieve.indexOf(postsToSet[i].comments[j].user_id) === -1) {
+        userIdsToRetrieve.push(postsToSet[i].comments[j].user_id);
+        // console.log('pushing ', postsToSet[i].comments[j].user_id, 'to userIdsToRetrieve');
+      }
+    }
+  }
+
+  // get the names associated with all the userIds needed on the page
+  // console.log('about to go populate promise container with ', userIdsToRetrieve);
+  const profilePromiseContainer = [];
+  for (let i = 0; i < userIdsToRetrieve.length; i += 1) {
+    const commenterProfile = getProfile(userIdsToRetrieve[i]);
+    // console.log(' about to push ', commenterProfile, ' onto the profilePromiseContainer');
+    profilePromiseContainer.push(commenterProfile);
+  }
+
+  console.log('profilePromiseContainer is ', profilePromiseContainer);
+  const profileFulfilledContainer = await Promise.all(profilePromiseContainer);
+  console.log('profileFulfilledContainer is ', profileFulfilledContainer);
+
+  // taking one level off the array - not sure why it's got an extra nesting?
+  const profilesToReturn = [];
+  for (let i = 0; i < profileFulfilledContainer.length; i += 1) {
+    profilesToReturn.push(profileFulfilledContainer[i][0][0]);
+  }
+
+  // attach the names to each comment
+  const postsToReturn = postsToSet;
+  console.log('profiles to return used to iteratively assign to posts to return is: ', profilesToReturn);
+  console.log('posts and comments to iterate through: ', postsToReturn);
+  console.log('i will iterate this number of times: ', postsToReturn.length);
+  for (let i = 0; i < postsToReturn.length; i += 1) {
+    console.log('For i of ', i, ' will iterate ', postsToReturn[i].comments.length, ' times');
+    for (let j = 0; j < postsToReturn[i].comments.length; j += 1) {
+      // const index = profilesToReturn.userId.indexOf(postsToReturn[i][j].user_id);
+      const idToFind = postsToReturn[i].comments[j].user_id;
+      const index = profilesToReturn.map((profile) => (profile.user_id)).indexOf(idToFind);
+      const firstName = profilesToReturn[index].first_name;
+      const lastName = profilesToReturn[index].last_name;
+      console.log(firstName, lastName);
+      postsToReturn[i].comments[j].name = `${firstName} ${lastName}`;
+      // console.log('just assigned sally at postsToReturn[i].comments[j] of
+      // ', postsToReturn[i].comments[j]);
+    }
+  }
+
+  console.log('posts inc profiles ToReturn is ', postsToReturn);
+  return postsToReturn;
+};
+
 // get posts to display and their associated comments
 const getUserPosts = async (userId) => {
   // get posts
@@ -94,12 +100,12 @@ const getUserPosts = async (userId) => {
 
   // get comments
   const postsArray = await getPostsComments(userPosts);
-  return postsArray;
-};
 
-const getProfile = async (userId) => {
-  const profile = await database.sendGetRequest('http://localhost:8080/post/', { id: userId });
-  return profile;
+  // get / attach the names to each comment
+  console.log('about to hop into getNamesFromDB with postsArray of: ', postsArray);
+  const postsArrayWithNames = await getNamesFromDB(postsArray);
+
+  return postsArrayWithNames;
 };
 
 function ProfilePage(props) {
@@ -107,22 +113,18 @@ function ProfilePage(props) {
   // define states
   const [userProfile, setUserProfile] = useState({ biography: '', username: 'Stacy Shapiro' });
   const [userPosts, setUserPosts] = useState([]);
-  // useState(getUserPosts());
-
-  // when use .then vs. async/await. How to solve this problem?
-
-  console.log('userPosts state variable: ', userPosts);
-  console.log('props variable: ', props);
 
   useEffect(async () => {
     // extract id from props
     console.log('props is: ', props);
     const { userId } = props.state;
 
+    const dummyId = 9;
+    console.log(userId);
+
     // call backend for content linked to userId
-    const postsToSet = await getUserPosts(userId);
-    const profileToSet = await getProfile(userId);
-    console.log('postsToSet in useffect is: ', postsToSet);
+    const postsToSet = await getUserPosts(dummyId);
+    const profileToSet = await getProfile(dummyId);
 
     // update state
     setUserPosts(postsToSet);
@@ -154,34 +156,31 @@ function ProfilePage(props) {
           {userProfile.biography}
         </div>
         <div id="post_container">
-          {userPosts.map((post) => {
-            console.log('printing post in render: ', post);
-            return (
-              <div className="wall_post">
-                <img className="wall_post_pic" src={post.photourl} alt="" />
-                <p />
-                <div className="post_caption">
-                  {post.caption}
-                </div>
-                <div className="post_content_container">
-                  { post.comments.map((comment) => (
+          {userPosts.map((post) => (
+            <div className="wall_post">
+              <img className="wall_post_pic" src={post.photourl} alt="" />
+              <p />
+              <div className="post_caption">
+                {post.caption}
+              </div>
+              <div className="post_content_container">
+                { post.comments.map((comment) => (
+                  <div>
+                    <p />
+                    <b className="post_content_name">{comment.name}</b>
                     <div>
-                      <p />
-                      <b className="post_content_name">{comment.user_id}</b>
-                      <div>
-                        {comment.comment_txt}
-                      </div>
+                      {comment.comment_txt}
                     </div>
-                  )) }
-                  <p />
-                  <div className="reply_container">
-                    <div className="post_reply_textbox"> Type your reply here...</div>
-                    <div className="post_reply_button">Reply!</div>
                   </div>
+                )) }
+                <p />
+                <div className="reply_container">
+                  <div className="post_reply_textbox"> Type your reply here...</div>
+                  <div className="post_reply_button">Reply!</div>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
     </div>
