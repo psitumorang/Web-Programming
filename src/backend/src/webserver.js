@@ -93,7 +93,7 @@ webapp.post('/login', async (req, res) => {
 });
 
 webapp.get('/post/:id', async (req, res) => {
-  // estlint-disable-next-line no-console
+  // eslint-disable-next-line no-console
   console.log('retrieve the post list of a user for their profile page');
   try {
     const id = req.params.id;
@@ -107,19 +107,33 @@ webapp.get('/post/:id', async (req, res) => {
 });
 
 webapp.get('/comment/:id', async (req, res) => {
-  // estlint-disable-next-line no-console
+  // eslint-disable-next-line no-console
   console.log('retrieve the comments on a post');
   try {
     const id = req.params.id;
-    // assign to res.status
 
-    const commentList = await postCommentLib.getPostComments(postDb, id);
+    // assign to res.status
+    const commentList = await postCommentLib.getPostComments(postCommentDb, id);
     console.log('returning comment list from webserver: ', commentList);
     res.status(200).json(commentList);
   } catch (err) {
   }
 });
 
+webapp.get('/profile/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('retrieve profile information for supplied id.');
+  try {
+    const id = req.params.id;
+
+    // assign to res.status
+    const profileInfo = await profileLib.getProfileById(profileDb, id);
+    console.log('retrieved (from model, still in controller) profile info: ', profileInfo);
+    res.status(200).json(profileInfo);
+  } catch (err) {
+    console.log(err);
+  }
+})
 
 webapp.use((req, res) => {
   console.log("testing to see if control gets to webapp.use");

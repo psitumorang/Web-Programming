@@ -1,8 +1,15 @@
 import React from 'react';
+// import { Link } from 'react-router-dom';
 import './Home.css';
+
+const clickProfile = (props) => {
+  const url = '/profile';
+  props.changeState({ link: url });
+};
 
 function Home(props) {
   const { changeState } = props;
+  console.log('props object is: ', props);
 
   return (
     <div className="container">
@@ -17,7 +24,7 @@ function Home(props) {
 
       <div className="top-navbar">
         <div className="home-link">Home</div>
-        <div className="profile-link">Profile</div>
+        <div className="profile-link" onClick={() => clickProfile(props)} onKeyDown={() => clickProfile(props)} role="link" tabIndex={0}>Profile</div>
       </div>
 
       <div className="main-container">
