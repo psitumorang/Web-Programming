@@ -100,7 +100,7 @@ function ProfilePage(props) {
                 )) }
                 <p />
                 <div className="reply_container">
-                  <div className="post_reply_textbox"> Type your reply here...</div>
+                  <div className="post_reply_textbox" id={`reply_for_post_${post.post_id}`}> Type your reply here...</div>
                   <div className="post_reply_button" onClick={() => sendReply(post.post_id, userProfile.user_id, 'testcommentinsertion!', updateUserPosts)} onKeyDown={() => sendReply(post.post_id, userProfile.user_id, 'testcommentinsertion!', updateUserPosts)} role="link" tabIndex={0}>Reply!</div>
                 </div>
               </div>
