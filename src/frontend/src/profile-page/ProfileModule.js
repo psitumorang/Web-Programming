@@ -30,8 +30,6 @@ const getNamesFromDB = async (postsToSet) => {
   // set up array of unique userIds for which to retrieve names from Db
   const userIdsToRetrieve = [];
 
-  console.log('in get names, postsToSet are: ', postsToSet);
-
   // loop through and get the userIds of the comment-makers
   for (let i = 0; i < postsToSet.length; i += 1) {
     // console.log('in get outerloop names, postsToSet[i].comments are: ', postsToSet[i].comments);
@@ -52,9 +50,7 @@ const getNamesFromDB = async (postsToSet) => {
     profilePromiseContainer.push(commenterProfile);
   }
 
-  console.log('profilePromiseContainer is ', profilePromiseContainer);
   const profileFulfilledContainer = await Promise.all(profilePromiseContainer);
-  console.log('profileFulfilledContainer is ', profileFulfilledContainer);
 
   // taking one level off the array - not sure why it's got an extra nesting?
   const profilesToReturn = [];
@@ -64,25 +60,19 @@ const getNamesFromDB = async (postsToSet) => {
 
   // attach the names to each comment
   const postsToReturn = postsToSet;
-  console.log('profiles to return used to iteratively assign to posts to return is: ', profilesToReturn);
-  console.log('posts and comments to iterate through: ', postsToReturn);
-  console.log('i will iterate this number of times: ', postsToReturn.length);
   for (let i = 0; i < postsToReturn.length; i += 1) {
-    console.log('For i of ', i, ' will iterate ', postsToReturn[i].comments.length, ' times');
     for (let j = 0; j < postsToReturn[i].comments.length; j += 1) {
       // const index = profilesToReturn.userId.indexOf(postsToReturn[i][j].user_id);
       const idToFind = postsToReturn[i].comments[j].user_id;
       const index = profilesToReturn.map((profile) => (profile.user_id)).indexOf(idToFind);
       const firstName = profilesToReturn[index].first_name;
       const lastName = profilesToReturn[index].last_name;
-      console.log(firstName, lastName);
       postsToReturn[i].comments[j].name = `${firstName} ${lastName}`;
       // console.log('just assigned sally at postsToReturn[i].comments[j] of
       // ', postsToReturn[i].comments[j]);
     }
   }
 
-  console.log('posts inc profiles ToReturn is ', postsToReturn);
   return postsToReturn;
 };
 
@@ -95,7 +85,6 @@ const getUserPosts = async (userId) => {
   const postsArray = await getPostsComments(userPosts);
 
   // get / attach the names to each comment
-  console.log('about to hop into getNamesFromDB with postsArray of: ', postsArray);
   const postsArrayWithNames = await getNamesFromDB(postsArray);
 
   return postsArrayWithNames;
@@ -108,7 +97,6 @@ const sendReply = async (postId, userId, commentTxt, updateUserPosts) => {
     comment_txt: commentTxt,
   };
 
-  console.log('about to callPostRply from ProfileModule with : ', replyBody);
   const callPostReply = await database.sendPostRequest('http://localhost:8080/comment/', replyBody);
 
   updateUserPosts();

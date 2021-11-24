@@ -9,7 +9,6 @@ const clickProfile = (props) => {
 
 function Home(props) {
   const { changeState } = props;
-  console.log('props object is: ', props);
 
   return (
     <div className="container">

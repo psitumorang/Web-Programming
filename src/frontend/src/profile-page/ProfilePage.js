@@ -26,11 +26,9 @@ function ProfilePage(props) {
 
   const updateUserPosts = async () => {
     // extract id from props
-    console.log('props is: ', props);
-    const { userId } = props.state;
+    // const { userId } = props.state;
 
     const dummyId = 9;
-    console.log(userId);
 
     // call backend for content linked to userId
     const postsToSet = await getUserPosts(dummyId);
@@ -40,16 +38,15 @@ function ProfilePage(props) {
     setUserPosts(postsToSet);
     // don't know why I need to index it at all let alone double, gets the right data structure
     setUserProfile(profileToSet[0][0]);
-    console.log('just reset the userProfile with the actual db pulled value, with: ', profileToSet[0][0]);
   };
 
   useEffect(() => {
     updateUserPosts();
   }, []);
 
-  useEffect(async () => {
-    console.log('state updated, userPosts is now: ', userPosts);
-  }, [userPosts]);
+  // useEffect(async () => {
+  //  console.log('state updated, userPosts is now: ', userPosts);
+  // }, [userPosts]);
 
   return (
     <div className="App">

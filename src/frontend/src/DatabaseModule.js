@@ -19,7 +19,6 @@ const sendPostRequest = async function sendPostRequest(url, body) {
 
 const sendGetRequest = async function sendGetRequest(url, params) {
   try {
-    console.log('in db module, sendgetRequest, with url and params: ', url, ' ', params);
     const fullURL = url + JSON.stringify(params.id);
     const res = await fetch(fullURL, {
       method: 'GET',
@@ -33,7 +32,6 @@ const sendGetRequest = async function sendGetRequest(url, params) {
   } catch (err) {
     // eslint-disable-next-line
     console.log('ERROR getting posts');
-    console.log(err.message);
     return null;
   }
 };

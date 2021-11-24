@@ -5,7 +5,6 @@ import LoginForm from './LoginForm';
 import RegistrationForm from '../registration-page/RegistrationForm';
 
 function LoginPage(props) {
-  console.log('console log props:', props);
   const { changeState } = props;
 
   return (
