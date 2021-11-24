@@ -87,6 +87,22 @@
   display: block;
 }
 
+.main_post {
+  font-size: 20px;
+}
+
+.post_caption {
+  font-size: 20px;
+}
+
+.reply_content_name {
+  font-size: 14px;
+}
+
+.reply_text {
+  font-size: 14px;
+}
+
 /**.post_profile_pic_container {
   height: 50%;
   float: left;

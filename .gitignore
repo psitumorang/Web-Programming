@@ -10,7 +10,7 @@ src/backend/node_modules
 src/frontend/coverage
 
 # production
-/build
+src/frontend/build
 
 # misc
 .DS_Store
