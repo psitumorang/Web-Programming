@@ -22,21 +22,22 @@ const connect = async () => {
 
 // get all posts (not the ones in a group) for a particular user id
 const getUserPosts = async (db, id) => {
-    try {
-        // assign query using id as param
-        const query = 'SELECT * FROM post_lst WHERE posting_user = ?';
+  try {
+    // assign query using id as param
+    const query = 'SELECT * FROM post_lst WHERE posting_user = ?';
 
-        // execute query on db
-        const posts = await db.execute(query, [id]);
-        //console.log(" in postTableDB executed query with result of ", posts);
-        return posts[0];
-    } catch (err) {
-        console.error("error trying to retrieve the user's posts");
-        throw err;
-    }
+    // execute query on db
+    const posts = await db.execute(query, [id]);
+    // console.log(" in postTableDB executed query with result of ", posts);
+    return posts[0];
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error("error trying to retrieve the user's posts");
+    throw err;
+  }
 };
 
 module.exports = {
-    connect,
-    getUserPosts,
-}
+  connect,
+  getUserPosts,
+};

@@ -29,35 +29,37 @@ const getPostComments = async (db, id) => {
     const postComments = await db.execute(query, [id]);
     return postComments[0];
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error("error trying to retrieve the user's posts");
     throw err;
   }
 };
 
 const makeNewComment = async (db, comment) => {
+  // eslint-disable-next-line no-console
   console.log('in postcommentsTableDatabase with comment of ', comment);
   try {
     // get the comment_id to insert (e.g. max in table then increment)
     const maxQuery = 'SELECT MAX(comment_id) as max_id FROM post_comments';
     const maxID = await db.execute(maxQuery);
     const newCommentID = maxID[0][0].max_id + 1;
+    // eslint-disable-next-line no-console
     console.log('newCommentID is: ', newCommentID);
-    
+
     // assign query using comment in body
     const query = 'INSERT INTO post_comments VALUES (?, ?, ?, ?)';
-    const query_params = [newCommentID, comment.post_id, comment.user_id, comment.comment_txt, ];
-    const insertion = await db.execute(query, query_params);
+    const queryParams = [newCommentID, comment.post_id, comment.user_id, comment.comment_txt];
+    const insertion = await db.execute(query, queryParams);
     return insertion;
-
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error('error trying to make new comment! ', err);
     throw err;
   }
-}
-
+};
 
 module.exports = {
-    connect,
-    getPostComments,
-    makeNewComment,
-}
+  connect,
+  getPostComments,
+  makeNewComment,
+};

@@ -35,6 +35,10 @@ exports[`Test Home Page UI Home page renders correctly 1`] = `
     </div>
     <div
       className="profile-link"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      role="link"
+      tabIndex={0}
     >
       Profile
     </div>

@@ -1,12 +1,14 @@
 import './ProfilePage.css';
 import React, { useEffect, useState } from 'react';
-import { getUserPosts, getProfile, sendReply } from './ProfileModule';
-// import { getProfile, getUserPosts } from './ProfileModule';
+// import { getUserPosts, getProfile, sendReply } from './ProfileModule';
+// import { getProfile, getUserPosts, sendReply } from './ProfileModule';
 // import './ProfileModule.js';
 // import '../DatabaseModule';
 // import { ReactHtmlParser } from 'react-html-parser';
 // const database = require('../DatabaseModule');
 // const profileModules = require('./ProfileModule');
+
+const { getProfile, getUserPosts, sendReply } = require('./ProfileModule');
 
 function ProfilePage(props) {
   // dummy profile to help implement component frontend with right schema
