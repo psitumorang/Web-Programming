@@ -16,7 +16,10 @@ function ProfilePage(props) {
     first_name: 'Stacy',
     last_name: 'Shapiro',
     user_id: 1,
+    profile_picture_url: 'https://www.psypost.org/wp-content/uploads/2017/08/meditating-woman.jpg',
   };
+
+  const { changeState } = props;
 
   const [userProfile, setUserProfile] = useState(dummyProfile);
   const [userPosts, setUserPosts] = useState([]);
@@ -51,7 +54,7 @@ function ProfilePage(props) {
   return (
     <div className="App">
       <div id="cover_space">
-        <img id="user_profile_pic" src="Stacy meditating.jpg" alt="" />
+        <img id="user_profile_pic" src={userProfile.profile_picture_url} alt="" />
         <div id="main_title">
           {`${userProfile.first_name} ${userProfile.last_name}`}
           &apos;s FaceTok Page
@@ -60,7 +63,7 @@ function ProfilePage(props) {
       <div id="nav_button_container">
         <div className="nav_button">Friends</div>
         <div className="nav_button">Photos</div>
-        <div className="nav_button">Groups</div>
+        <div className="nav_button" onClick={() => changeState({ link: '/home' })} onKeyDown={() => changeState({ link: '/home' })} role="link" tabIndex={0}>Groups [active link] </div>
         <div className="nav_button">Update bio</div>
         <div className="nav_button">Settings</div>
       </div>
@@ -76,17 +79,24 @@ function ProfilePage(props) {
         <div id="post_container">
           {userPosts.map((post) => (
             <div className="wall_post">
-              <img className="wall_post_pic" src={post.photourl} alt="" />
+              <b>
+                <div className="main_post">
+                  {`${userProfile.first_name} ${userProfile.last_name}`}
+                  &nbsp;posted:
+                </div>
+              </b>
               <p />
               <div className="post_caption">
                 {post.caption}
               </div>
-              <div className="post_content_container">
+              <div className="reply_content_container">
                 { post.comments.map((comment) => (
                   <div>
                     <p />
-                    <b className="post_content_name">{comment.name}</b>
-                    <div>
+                    <b className="reply_content_name">
+                      {comment.name}
+                    </b>
+                    <div className="reply_text">
                       {comment.comment_txt}
                     </div>
                   </div>
