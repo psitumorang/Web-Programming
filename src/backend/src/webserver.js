@@ -114,7 +114,6 @@ webapp.get('/comment/:id', async (req, res) => {
 
     // assign to res.status
     const commentList = await postCommentLib.getPostComments(postCommentDb, id);
-    console.log('returning comment list from webserver: ', commentList);
     res.status(200).json(commentList);
   } catch (err) {
   }
@@ -122,7 +121,7 @@ webapp.get('/comment/:id', async (req, res) => {
 
 webapp.post('/comment', async (req, res) => {
   //eslint-disable-next-line no-console
-  console.log('control through webserver.js to post at /comment');
+  console.log('control through webserver.js to post at /comment with a req of ', req.body);
   try {
     const commentObj = {
       post_id: req.body.post_id,

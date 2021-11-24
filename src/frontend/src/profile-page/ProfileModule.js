@@ -101,8 +101,7 @@ const getUserPosts = async (userId) => {
   return postsArrayWithNames;
 };
 
-const sendReply = async (postId, userId, commentTxt) => {
-  
+const sendReply = async (postId, userId, commentTxt, updateUserPosts) => {
   const replyBody = {
     post_id: postId,
     user_id: userId,
@@ -111,6 +110,8 @@ const sendReply = async (postId, userId, commentTxt) => {
 
   console.log('about to callPostRply from ProfileModule with : ', replyBody);
   const callPostReply = await database.sendPostRequest('http://localhost:8080/comment/', replyBody);
+
+  updateUserPosts();
   return callPostReply;
 
   // this structure in a Javascript Object: post_id: req.body.post_id,

@@ -11,10 +11,17 @@ import { getUserPosts, getProfile, sendReply } from './ProfileModule';
 function ProfilePage(props) {
   // dummy profile to help implement component frontend with right schema
   // define states
-  const [userProfile, setUserProfile] = useState({ biography: '', username: 'Stacy Shapiro', user_id: 1 });
+  const dummyProfile = {
+    biography: '',
+    first_name: 'Stacy',
+    last_name: 'Shapiro',
+    user_id: 1,
+  };
+
+  const [userProfile, setUserProfile] = useState(dummyProfile);
   const [userPosts, setUserPosts] = useState([]);
 
-  useEffect(async () => {
+  const updateUserPosts = async () => {
     // extract id from props
     console.log('props is: ', props);
     const { userId } = props.state;
@@ -28,9 +35,13 @@ function ProfilePage(props) {
 
     // update state
     setUserPosts(postsToSet);
-    // console.log('about to test setUserProfile,
-    // think I\'m accidentally nesting it in an array', profileToSet);
-    setUserProfile(profileToSet[0]);
+    // don't know why I need to index it at all let alone double, gets the right data structure
+    setUserProfile(profileToSet[0][0]);
+    console.log('just reset the userProfile with the actual db pulled value, with: ', profileToSet[0][0]);
+  };
+
+  useEffect(() => {
+    updateUserPosts();
   }, []);
 
   useEffect(async () => {
@@ -42,7 +53,7 @@ function ProfilePage(props) {
       <div id="cover_space">
         <img id="user_profile_pic" src="Stacy meditating.jpg" alt="" />
         <div id="main_title">
-          {userProfile.username}
+          {`${userProfile.first_name} ${userProfile.last_name}`}
           &apos;s FaceTok Page
         </div>
       </div>
@@ -55,6 +66,11 @@ function ProfilePage(props) {
       </div>
       <div id="main_content_container">
         <div id="key_bio_info">
+          <b>
+            {userProfile.first_name}
+            &apos;s bio
+          </b>
+          <p />
           {userProfile.biography}
         </div>
         <div id="post_container">
@@ -78,7 +94,7 @@ function ProfilePage(props) {
                 <p />
                 <div className="reply_container">
                   <div className="post_reply_textbox"> Type your reply here...</div>
-                  <div className="post_reply_button" onClick={() => sendReply(post.post_id, userProfile, 'testcommentinsertion!')} onKeyDown={() => sendReply(post.post_id, userProfile, 'testcommentinsertion!')} role="link" tabIndex={0}>Reply!</div>
+                  <div className="post_reply_button" onClick={() => sendReply(post.post_id, userProfile.user_id, 'testcommentinsertion!', updateUserPosts)} onKeyDown={() => sendReply(post.post_id, userProfile.user_id, 'testcommentinsertion!', updateUserPosts)} role="link" tabIndex={0}>Reply!</div>
                 </div>
               </div>
             </div>
