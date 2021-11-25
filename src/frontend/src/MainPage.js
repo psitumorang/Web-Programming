@@ -9,7 +9,11 @@ import React, { useState } from 'react';
 import LoginPage from './login-page/LoginPage';
 import Home from './home-page/Home';
 import ProfilePage from './profile-page/ProfilePage';
+<<<<<<< HEAD
 import UpdatePassword from './profile-page/UpdatePassword';
+=======
+import Groups from './groups-page/Groups';
+>>>>>>> Add files via upload
 
 function MainPage() {
   const [state, updateState] = useState({ link: '/', userId: -1 });
@@ -31,6 +35,8 @@ function MainPage() {
     }
     if (url.includes('/changepassword')) {
       return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);
+    if (url.includes('/groups')) {
+      return (<Groups changeState={changeState} state={state} />);
     }
     const last = url.split('/').pop();
     if (url.includes('/registration') || last === '' || url.includes('/error')) {
