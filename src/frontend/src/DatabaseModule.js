@@ -36,7 +36,21 @@ const sendGetRequest = async function sendGetRequest(url, params) {
   }
 };
 
+const sendGetGroupsRequest = async function sendGetGroupsRequest(url) {
+  try {
+    const res = await fetch(url)
+      .then((response) => response.json())
+      .then((result) => result);
+    return res;
+  } catch (err) {
+    // eslint-disable-next-line
+    console.log('ERROR');
+    return null;
+  }
+};
+
 module.exports = {
   sendPostRequest,
   sendGetRequest,
+  sendGetGroupsRequest,
 };

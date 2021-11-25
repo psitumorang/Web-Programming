@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import LoginPage from './login-page/LoginPage';
 import Home from './home-page/Home';
 import ProfilePage from './profile-page/ProfilePage';
+import Groups from './groups-page/Groups';
 
 function MainPage() {
   const [state, updateState] = useState({ link: '/', userId: -1 });
@@ -26,6 +27,9 @@ function MainPage() {
     }
     if (url.includes('/home') || url.includes('/main')) {
       return (<Home changeState={changeState} state={state} />);
+    }
+    if (url.includes('/groups')) {
+      return (<Groups changeState={changeState} state={state} />);
     }
     const last = url.split('/').pop();
     if (url.includes('/registration') || last === '' || url.includes('/error')) {
