@@ -4,6 +4,19 @@ body {
   padding: 0;
 }
 
+/* button styles */
+
+button:hover {
+  background: aliceblue;
+  font-size: 16px;
+}
+
+.profile-link:hover, .home-link:hover {
+  color: black;
+  background: aliceblue;
+  font-size: 20px;
+}
+
 /* header styles*/
 
 .header {
@@ -106,7 +119,7 @@ body {
 .side-navbar {
   height: 100%;
   width: 15vw;
-  background: rgba(211, 211, 211, 0.2);
+  background: #fff;
 } button {
   border: 0.5px solid rgb(10, 17, 40);
   height: 5vh;
@@ -127,20 +140,28 @@ body {
 }
 
 .post-area {
-  height: 20%;
+  height: 40%;
   width: 70vw;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
 }
 
 .updates-area {
   border-top: 0.5px solid rgb(10, 17, 40);
-  height: 80%;
+  height: 60%;
   width: 70vw;
+
+  gap: 20px 20px;
 }
 /*live updates*/
 
 .live-updates {
   border-top: 0.5px solid rgb(10, 17, 40);
-  background: rgba(211, 211, 211, 0.2);
+  background: #fff;
   height: 100%;
   width: 15vw;
 }

@@ -29,9 +29,9 @@ function Home(props) {
       <div className="main-container">
 
         <div className="side-navbar">
-          <button type="submit" onClick={() => changeState({ link: '/updates' })} className="updates">Updates</button>
+          <button type="submit" className="updates" onClick={() => changeState({ link: '/updates' })}>Updates</button>
           <button type="submit" className="events">Events</button>
-          <button type="submit" className="groups">Groups</button>
+          <button type="submit" className="groups" onClick={() => changeState({ link: '/groups' })}>Groups</button>
           <button type="submit" className="videos">Videos</button>
           <button type="submit" className="photos">Photos</button>
         </div>
@@ -70,3 +70,4 @@ function Home(props) {
 }
 
 export default Home;
+export { clickProfile };
