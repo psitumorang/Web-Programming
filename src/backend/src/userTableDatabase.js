@@ -62,6 +62,21 @@ const getUsers = async (db) => {
   return null;
 };
 
+// get a user by userid
+const getUserById = async (db, id) => {
+  try {
+    console.log('in getUser ')
+    const query = 'SELECT * FROM user_lst WHERE user_id = ?';
+    const [row] = await db.execute(query, [id]);
+    // eslint-disable-next-line no-console
+    console.log(`User: ${JSON.stringify(row)}`);
+    return row;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`err in getUser at userTableDB`);
+  }
+}
+
 // get all users with same username
 const getUsersWithName = async (db, name) => {
   try {
@@ -124,6 +139,7 @@ const getNextId = async (db) => {
 module.exports = {
   connect,
   addUser,
+  getUserById,
   getUsers,
   getUsersWithName,
   deleteUser,

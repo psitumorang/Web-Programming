@@ -8,6 +8,16 @@ import { getUserPosts, getProfile, sendReply } from './ProfileModule';
 // const database = require('../DatabaseModule');
 // const profileModules = require('./ProfileModule');
 
+<<<<<<< Updated upstream
+=======
+const {
+  getProfile,
+  getUserPosts,
+  sendReply,
+  getRegistrationDate,
+} = require('./ProfileModule');
+
+>>>>>>> Stashed changes
 function ProfilePage(props) {
   // dummy profile to help implement component frontend with right schema
   // define states
@@ -15,7 +25,7 @@ function ProfilePage(props) {
     biography: '',
     first_name: 'Stacy',
     last_name: 'Shapiro',
-    user_id: 1,
+    user_id: 9,
     profile_picture_url: 'https://www.psypost.org/wp-content/uploads/2017/08/meditating-woman.jpg',
   };
 
@@ -23,21 +33,29 @@ function ProfilePage(props) {
 
   const [userProfile, setUserProfile] = useState(dummyProfile);
   const [userPosts, setUserPosts] = useState([]);
+  const [registrationDate, setRegoDate] = useState('');
 
   const updateUserPosts = async () => {
     // extract id from props
     // const { userId } = props.state;
 
+    // const dummyId = props.state.userId;
     const dummyId = 9;
 
     // call backend for content linked to userId
     const postsToSet = await getUserPosts(dummyId);
     const profileToSet = await getProfile(dummyId);
 
+    // just for testing
+    const regoDate = await getRegistrationDate(dummyId);
+    // eslint-disable-next-line no-console
+    console.log('user registration date is: ', regoDate);
+
     // update state
     setUserPosts(postsToSet);
     // don't know why I need to index it at all let alone double, gets the right data structure
     setUserProfile(profileToSet[0][0]);
+    setRegoDate(regoDate);
   };
 
   useEffect(() => {
@@ -58,11 +76,10 @@ function ProfilePage(props) {
         </div>
       </div>
       <div id="nav_button_container">
-        <div className="nav_button">Friends</div>
-        <div className="nav_button">Photos</div>
         <div className="nav_button" onClick={() => changeState({ link: '/home' })} onKeyDown={() => changeState({ link: '/home' })} role="link" tabIndex={0}>Groups [active link] </div>
         <div className="nav_button">Update bio</div>
-        <div className="nav_button">Settings</div>
+        <div className="nav_button" onClick={() => changeState({ link: '/changepassword' })} onKeyDown={() => changeState({ link: '/changepassword' })} role="link" tabIndex={0}>Change password</div>
+        <div className="nav_button">Deactivate account</div>
       </div>
       <div id="main_content_container">
         <div id="key_bio_info">
@@ -72,6 +89,11 @@ function ProfilePage(props) {
           </b>
           <p />
           {userProfile.biography}
+          <p />
+          <p />
+          Account registration date:
+          <p />
+          {registrationDate}
         </div>
         <div id="post_container">
           {userPosts.map((post) => (

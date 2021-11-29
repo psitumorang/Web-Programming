@@ -108,8 +108,18 @@ const sendReply = async (postId, userId, commentTxt, updateUserPosts) => {
   // (8, 6, 9, "That's THEFT!")
 };
 
+const getRegistrationDate = async (userId) => {
+  // eslint-disable-next-line no-console
+  console.log('at ProfileModule/getRegistrationDate with userId', userId);
+  const userLst = await database.sendGetRequest('http://localhost:8080/user/', { id: userId });
+  console.log('back from sendGetRequest, with userLst of:', userLst);
+  const registrationDate = userLst[0].registration_date.slice(0, 10);
+  return registrationDate;
+};
+
 module.exports = {
   getUserPosts,
   getProfile,
   sendReply,
+  getRegistrationDate,
 };
