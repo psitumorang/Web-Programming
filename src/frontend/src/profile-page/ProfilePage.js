@@ -1,15 +1,13 @@
 import './ProfilePage.css';
 import React, { useEffect, useState } from 'react';
-import { getUserPosts, getProfile, sendReply } from './ProfileModule';
-// import { getProfile, getUserPosts } from './ProfileModule';
+// import { getUserPosts, getProfile, sendReply } from './ProfileModule';
+// import { getProfile, getUserPosts, sendReply } from './ProfileModule';
 // import './ProfileModule.js';
 // import '../DatabaseModule';
 // import { ReactHtmlParser } from 'react-html-parser';
 // const database = require('../DatabaseModule');
 // const profileModules = require('./ProfileModule');
 
-<<<<<<< Updated upstream
-=======
 const {
   getProfile,
   getUserPosts,
@@ -17,7 +15,6 @@ const {
   getRegistrationDate,
 } = require('./ProfileModule');
 
->>>>>>> Stashed changes
 function ProfilePage(props) {
   // dummy profile to help implement component frontend with right schema
   // define states

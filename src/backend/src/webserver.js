@@ -62,10 +62,8 @@ webapp.post('/registration', async (req, res) => {
       });
     }
   } catch (err) {
-<<<<<<< Updated upstream
-    console.log("testing to see if control gets to catch in webserver.js for rego post");
-=======
->>>>>>> Stashed changes
+    // eslint-disable-next-line no-console
+    console.log('testing to see if control gets to catch in webserver.js for rego post');
     res.status(404).json({ err: err.message });
   }
 });
@@ -95,70 +93,54 @@ webapp.post('/login', async (req, res) => {
 
 webapp.get('/post/:id', async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     // assign to res.status
 
     const postList = await postLib.getUserPosts(postDb, id);
-<<<<<<< Updated upstream
     console.log('returning postList from webserver of: ', postList);
-=======
->>>>>>> Stashed changes
     res.status(200).json(postList);
   } catch (err) {
+    res.status(404).json({ err: err.message });
   }
 });
 
 webapp.get('/comment/:id', async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
 
     // assign to res.status
     const commentList = await postCommentLib.getPostComments(postCommentDb, id);
     res.status(200).json(commentList);
   } catch (err) {
+    res.status(404).json({ err: err.message });
   }
 });
 
 webapp.post('/comment', async (req, res) => {
-<<<<<<< Updated upstream
-  //eslint-disable-next-line no-console
-  console.log('control through webserver.js to post at /comment with a req of ', req.body);
-=======
->>>>>>> Stashed changes
   try {
     const commentObj = {
       post_id: req.body.post_id,
       user_id: req.body.user_id,
       comment_txt: req.body.comment_txt,
-<<<<<<< Updated upstream
-    }
-    console.log('and now succesful on comment Obj of ', commentObj);
-=======
     };
->>>>>>> Stashed changes
     const commentInsert = await postCommentLib.makeNewComment(postCommentDb, commentObj);
     res.status(200).json(commentInsert);
-
   } catch (err) {
+    res.status(404).json({ err: err.message });
   }
-})
+});
 
 webapp.get('/profile/:id', async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
 
     // assign to res.status
     const profileInfo = await profileLib.getProfileById(profileDb, id);
-<<<<<<< Updated upstream
-    console.log('retrieved (from model, still in controller) profile info: ', profileInfo);
-=======
->>>>>>> Stashed changes
     res.status(200).json(profileInfo);
   } catch (err) {
-    console.log(err);
+    res.status(404).json({ err: err.message });
   }
-})
-
+});
 
 webapp.get('/user/:id', async (req, res) => {
   // eslint-disable-next-line no-console
@@ -186,6 +168,7 @@ webapp.put('/user/:id', async(req, res) => {
 });
 
 webapp.use((req, res) => {
-  console.log("testing to see if control gets to webapp.use");
+  // eslint-disable-next-line no-console
+  console.log('testing to see if control gets to webapp.use');
   res.status(404);
 });

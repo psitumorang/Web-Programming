@@ -4,284 +4,70 @@ exports[`Test Profile Page UI Profile page renders correctly 1`] = `
 <div
   className="App"
 >
-  <header
-    className="App-header"
-  />
-  <body>
+  <div
+    id="cover_space"
+  >
+    <img
+      alt=""
+      id="user_profile_pic"
+      src="https://www.psypost.org/wp-content/uploads/2017/08/meditating-woman.jpg"
+    />
     <div
-      id="cover_space"
+      id="main_title"
     >
-      <img
-        alt=""
-        id="user_profile_pic"
-        src="Stacy meditating.jpg"
-      />
-      <div
-        id="main_title"
-      >
-        Stacy Shapiro
-        's FaceTok Page
-      </div>
+      Stacy Shapiro
+      's FaceTok Page
+    </div>
+  </div>
+  <div
+    id="nav_button_container"
+  >
+    <div
+      className="nav_button"
+    >
+      Friends
     </div>
     <div
-      id="nav_button_container"
+      className="nav_button"
     >
-      <div
-        className="nav_button"
-      >
-        Friends
-      </div>
-      <div
-        className="nav_button"
-      >
-        Photos
-      </div>
-      <div
-        className="nav_button"
-      >
-        Groups
-      </div>
-      <div
-        className="nav_button"
-      >
-        Update bio
-      </div>
-      <div
-        className="nav_button"
-      >
-        Settings
-      </div>
+      Photos
     </div>
     <div
-      id="main_content_container"
+      className="nav_button"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      role="link"
+      tabIndex={0}
     >
-      <div
-        id="key_bio_info"
-      >
-        &lt;div&gt; Hi! I'm Stacy! I'm an Eat, Pray, Love kind of gal but also like a bit of quantum physics on the side.&lt;p/&gt; Went to undergrad at Penn and now out to get #whitegirlwasted with my ladies &lt;/div&gt;
-      </div>
-      <div
-        id="post_container"
-      >
-        <div
-          className="wall_post"
-        >
-          <img
-            alt=""
-            className="wall_post_pic"
-            src="whitegalwastedv2.jfif"
-          />
-          <p />
-          <div
-            className="post_caption"
-          >
-            It's a dangerous day to be a Whiteclaw! From Sweetgreen to feeling #mean
-          </div>
-          <div
-            className="post_content_container"
-          >
-            <div>
-              <p />
-              <b
-                className="post_content_name"
-              >
-                Yide Zhao
-              </b>
-              <div>
-                OMG! Stacy I can't believe you did that! You absolute menace
-              </div>
-            </div>
-            <div>
-              <p />
-              <b
-                className="post_content_name"
-              >
-                Professor Fouh
-              </b>
-              <div>
-                Have you seen D'Amelio's latest OOTD? Looks just like it!
-              </div>
-            </div>
-            <p />
-            <div
-              className="reply_container"
-            >
-              <div
-                className="post_reply_textbox"
-              >
-                 Type your reply here...
-              </div>
-              <div
-                className="post_reply_button"
-              >
-                Reply!
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="wall_post"
-        >
-          <div
-            className="post_content_container"
-          >
-            <b
-              className="post_content_name"
-            >
-               Yide Zhao 
-            </b>
-            <p
-              className="post_content_message"
-            >
-              OMG Stacy I can't believe you did that! You're so out there! #girlboss
-            </p>
-            <div
-              className="reply_container"
-            >
-              <div
-                className="post_reply_textbox"
-              >
-                 Type your reply here...
-              </div>
-              <div
-                className="post_reply_button"
-              >
-                Reply!
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="wall_post"
-        >
-          <div
-            className="post_content_container"
-          >
-            <b
-              className="post_content_name"
-            >
-               Charlotte Dagabond 
-            </b>
-            <p
-              className="post_content_message"
-            >
-              Stacy I hope you survived last night! 
-            </p>
-            <div
-              className="reply_container"
-            >
-              <div
-                className="post_reply_textbox"
-              >
-                 Type your reply here...
-              </div>
-              <div
-                className="post_reply_button"
-              >
-                Reply!
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="wall_post"
-        >
-          <div
-            className="post_content_container"
-          >
-            <b
-              className="post_content_name"
-            >
-               Bruce Yang 
-            </b>
-            <p
-              className="post_content_message"
-            >
-              I'm still cleaning up those vomit stains. I'll venmo you when I know the damage. 
-            </p>
-            <div
-              className="reply_container"
-            >
-              <div
-                className="post_reply_textbox"
-              >
-                 Type your reply here...
-              </div>
-              <div
-                className="post_reply_button"
-              >
-                Reply!
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="wall_post"
-        >
-          <div
-            className="post_content_container"
-          >
-            <b
-              className="post_content_name"
-            >
-               Professor Eric 
-            </b>
-            <p
-              className="post_content_message"
-            >
-              Have you seen D'Amelio's latest OOTD?
-            </p>
-            <div
-              className="reply_container"
-            >
-              <div
-                className="post_reply_textbox"
-              >
-                 Type your reply here...
-              </div>
-              <div
-                className="post_reply_button"
-              >
-                Reply!
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="wall_post"
-        >
-          <div
-            className="post_content_container"
-          >
-            <b
-              className="post_content_name"
-            >
-               Turing Von Neumann 
-            </b>
-            <p
-              className="post_content_message"
-            >
-              I'm still shocked that you managed to prove Goldbach's conjecture on a napkin 8 margs in!
-            </p>
-            <div
-              className="reply_container"
-            >
-              <div
-                className="post_reply_textbox"
-              >
-                 Type your reply here...
-              </div>
-              <div
-                className="post_reply_button"
-              >
-                Reply!
-              </div>
-            </div>
-          </div>
-          <p />
-        </div>
-      </div>
+      Groups [active link] 
     </div>
-  </body>
+    <div
+      className="nav_button"
+    >
+      Update bio
+    </div>
+    <div
+      className="nav_button"
+    >
+      Settings
+    </div>
+  </div>
+  <div
+    id="main_content_container"
+  >
+    <div
+      id="key_bio_info"
+    >
+      <b>
+        Stacy
+        's bio
+      </b>
+      <p />
+      
+    </div>
+    <div
+      id="post_container"
+    />
+  </div>
 </div>
 `;
