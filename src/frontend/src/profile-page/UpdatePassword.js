@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 const { createHash } = require('crypto');
 const { sendPutRequest } = require('../DatabaseModule');
 
-const changePassword = async function (pass1, pass2, userId, updateMessage) {
-  console.log('entered change password with pass 1 of ', pass1, 'and pass 2 of ', pass2);
+const changePassword = async (pass1, pass2, userId, updateMessage) => {
   if (pass1 !== pass2) {
     updateMessage('the two passwords don\'t match - try again!');
   } else {
@@ -32,15 +31,13 @@ const changeBio = async function (newBio, userId, updateMessage) {
   updateMessage('bio updated successfully!');
 };
 
-const showMessage = function (message) {
-  return (
-    <div>
-      <p />
-      {message}
-      <p />
-    </div>
-  );
-};
+const showMessage = (message) => 
+  <div>
+    <p />
+    {message}
+    <p />
+  </div>
+);
 
 const UpdatePassword = (props) => {
   const { userId } = props;

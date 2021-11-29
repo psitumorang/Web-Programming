@@ -67,6 +67,8 @@ webapp.post('/registration', async (req, res) => {
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log('testing to see if control gets to catch in webserver.js for rego post');
+    // eslint-disable-next-line no-console
+    console.log("testing to see if control gets to catch in webserver.js for rego post");
     res.status(404).json({ err: err.message });
   }
 });
@@ -235,6 +237,31 @@ webapp.get('/groups', async (req, res) => {
     }
   } catch (err) {
     res.status(404).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/user/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('retrieve user information for supplied id, with id of: ', req.params.id);
+  try {
+    const { id } = req.params;
+    const userInfo = await userLib.getUserById(userDb, id);
+    // eslint-disable-next-line no-console
+    console.log('retrieved user info from model, current at webserver/user/id/get, value of: ', userInfo);
+    res.status(200).json(userInfo);
+  } catch (err) {
+    res.status(404).json('error! at webserver/user/id/get');
+  }
+});
+
+webapp.put('/user/:id', async(req, res) => {
+
+  try {
+    const { id, user_password } = req.params;
+    const userInfo = await userLib.updateUser(userDb, id, 'user_password', user_password);
+    res.status(200).json(userInfo);
+  } catch (err) {
+    res.status(404).json('error! at webserver/user/id/put');
   }
 });
 
