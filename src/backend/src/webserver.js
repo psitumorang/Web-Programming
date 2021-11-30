@@ -170,14 +170,14 @@ webapp.post('/groups', async (req, res) => {
       group_name: req.body.group_name,
       group_creator: req.body.group_creator,
       group_description: req.body.group_description,
-      is_public: req.body.is_public
+      is_public: req.body.is_public,
     };
 
     const newTopics = {
       group_id: nextId + 1,
       topic_1: req.body.topic_1,
       topic_2: req.body.topic_2,
-      topic_3: req.body.topic_3
+      topic_3: req.body.topic_3,
     };
 
     const resultsGroup = await groupLib.addGroup(groupDb, newGroup);
@@ -187,16 +187,18 @@ webapp.post('/groups', async (req, res) => {
       res.status(201).json({
         group: newGroup,
       });
-    };
+    }
 
     const resultsTopics = await groupLib.addTopics(groupDb, newTopics);
-
+    return resultsTopics;
   } catch (err) {
     res.status(404).json({ err: err.message });
   }
+  return null;
 });
 
 webapp.get('/groups', async (req, res) => {
+  // eslint-disable-next-line no-console
   console.log('get groups');
 
   try {
@@ -204,12 +206,12 @@ webapp.get('/groups', async (req, res) => {
     if (groups === null) {
       res.status(404).json({ err: 'no groups found' });
     } else {
-      res.status(200).json({ result: groups, });
-    };
-  } catch(err) {
-    res.status(404).json({ err: 'error is ' + err.message }); 
+      res.status(200).json({ result: groups });
+    }
+  } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
   }
-})
+});
 
 webapp.use((req, res) => {
   // eslint-disable-next-line no-console

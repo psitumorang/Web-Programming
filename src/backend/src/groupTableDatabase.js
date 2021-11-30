@@ -58,34 +58,34 @@ const addTopics = async (db, newTopics) => {
     try {
       await db.execute(query, param1);
       // eslint-disable-next-line no-console
-      console.log(`Created topic: ${newTopics.topic_1}` + ` for group with id: ${newTopics.group_id}`);
+      console.log(`Created topic: ${newTopics.topic_1} for group with id: ${newTopics.group_id}`);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(`error: ${err.message}`);
     }
-  };
+  }
 
   if (newTopics.topic_2) {
     try {
       await db.execute(query, param2);
       // eslint-disable-next-line no-console
-      console.log(`Created topic: ${newTopics.topic_2}` + ` for group with id: ${newTopics.group_id}`);
+      console.log(`Created topic: ${newTopics.topic_2} for group with id: ${newTopics.group_id}`);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(`error: ${err.message}`);
     }
-  };
+  }
 
   if (newTopics.topic_3) {
     try {
       await db.execute(query, param3);
       // eslint-disable-next-line no-console
-      console.log(`Created topic: ${newTopics.topic_3}` + ` for group with id: ${newTopics.group_id}`);
+      console.log(`Created topic: ${newTopics.topic_3} for group with id: ${newTopics.group_id}`);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(`error: ${err.message}`);
     }
-  };
+  }
 };
 
 // get all groups
