@@ -255,13 +255,28 @@ webapp.get('/user/:id', async (req, res) => {
 });
 
 webapp.put('/user/:id', async(req, res) => {
-
+  console.log('make it to webserver/webapp.put/user/id with params: ', req.params);
   try {
-    const { id, user_password } = req.params;
+    const { id } = req.params;
+    const { user_password } = req.body;
+    // get password from body not params! 
     const userInfo = await userLib.updateUser(userDb, id, 'user_password', user_password);
     res.status(200).json(userInfo);
   } catch (err) {
     res.status(404).json('error! at webserver/user/id/put');
+  }
+});
+
+webapp.put('/profile/:id', async (req, res) => {
+  console.log('make it to webserver/webapp.put/profile/id with params: ', req.params);
+  try {
+    const { id } = req.params;
+    const { biography } = req.body;
+    // get password from body not params! 
+    const userInfo = await profileLib.updateProfile(profileDb, id, 'biography', biography);
+    res.status(200).json(userInfo);
+  } catch (err) {
+    res.status(404).json('error! at webserver/profile/id/put');
   }
 });
 

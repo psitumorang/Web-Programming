@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 const { createHash } = require('crypto');
 const { sendPutRequest } = require('../DatabaseModule');
 
-const changePassword = async (pass1, pass2, userId, updateMessage) => {
+const changePassword = async function (pass1, pass2, userId, updateMessage) {
+  console.log('entered change password with pass 1 of ', pass1, 'and pass 2 of ', pass2);
   if (pass1 !== pass2) {
     updateMessage('the two passwords don\'t match - try again!');
   } else {

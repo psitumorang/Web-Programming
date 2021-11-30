@@ -9,8 +9,8 @@ import React, { useState } from 'react';
 import LoginPage from './login-page/LoginPage';
 import Home from './home-page/Home';
 import ProfilePage from './profile-page/ProfilePage';
-import UpdatePassword from './profile-page/UpdatePassword';
 import Groups from './groups-page/Groups';
+import UpdatePassword from './profile-page/UpdatePassword';
 
 function MainPage() {
   const [state, updateState] = useState({ link: '/', userId: -1 });
@@ -30,10 +30,11 @@ function MainPage() {
     if (url.includes('/home') || url.includes('/main')) {
       return (<Home changeState={changeState} state={state} />);
     }
-    if (url.includes('/changepassword')) {
-      return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);
     if (url.includes('/groups')) {
       return (<Groups changeState={changeState} state={state} />);
+    }
+    if (url.includes('/changepassword')) {
+      return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);
     }
     const last = url.split('/').pop();
     if (url.includes('/registration') || last === '' || url.includes('/error')) {

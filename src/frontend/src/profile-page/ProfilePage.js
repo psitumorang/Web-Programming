@@ -74,8 +74,8 @@ function ProfilePage(props) {
       </div>
       <div id="nav_button_container">
         <div className="nav_button" onClick={() => changeState({ link: '/home' })} onKeyDown={() => changeState({ link: '/home' })} role="link" tabIndex={0}>Groups [active link] </div>
-        <div className="nav_button">Friends</div>
-        <div className="nav_button" onClick={() => changeState({ link: '/changepassword', userId: userProfile.user_id })} onKeyDown={() => changeState({ link: '/changepassword', userId: userProfile.user_id })} role="link" tabIndex={0}>Change pw or bio</div>
+        <div className="nav_button">Update bio</div>
+        <div className="nav_button" onClick={() => changeState({ link: '/changepassword', userId: userProfile.user_id })} onKeyDown={() => changeState({ link: '/changepassword', userId: userProfile.user_id })} role="link" tabIndex={0}>Change password</div>
         <div className="nav_button">Deactivate account</div>
       </div>
       <div id="main_content_container">
