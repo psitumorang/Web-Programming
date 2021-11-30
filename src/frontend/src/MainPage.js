@@ -30,7 +30,7 @@ function MainPage() {
     }
     if (url.includes('/changepassword')) {
       return (<UpdatePassword changeState={changeState} state={state} />);
-    } 
+    }
     const last = url.split('/').pop();
     if (url.includes('/registration') || last === '' || url.includes('/error')) {
       return (<LoginPage changeState={changeState} state={state} />);

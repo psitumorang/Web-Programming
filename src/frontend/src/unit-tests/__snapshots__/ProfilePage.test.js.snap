@@ -24,16 +24,6 @@ exports[`Test Profile Page UI Profile page renders correctly 1`] = `
   >
     <div
       className="nav_button"
-    >
-      Friends
-    </div>
-    <div
-      className="nav_button"
-    >
-      Photos
-    </div>
-    <div
-      className="nav_button"
       onClick={[Function]}
       onKeyDown={[Function]}
       role="link"
@@ -48,8 +38,17 @@ exports[`Test Profile Page UI Profile page renders correctly 1`] = `
     </div>
     <div
       className="nav_button"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      role="link"
+      tabIndex={0}
     >
-      Settings
+      Change password
+    </div>
+    <div
+      className="nav_button"
+    >
+      Deactivate account
     </div>
   </div>
   <div
@@ -62,6 +61,11 @@ exports[`Test Profile Page UI Profile page renders correctly 1`] = `
         Stacy
         's bio
       </b>
+      <p />
+      
+      <p />
+      <p />
+      Account registration date:
       <p />
       
     </div>

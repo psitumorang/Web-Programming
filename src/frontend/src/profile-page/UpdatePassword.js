@@ -13,20 +13,20 @@ const changePassword = async (pass1, pass2, userId, updateMessage) => {
 
     // need put request
     const response = await sendPutRequest('http://localhost:8080/registration', reqBody);
+    // eslint-disable-next-line no-console
     console.log('printing response ', response);
   }
+  // eslint-disable-next-line no-console
   console.log('why isn\'t this working?');
 };
 
-const showMessage = (message) => {
-  return (
-    <div>
-      <p />
-      {message}
-      <p />
-    </div>
-  );
-};
+const showMessage = (message) => (
+  <div>
+    <p />
+    {message}
+    <p />
+  </div>
+);
 
 const UpdatePassword = (id) => {
   const [message, mutateMessage] = useState('');
