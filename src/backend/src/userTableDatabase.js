@@ -110,8 +110,12 @@ const deleteUser = async (db, name) => {
 // update a user
 const updateUser = async (db, userId, paramToUpdate, updateValue) => {
   try {
-    const query = 'UPDATE user_lst SET ?=? WHERE user_id=?';
-    const params = [paramToUpdate, updateValue, userId];
+    // const query = 'UPDATE user_lst SET ?=? WHERE user_id=?';
+    // const params = [paramToUpdate, `\'${updateValue}\'`, userId];
+    const query = 'UPDATE user_lst SET user_password=? WHERE user_id=?';
+    const params = [updateValue, userId];
+    console.log('in updateUser in userTable DB, with params of: ', params);
+    console.log(`and templated version of query: UPDATE user_lst SET ${paramToUpdate}=${updateValue} WHERE user_id=${Number(userId)}`);
     const [row] = await db.execute(query, params);
     // eslint-disable-next-line no-console
     console.log(`Updated ${JSON.stringify(row.affectedRows)} player`);
