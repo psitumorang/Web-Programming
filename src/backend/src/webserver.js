@@ -175,7 +175,7 @@ webapp.put('/profile/:id', async (req, res) => {
     const { id } = req.params;
     const { biography } = req.body;
     // get password from body not params! 
-    const userInfo = await profileLib.updateProfile(profileDb, id, 'biography', biography);
+    const userInfo = await profileLib.updateProfile(profileDb, id, biography);
     res.status(200).json(userInfo);
   } catch (err) {
     res.status(404).json('error! at webserver/profile/id/put');
