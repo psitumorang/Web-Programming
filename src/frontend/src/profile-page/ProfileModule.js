@@ -94,7 +94,7 @@ const sendReply = async (postId, userId, commentTxt, updateUserPosts) => {
   const replyBody = {
     post_id: postId,
     user_id: userId,
-    comment_txt: commentTxt,
+    comment_txt: document.getElementById(`post_${postId}`).value,
   };
 
   const callPostReply = await database.sendPostRequest('http://localhost:8080/comment/', replyBody);
