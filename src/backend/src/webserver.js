@@ -11,6 +11,7 @@ const userLib = require('./userTableDatabase');
 const profileLib = require('./profileTableDatabase');
 const postLib = require('./postTableDatabase');
 const postCommentLib = require('./postCommentsTableDatabase');
+const groupLib = require('./groupTableDatabase');
 
 const port = 8080;
 
@@ -25,12 +26,14 @@ let userDb;
 let profileDb;
 let postDb;
 let postCommentDb;
+let groupDb;
 
 webapp.listen(port, async () => {
   userDb = await userLib.connect();
   profileDb = await profileLib.connect();
   postDb = await postLib.connect();
   postCommentDb = await postCommentLib.connect();
+  groupDb = await groupLib.connect();
   // eslint-disable-next-line no-console
   console.log('listening');
 });
@@ -154,6 +157,59 @@ webapp.get('/profile/:id', async (req, res) => {
     res.status(200).json(profileInfo);
   } catch (err) {
     res.status(404).json({ err: err.message });
+  }
+});
+
+webapp.post('/groups', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('create a group');
+  try {
+    const nextId = await groupLib.getNextId(groupDb);
+    const newGroup = {
+      group_id: nextId + 1,
+      group_name: req.body.group_name,
+      group_creator: req.body.group_creator,
+      group_description: req.body.group_description,
+      is_public: req.body.is_public,
+    };
+
+    const newTopics = {
+      group_id: nextId + 1,
+      topic_1: req.body.topic_1,
+      topic_2: req.body.topic_2,
+      topic_3: req.body.topic_3,
+    };
+
+    const resultsGroup = await groupLib.addGroup(groupDb, newGroup);
+    if (resultsGroup === null) {
+      res.status(404).json({ err: 'groupname already taken' });
+    } else {
+      res.status(201).json({
+        group: newGroup,
+      });
+    }
+
+    const resultsTopics = await groupLib.addTopics(groupDb, newTopics);
+    return resultsTopics;
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+webapp.get('/groups', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get groups');
+
+  try {
+    const groups = await groupLib.getGroups(groupDb);
+    if (groups === null) {
+      res.status(404).json({ err: 'no groups found' });
+    } else {
+      res.status(200).json({ result: groups });
+    }
+  } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
   }
 });
 
