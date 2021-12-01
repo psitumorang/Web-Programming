@@ -77,5 +77,4 @@ module.exports = {
   sendGetRequest,
   sendPutRequest,
   sendGetGroupsRequest,
-  sendPutRequest,
 };

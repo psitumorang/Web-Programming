@@ -65,7 +65,8 @@ const getUsers = async (db) => {
 // get a user by userid
 const getUserById = async (db, id) => {
   try {
-    console.log('in getUser ')
+    // eslint-disable-next-line no-console
+    console.log('in getUser ');
     const query = 'SELECT * FROM user_lst WHERE user_id = ?';
     const [row] = await db.execute(query, [id]);
     // eslint-disable-next-line no-console
@@ -73,9 +74,10 @@ const getUserById = async (db, id) => {
     return row;
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.log(`err in getUser at userTableDB`);
+    console.log('err in getUser at userTableDB');
   }
-}
+  return null;
+};
 
 // get all users with same username
 const getUsersWithName = async (db, name) => {
@@ -114,7 +116,9 @@ const updateUser = async (db, userId, paramToUpdate, updateValue) => {
     // const params = [paramToUpdate, `\'${updateValue}\'`, userId];
     const query = 'UPDATE user_lst SET user_password=? WHERE user_id=?';
     const params = [updateValue, userId];
+    // eslint-disable-next-line no-console
     console.log('in updateUser in userTable DB, with params of: ', params);
+    // eslint-disable-next-line no-console
     console.log(`and templated version of query: UPDATE user_lst SET ${paramToUpdate}=${updateValue} WHERE user_id=${Number(userId)}`);
     const [row] = await db.execute(query, params);
     // eslint-disable-next-line no-console
