@@ -39,8 +39,6 @@ webapp.listen(port, async () => {
 });
 
 webapp.post('/registration', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('register a user');
   try {
     const nextId = await userLib.getNextId(userDb);
     const newUser = {
@@ -67,6 +65,8 @@ webapp.post('/registration', async (req, res) => {
       });
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log('testing to see if control gets to catch in webserver.js for rego post');
     // eslint-disable-next-line no-console
     console.log('testing to see if control gets to catch in webserver.js for rego post');
     res.status(404).json({ err: err.message });
@@ -97,8 +97,6 @@ webapp.post('/login', async (req, res) => {
 });
 
 webapp.get('/post/:id', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('retrieve the post list of a user for their profile page');
   try {
     const { id } = req.params;
     // assign to res.status
@@ -113,8 +111,6 @@ webapp.get('/post/:id', async (req, res) => {
 });
 
 webapp.get('/comment/:id', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('retrieve the comments on a post');
   try {
     const { id } = req.params;
 
@@ -127,16 +123,12 @@ webapp.get('/comment/:id', async (req, res) => {
 });
 
 webapp.post('/comment', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('control through webserver.js to post at /comment with a req of ', req.body);
   try {
     const commentObj = {
       post_id: req.body.post_id,
       user_id: req.body.user_id,
       comment_txt: req.body.comment_txt,
     };
-    // eslint-disable-next-line no-console
-    console.log('and now succesful on comment Obj of ', commentObj);
     const commentInsert = await postCommentLib.makeNewComment(postCommentDb, commentObj);
     res.status(200).json(commentInsert);
   } catch (err) {
@@ -145,15 +137,11 @@ webapp.post('/comment', async (req, res) => {
 });
 
 webapp.get('/profile/:id', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('retrieve profile information for supplied id.');
   try {
     const { id } = req.params;
 
     // assign to res.status
     const profileInfo = await profileLib.getProfileById(profileDb, id);
-    // eslint-disable-next-line no-console
-    console.log('retrieved (from model, still in controller) profile info: ', profileInfo);
     res.status(200).json(profileInfo);
   } catch (err) {
     res.status(404).json({ err: err.message });
@@ -210,6 +198,48 @@ webapp.get('/groups', async (req, res) => {
     }
   } catch (err) {
     res.status(404).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/user/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('retrieve user information for supplied id, with id of: ', req.params.id);
+  try {
+    const { id } = req.params;
+    const userInfo = await userLib.getUserById(userDb, id);
+    // eslint-disable-next-line no-console
+    console.log('retrieved user info from model, current at webserver/user/id/get, value of: ', userInfo);
+    res.status(200).json(userInfo);
+  } catch (err) {
+    res.status(404).json('error! at webserver/user/id/get');
+  }
+});
+
+webapp.put('/user/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('make it to webserver/webapp.put/user/id with params: ', req.params);
+  try {
+    const { id } = req.params;
+    const { userPassword } = req.body;
+    // get password from body not params!
+    const userInfo = await userLib.updateUser(userDb, id, 'user_password', userPassword);
+    res.status(200).json(userInfo);
+  } catch (err) {
+    res.status(404).json('error! at webserver/user/id/put');
+  }
+});
+
+webapp.put('/profile/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('make it to webserver/webapp.put/profile/id with params: ', req.params);
+  try {
+    const { id } = req.params;
+    const { biography } = req.body;
+    // get password from body not params!
+    const userInfo = await profileLib.updateProfile(profileDb, id, 'biography', biography);
+    res.status(200).json(userInfo);
+  } catch (err) {
+    res.status(404).json('error! at webserver/profile/id/put');
   }
 });
 

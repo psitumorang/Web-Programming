@@ -83,10 +83,10 @@ const deleteProfile = async (db, userId) => {
 };
 
 // update a user
-const updateProfile = async (db, userId, paramToUpdate, updateValue) => {
+const updateProfile = async (db, userId, updateValue) => {
   try {
-    const query = 'UPDATE profile_lst SET ?=? WHERE user_id=?';
-    const params = [paramToUpdate, updateValue, userId];
+    const query = 'UPDATE profile_lst SET biography=? WHERE user_id=?';
+    const params = [updateValue, userId];
     const [row] = await db.execute(query, params);
     // eslint-disable-next-line no-console
     console.log(`Updated ${JSON.stringify(row.affectedRows)} player`);

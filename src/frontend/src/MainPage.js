@@ -4,11 +4,13 @@ import React, { useState } from 'react';
   Route,
   Switch,
   withRouter,
+  other thing blah
 } from 'react-router-dom'; */
 import LoginPage from './login-page/LoginPage';
 import Home from './home-page/Home';
 import ProfilePage from './profile-page/ProfilePage';
 import Groups from './groups-page/Groups';
+import UpdatePassword from './profile-page/UpdatePassword';
 
 function MainPage() {
   const [state, updateState] = useState({ link: '/', userId: -1 });
@@ -31,10 +33,14 @@ function MainPage() {
     if (url.includes('/groups')) {
       return (<Groups changeState={changeState} state={state} />);
     }
+    if (url.includes('/changepassword')) {
+      return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);
+    }
     const last = url.split('/').pop();
     if (url.includes('/registration') || last === '' || url.includes('/error')) {
       return (<LoginPage changeState={changeState} state={state} />);
     }
+
     // TODO: change this to something meaningful
     return state;
   };
