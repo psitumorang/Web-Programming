@@ -1,6 +1,8 @@
 import React from 'react';
 import './Notification.css';
 
+const module = require('./NotificationModule');
+
 const clickProfile = (props) => {
   const url = '/notifications';
   props.changeState({ link: url });
@@ -8,6 +10,8 @@ const clickProfile = (props) => {
 
 function Home(props) {
   const { changeState, state } = props;
+    
+  const notifications = module.getNotifications(state.userId);
 
   return (
     <div className="container">

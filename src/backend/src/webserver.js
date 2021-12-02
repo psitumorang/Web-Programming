@@ -203,7 +203,6 @@ webapp.get('/groups', async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 webapp.get('/user/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('retrieve user information for supplied id, with id of: ', req.params.id);
