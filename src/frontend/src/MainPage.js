@@ -32,6 +32,9 @@ function MainPage() {
     }
     if (url.includes('/groups')) {
       return (<Groups changeState={changeState} state={state} />);
+    } 
+    if (url.includes('/notifications')) {
+      return (<NotificationPage changeState={changeState} state={state} />);
     }
     if (url.includes('/changepassword')) {
       return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);

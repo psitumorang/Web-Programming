@@ -12,6 +12,7 @@ const profileLib = require('./profileTableDatabase');
 const postLib = require('./postTableDatabase');
 const postCommentLib = require('./postCommentsTableDatabase');
 const groupLib = require('./groupTableDatabase');
+const notifLib = require('./notificationTableDatabase');
 
 const port = 8080;
 
@@ -34,6 +35,7 @@ webapp.listen(port, async () => {
   postDb = await postLib.connect();
   postCommentDb = await postCommentLib.connect();
   groupDb = await groupLib.connect();
+  notifDb = await notifLib.connect();
   // eslint-disable-next-line no-console
   console.log('listening');
 });
@@ -201,6 +203,7 @@ webapp.get('/groups', async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 webapp.get('/user/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('retrieve user information for supplied id, with id of: ', req.params.id);
@@ -240,6 +243,37 @@ webapp.put('/profile/:id', async (req, res) => {
     res.status(200).json(userInfo);
   } catch (err) {
     res.status(404).json('error! at webserver/profile/id/put');
+  }
+});
+
+webapp.get('/notifications/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get notifications');
+  const { id } = req.params;
+  try {
+    const notifications = await notifLib.getNotifications(notifDb, id);
+    
+    // eslint-disable-next-line no-console
+    console.log('got notifications: ' + notifications);
+    return notifications;
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.post('/notifications/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get notifications');
+  const { id } = req.params;
+  const { notification } = req.params.notification;
+  try {
+    const notifications = await notifLib.addNotification(notifDb, id, notification);
+    
+    // eslint-disable-next-line no-console
+    console.log('got notifications: ' + notifications);
+    return notifications;
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
   }
 });
 

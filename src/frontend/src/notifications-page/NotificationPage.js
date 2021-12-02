@@ -1,14 +1,13 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
-import './Home.css';
+import './Notification.css';
 
 const clickProfile = (props) => {
-  const url = '/profile';
+  const url = '/notifications';
   props.changeState({ link: url });
 };
 
 function Home(props) {
-  const { changeState } = props;
+  const { changeState, state } = props;
 
   return (
     <div className="container">
@@ -37,27 +36,12 @@ function Home(props) {
         </div>
 
         <div className="main-area">
-
-          <div className="post-create-area">
-            User can create post here
-            <div className="text-area" />
-            <div className="post-button" />
-          </div>
-
-          <div className="post-area">
-            Posts can be viewed here
-            <div className="box-1">
-              <div className="poster-picture" />
-              <div className="update-text" />
-              <div className="reply-button" />
+            // will be a dynamic list of notifications
+            <div className="notification">
+              <div id="mark-as-read-dot"></div>
+              <div id="title"></div>
+              <div id="message"></div>
             </div>
-
-            <div className="box-2">
-              <div className="poster-picture" />
-              <div className="update-text" />
-              <div className="reply-button" />
-            </div>
-          </div>
         </div>
 
         <div className="message-updates">
