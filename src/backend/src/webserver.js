@@ -148,48 +148,6 @@ webapp.get('/profile/:id', async (req, res) => {
   }
 });
 
-webapp.get('/user/:id', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('retrieve user information for supplied id, with id of: ', req.params.id);
-  try {
-    const { id } = req.params;
-    const userInfo = await userLib.getUserById(userDb, id);
-    // eslint-disable-next-line no-console
-    console.log('retrieved user info from model, current at webserver/user/id/get, value of: ', userInfo);
-    res.status(200).json(userInfo);
-  } catch (err) {
-    res.status(404).json('error! at webserver/user/id/get');
-  }
-});
-
-webapp.put('/user/:id', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('make it to webserver/webapp.put/user/id with params: ', req.params);
-  try {
-    const { id } = req.params;
-    const { userPassword } = req.body;
-    // get password from body not params!
-    const userInfo = await userLib.updateUser(userDb, id, 'user_password', userPassword);
-    res.status(200).json(userInfo);
-  } catch (err) {
-    res.status(404).json('error! at webserver/user/id/put');
-  }
-});
-
-webapp.put('/profile/:id', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('make it to webserver/webapp.put/profile/id with params: ', req.params);
-  try {
-    const { id } = req.params;
-    const { biography } = req.body;
-    // get password from body not params!
-    const userInfo = await profileLib.updateProfile(profileDb, id, biography);
-    res.status(200).json(userInfo);
-  } catch (err) {
-    res.status(404).json('error! at webserver/profile/id/put');
-  }
-});
-
 webapp.post('/groups', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('create a group');
