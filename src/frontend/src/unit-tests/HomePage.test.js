@@ -11,11 +11,11 @@ import Home from '../home-page/Home';
 const changeState = jest.fn();
 
 describe('Test Home Page UI', () => {
-  test('change link called when updates button clicked', async () => {
+  test('change link called when notification button clicked', async () => {
     render(<Router><Home changeState={changeState} /></Router>);
-    document.getElementsByClassName('updates')[0].click();
+    document.getElementsByClassName('notifications')[0].click();
     expect(changeState).toBeCalled();
-    expect(changeState.mock.calls[0][0]).toStrictEqual({link: '/updates'});
+    expect(changeState.mock.calls[0][0]).toStrictEqual({link: '/notifications'});
   });
 
   test('Home page renders correctly', () => {

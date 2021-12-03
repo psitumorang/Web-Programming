@@ -29,7 +29,7 @@ function Home(props) {
       <div className="main-container">
 
         <div className="side-navbar">
-          <button type="submit" className="Notifications" onClick={() => changeState({ link: '/notifications' })}>Notifications</button>
+          <button type="submit" className="notifications" onClick={() => changeState({ link: '/notifications' })}>Notifications</button>
           <button type="submit" className="events">Events</button>
           <button type="submit" className="groups" onClick={() => changeState({ link: '/groups' })}>Groups</button>
           <button type="submit" className="videos">Videos</button>

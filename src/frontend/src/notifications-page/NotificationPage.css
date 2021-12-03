@@ -137,6 +137,54 @@ button:hover {
   border: 0.5px solid rgb(10, 17, 40);
   height: 100%;
   width: 70vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.notification {
+  width: 70vw;
+  height: 100px;
+  border-right: 2px solid rgb(10, 17, 40);
+  border-left: 2px solid rgb(10, 17, 40);
+  border-bottom: 2px solid rgb(10, 17, 40);
+  background: rgba(211, 211, 211, 0.2);
+}
+
+.title {
+  font-weight: bold;
+  color: rgb(18,130,162);
+}
+
+.info {
+  height: 83px;
+  width: 70vw;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.message {
+  height: 100%;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+}
+
+.mark-as-read-dot {
+  
+  height: 10px;
+  width: 10px;
+}
+
+.read {
+  border: 2px solid rgb(0,31,84);
+}
+
+.unread {
+  background: rgb(0,31,84);
 }
 
 /*message updates*/

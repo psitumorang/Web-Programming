@@ -10,6 +10,7 @@ import LoginPage from './login-page/LoginPage';
 import Home from './home-page/Home';
 import ProfilePage from './profile-page/ProfilePage';
 import Groups from './groups-page/Groups';
+import NotificationPage from './notifications-page/NotificationPage';
 import UpdatePassword from './profile-page/UpdatePassword';
 
 function MainPage() {
@@ -32,7 +33,7 @@ function MainPage() {
     }
     if (url.includes('/groups')) {
       return (<Groups changeState={changeState} state={state} />);
-    } 
+    }
     if (url.includes('/notifications')) {
       return (<NotificationPage changeState={changeState} state={state} />);
     }

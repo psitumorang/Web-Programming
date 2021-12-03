@@ -22,15 +22,13 @@ const connect = async () => {
 
 // add a notification
 const addNotification = async (db, id, notification) => {
-  const query = 'INSERT INTO notification_lst (notif_id , user_id, is_read, notif_msg, notif_date) VALUES(?, ?, ?, ?, STR_TO_DATE(?, "%m-%d-%Y"))';
+  const query = 'INSERT INTO notification_lst (user_id, is_read, msg, date) VALUES(?, ?, ?, NOW())';
 
-  const date = new Date();
-  const params = [notification.id, notification.userId,
-    notification.isRead, notification.msg, `${date.getUTCMonth() + 1}-${date.getUTCDate()}-${date.getUTCFullYear()}`];
+  const params = [id, notification.isRead, notification.msg];
   try {
-    await db.execute(query, params);
+    const [rows] = await db.execute(query, params);
     // eslint-disable-next-line no-console
-    console.log(`Created notif with id: ${notification.id}`);
+    console.log(`Created notif with id: ${notification.id}`, rows);
     return notification;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -41,12 +39,17 @@ const addNotification = async (db, id, notification) => {
 
 // gets all notifications for user
 const getNotifications = async (db, id) => {
-  const query = 'SELECT * FROM notification_lst WHERE user_id=?';
+  const query = 'SELECT * FROM notification_lst WHERE user_id=? ORDER BY date DESC';
 
   try {
     const [rows] = await db.execute(query, [id]);
-    
+
+    // eslint-disable-next-line no-console
     console.log(`Fetched notifs: ${rows}`);
+    // change the rows we just fetched to be read now!
+    const readQuery = 'UPDATE notification_lst SET is_read=true WHERE is_read=false';
+    await db.execute(readQuery);
+
     return rows;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -56,6 +59,7 @@ const getNotifications = async (db, id) => {
 };
 
 module.exports = {
+  connect,
   getNotifications,
   addNotification,
 };

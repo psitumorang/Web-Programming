@@ -50,11 +50,11 @@ exports[`Test Home Page UI Home page renders correctly 1`] = `
       className="side-navbar"
     >
       <button
-        className="updates"
+        className="notifications"
         onClick={[Function]}
         type="submit"
       >
-        Updates
+        Notifications
       </button>
       <button
         className="events"
@@ -86,9 +86,9 @@ exports[`Test Home Page UI Home page renders correctly 1`] = `
       className="main-area"
     >
       <div
-        className="post-area"
+        className="post-create-area"
       >
-        User can input status update here
+        User can create post here
         <div
           className="text-area"
         />
@@ -97,9 +97,9 @@ exports[`Test Home Page UI Home page renders correctly 1`] = `
         />
       </div>
       <div
-        className="updates-area"
+        className="post-area"
       >
-        Status updates will be located here
+        Posts can be viewed here
         <div
           className="box-1"
         >
@@ -129,9 +129,9 @@ exports[`Test Home Page UI Home page renders correctly 1`] = `
       </div>
     </div>
     <div
-      className="live-updates"
+      className="message-updates"
     >
-      Live updates
+      Message updates
     </div>
   </div>
 </div>

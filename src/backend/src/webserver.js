@@ -28,6 +28,7 @@ let profileDb;
 let postDb;
 let postCommentDb;
 let groupDb;
+let notifDb;
 
 webapp.listen(port, async () => {
   userDb = await userLib.connect();
@@ -251,10 +252,10 @@ webapp.get('/notifications/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const notifications = await notifLib.getNotifications(notifDb, id);
-    
+
     // eslint-disable-next-line no-console
-    console.log('got notifications: ' + notifications);
-    return notifications;
+    console.log('got notifications: ', notifications);
+    res.status(200).json(notifications);
   } catch (err) {
     res.status(400).json({ err: `error is ${err.message}` });
   }
@@ -262,15 +263,14 @@ webapp.get('/notifications/:id', async (req, res) => {
 
 webapp.post('/notifications/:id', async (req, res) => {
   // eslint-disable-next-line no-console
-  console.log('get notifications');
+  console.log('POST notifications, ', req.params, req.body.notification);
   const { id } = req.params;
-  const { notification } = req.params.notification;
   try {
-    const notifications = await notifLib.addNotification(notifDb, id, notification);
-    
+    const notifications = await notifLib.addNotification(notifDb, id, req.body.notification);
+
     // eslint-disable-next-line no-console
-    console.log('got notifications: ' + notifications);
-    return notifications;
+    console.log('got notifications: ', notifications);
+    res.status(201);
   } catch (err) {
     res.status(400).json({ err: `error is ${err.message}` });
   }
