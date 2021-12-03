@@ -29,7 +29,7 @@ function Home(props) {
       <div className="main-container">
 
         <div className="side-navbar">
-          <button type="submit" className="updates" onClick={() => changeState({ link: '/updates' })}>Updates</button>
+          <button type="submit" className="notifications" onClick={() => changeState({ link: '/notifications' })}>Notifications</button>
           <button type="submit" className="events">Events</button>
           <button type="submit" className="groups" onClick={() => changeState({ link: '/groups' })}>Groups</button>
           <button type="submit" className="videos">Videos</button>
@@ -38,14 +38,14 @@ function Home(props) {
 
         <div className="main-area">
 
-          <div className="post-area">
-            User can input status update here
+          <div className="post-create-area">
+            User can create post here
             <div className="text-area" />
             <div className="post-button" />
           </div>
 
-          <div className="updates-area">
-            Status updates will be located here
+          <div className="post-area">
+            Posts can be viewed here
             <div className="box-1">
               <div className="poster-picture" />
               <div className="update-text" />
@@ -60,8 +60,8 @@ function Home(props) {
           </div>
         </div>
 
-        <div className="live-updates">
-          Live updates
+        <div className="message-updates">
+          Message updates
         </div>
 
       </div>

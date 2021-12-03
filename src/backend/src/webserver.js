@@ -12,6 +12,7 @@ const profileLib = require('./profileTableDatabase');
 const postLib = require('./postTableDatabase');
 const postCommentLib = require('./postCommentsTableDatabase');
 const groupLib = require('./groupTableDatabase');
+const notifLib = require('./notificationTableDatabase');
 
 const port = 8080;
 
@@ -27,6 +28,7 @@ let profileDb;
 let postDb;
 let postCommentDb;
 let groupDb;
+let notifDb;
 
 webapp.listen(port, async () => {
   userDb = await userLib.connect();
@@ -34,6 +36,7 @@ webapp.listen(port, async () => {
   postDb = await postLib.connect();
   postCommentDb = await postCommentLib.connect();
   groupDb = await groupLib.connect();
+  notifDb = await notifLib.connect();
   // eslint-disable-next-line no-console
   console.log('listening');
 });
@@ -240,6 +243,36 @@ webapp.put('/profile/:id', async (req, res) => {
     res.status(200).json(userInfo);
   } catch (err) {
     res.status(404).json('error! at webserver/profile/id/put');
+  }
+});
+
+webapp.get('/notifications/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get notifications');
+  const { id } = req.params;
+  try {
+    const notifications = await notifLib.getNotifications(notifDb, id);
+
+    // eslint-disable-next-line no-console
+    console.log('got notifications: ', notifications);
+    res.status(200).json(notifications);
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.post('/notifications/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('POST notifications, ', req.params, req.body.notification);
+  const { id } = req.params;
+  try {
+    const notifications = await notifLib.addNotification(notifDb, id, req.body.notification);
+
+    // eslint-disable-next-line no-console
+    console.log('got notifications: ', notifications);
+    res.status(201);
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
   }
 });
 
