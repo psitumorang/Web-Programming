@@ -10,11 +10,11 @@ function Groups(props) {
 
   const updateGroups = async () => {
     const groups = await lib.getGroups(changeState);
-
+    const admins = await lib.getAdmins();
     // eslint-disable-next-line
     console.log(groups.result);
     setAllGroups(groups.result);
-    lib.parseGroups(groups.result[0]);
+    lib.parseGroups(changeState, groups.result[0], admins);
   };
 
   const createGroup = async () => {
@@ -29,9 +29,9 @@ function Groups(props) {
       document.getElementById('topic3').value);
 
     const groups = await lib.getGroups(changeState);
-
+    const admins = await lib.getAdmins();
     setAllGroups(groups.result);
-    lib.parseGroups(groups.result[0]);
+    lib.parseGroups(changeState, groups.result[0], admins);
   };
 
   useEffect(() => { updateGroups(); }, []);
@@ -105,23 +105,10 @@ function Groups(props) {
             </div>
 
             <button type="submit" className="createGroup" onClick={() => { createGroup(); updateGroups(); }}> Create A Group </button>
-            <div className="text-area" />
-            <div className="post-button" />
           </div>
 
           <div className="groups-area" id="groups-area">
-            Groups will be displayed here
-            <div className="box-1">
-              <div className="poster-picture" />
-              <div className="update-text" />
-              <div className="reply-button" />
-            </div>
-
-            <div className="box-2">
-              <div className="poster-picture" />
-              <div className="update-text" />
-              <div className="reply-button" />
-            </div>
+            There are no groups yet!
           </div>
         </div>
 

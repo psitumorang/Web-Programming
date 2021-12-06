@@ -40,9 +40,7 @@ const sendPutRequest = async function sendPutRequest(url, body) {
 
 const sendGetRequest = async function sendGetRequest(url, params) {
   try {
-    // eslint-disable-next-line
-    console.log('at dbmodule.js frontend, sendGetRequest, with params.id of ', params.id);
-    const fullURL = url + JSON.stringify(params.id);
+    const fullURL = url + (typeof params !== 'undefined' ? JSON.stringify(params.id) : '');
     const res = await fetch(fullURL, {
       method: 'GET',
       mode: 'cors',
@@ -55,6 +53,27 @@ const sendGetRequest = async function sendGetRequest(url, params) {
   } catch (err) {
     // eslint-disable-next-line
     console.log('ERROR getting posts');
+    // eslint-disable-next-line
+    console.log(err);
+    return null;
+  }
+};
+
+const sendDeleteRequest = async function sendDeleteRequest(url) {
+  try {
+    const res = await fetch(url, {
+      method: 'DELETE',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((response) => response.json())
+      .then((result) => result);
+    return res;
+  } catch (err) {
+    // eslint-disable-next-line
+    console.log('ERROR deleting request');
+    // eslint-disable-next-line
+    console.log(err);
     return null;
   }
 };
@@ -77,4 +96,5 @@ module.exports = {
   sendGetRequest,
   sendPutRequest,
   sendGetGroupsRequest,
+  sendDeleteRequest,
 };

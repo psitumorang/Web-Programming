@@ -1,0 +1,113 @@
+import { useState, useEffect, React } from 'react';
+import './ViewGroup.css';
+
+// eslint-disable-next-line
+const lib = require('./ViewGroupModule');
+
+function ViewGroup(props) {
+  // eslint-disable-next-line
+  const { changeState, state } = props;
+
+  const [groupAndAdmins, setGroupAndAdmins] = useState({ group: {}, admins: [] });
+
+  const updateState = async () => {
+    const group = await lib.getGroup(state.viewingGroup);
+    const admins = await lib.getAdmins(state.viewingGroup);
+
+    setGroupAndAdmins(() => ({
+      group,
+      admins,
+    }));
+  };
+
+  const processAdmins = (admins) => {
+    let adminLst = '';
+    admins.forEach((admin) => {
+      const toShow = (admin.is_creator === 1 ? `${admin.user_name} (creator)` : `${admin.user_name}`);
+
+      adminLst += (adminLst === '' ? `${toShow} ` : `, ${toShow}`);
+    });
+    return adminLst;
+  };
+
+  useEffect(() => { updateState(); }, []);
+
+  return (
+    <div className="container">
+      <div className="header">
+        <div className="social-media-title">Social Media</div>
+        <div className="profile-picture">
+          <div className="img" />
+        </div>
+        <div className="username">Hi, username!</div>
+      </div>
+
+      <div className="top-navbar">
+        <div className="home-link">Home</div>
+        <div className="profile-link">Profile</div>
+      </div>
+
+      <div className="main-container">
+
+        <div className="side-navbar">
+          <button type="submit" className="notifications" onClick={() => changeState({ link: '/notifications' })}>Notifications</button>
+          <button type="submit" className="events">Events</button>
+          <button type="submit" className="groups" onClick={() => changeState({ link: '/groups' })}>Groups</button>
+          <button type="submit" className="videos">Videos</button>
+          <button type="submit" className="photos">Photos</button>
+        </div>
+
+        <div className="main-area">
+          <div className="post-area">
+            <div className="group-view">
+              <div className="group-info">
+                <ul>
+                  <li id="group-id">
+                    {`Group Id: ${groupAndAdmins.group.group_id}`}
+                  </li>
+                  <li id="group-name">
+                    {`Group Name: ${groupAndAdmins.group.group_name}`}
+                  </li>
+                  <li id="group-description">
+                    {`Group Description: ${groupAndAdmins.group.group_description}`}
+                  </li>
+                  <li id="group-admins">
+                    {`Admins: ${processAdmins(groupAndAdmins.admins)}`}
+                  </li>
+                  <li id="is-public">
+                    {(groupAndAdmins.group.is_public === 1 ? 'Public' : 'Private')}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="view-area" id="groups-area">
+            <div id="revoke">
+              { state.link.includes('error') ? (<p>Error: cannot revoke creator of group</p>) : (null)}
+              <label htmlFor="revokeAdmin">
+                {'Revoke Admin: '}
+                <input id="revokeAdmin" type="text" placeholder="Enter username" />
+              </label>
+              <input type="button" value="Submit" id="submit" onClick={() => lib.revokeAdmin(state, changeState, groupAndAdmins)} />
+            </div>
+            <div id="add">
+              <label htmlFor="addAdmin">
+                {'Add Admin: '}
+                <input id="addAdmin" type="text" placeholder="Enter username" />
+              </label>
+              <input type="button" value="Submit" id="submit" onClick={() => lib.addAdmin(groupAndAdmins)} />
+            </div>
+          </div>
+        </div>
+
+        <div className="message-updates">
+          Message updates
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+export default ViewGroup;
