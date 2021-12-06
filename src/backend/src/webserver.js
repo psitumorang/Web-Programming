@@ -13,6 +13,7 @@ const postLib = require('./postTableDatabase');
 const postCommentLib = require('./postCommentsTableDatabase');
 const groupLib = require('./groupTableDatabase');
 const notifLib = require('./notificationTableDatabase');
+const adminLib = require('./adminTableDatabase');
 
 const port = 8080;
 
@@ -29,6 +30,7 @@ let postDb;
 let postCommentDb;
 let groupDb;
 let notifDb;
+let adminDb;
 
 webapp.listen(port, async () => {
   userDb = await userLib.connect();
@@ -37,6 +39,7 @@ webapp.listen(port, async () => {
   postCommentDb = await postCommentLib.connect();
   groupDb = await groupLib.connect();
   notifDb = await notifLib.connect();
+  adminDb = await adminLib.connect();
   // eslint-disable-next-line no-console
   console.log('listening');
 });
@@ -82,14 +85,14 @@ webapp.post('/login', async (req, res) => {
   try {
     const name = req.body.user_name;
     const resultsUser = await userLib.getUsersWithName(userDb, name);
-    if (resultsUser[0].length === 0) {
+    if (resultsUser.length === 0) {
       res.status(404).json({ err: 'User does not exist' });
-    } else if (req.body.user_password.includes(resultsUser[0][0].user_password)) {
+    } else if (req.body.user_password.includes(resultsUser[0].user_password)) {
       // TODO: increase the number of characters that
       // are able to be stored for a password for more accuracy
-      const profile = await profileLib.getProfileById(profileDb, resultsUser[0][0].user_id);
+      const profile = await profileLib.getProfileById(profileDb, resultsUser[0].user_id);
       res.status(200).json({
-        profile: profile[0][0],
+        profile: profile[0],
       });
     } else {
       res.status(404).json({ err: 'Incorrect password' });
@@ -180,12 +183,42 @@ webapp.post('/groups', async (req, res) => {
       });
     }
 
+    const userId = await userLib.getUsersWithName(userDb, newGroup.group_creator);
+    await adminLib.addAdminForGroup(
+      adminDb,
+      newGroup.group_id,
+      userId[0].user_id,
+      1,
+      newGroup.group_creator,
+    );
+    await notifLib.addNotification(
+      notifDb,
+      userId[0].user_id,
+      { notification: { isRead: false, msg: `Congratulations! You are now the creator and admin of the group ${newGroup.group_name}` } },
+    );
+
     const resultsTopics = await groupLib.addTopics(groupDb, newTopics);
     return resultsTopics;
   } catch (err) {
     res.status(404).json({ err: err.message });
   }
   return null;
+});
+
+webapp.get('/groups/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get one group groups');
+
+  try {
+    const groups = await groupLib.getGroupById(groupDb, req.params.id);
+    if (groups === null) {
+      res.status(404).json({ err: 'no groups found' });
+    } else {
+      res.status(200).json(groups);
+    }
+  } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
+  }
 });
 
 webapp.get('/groups', async (req, res) => {
@@ -271,6 +304,79 @@ webapp.post('/notifications/:id', async (req, res) => {
     // eslint-disable-next-line no-console
     console.log('got notifications: ', notifications);
     res.status(201);
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.post('/admins', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('POST admins, ', req.body.admin);
+  try {
+    const userId = await userLib.getUsersWithName(userDb, req.body.admin.adminUser);
+
+    const admin = await adminLib.addAdminForGroup(
+      adminDb,
+      req.body.admin.groupId,
+      userId[0].user_id,
+      req.body.admin.isCreator,
+      req.body.admin.adminUser,
+    );
+
+    await notifLib.addNotification(notifDb, userId[0].user_id, { notification: { isRead: 0, msg: `Congratulations! You were promoted to admin of group: ${req.body.admin.groupName}` } });
+    // eslint-disable-next-line no-console
+    console.log('got admin: ', admin);
+    res.status(201).json(admin);
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/admins/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get admins');
+  try {
+    const admin = await adminLib.getAdmins(adminDb, req.params.id);
+
+    // eslint-disable-next-line no-console
+    console.log('got admins: ', admin);
+    res.status(200).json(admin);
+  } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/admins', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get all admins');
+  try {
+    const admins = await adminLib.getAllAdmins(adminDb);
+
+    // eslint-disable-next-line no-console
+    console.log('got all admins: ', admins);
+    res.status(200).json(admins);
+  } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.delete('/admins', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('delete admin');
+  try {
+    const admin = await adminLib.revokeAdmin(adminDb, req.query.groupId, req.query.adminUser);
+
+    // eslint-disable-next-line no-console
+    console.log('removed admin: ', admin);
+
+    if (typeof admin.err !== 'undefined') {
+      res.status(400).json(admin.err);
+      return;
+    }
+
+    await notifLib.addNotification(notifDb, admin[0].admin_id, { notification: { isRead: 0, msg: `You were removed as admin from ${req.query.groupName}. Too bad so sad :(` } });
+
+    res.status(200).json(admin);
   } catch (err) {
     res.status(400).json({ err: `error is ${err.message}` });
   }

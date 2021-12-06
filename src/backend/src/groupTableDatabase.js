@@ -103,6 +103,21 @@ const getGroups = async (db) => {
   return null;
 };
 
+// get all groups
+const getGroupById = async (db, id) => {
+  try {
+    const query = 'SELECT * FROM group_lst WHERE group_id=?';
+    const [rows] = await db.execute(query, [id]);
+    // eslint-disable-next-line no-console
+    console.log(`Group: ${JSON.stringify(rows)}`);
+    return rows[0];
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
 // get all groups with same groupname
 const getGroupsWithName = async (db, name) => {
   try {
@@ -171,4 +186,5 @@ module.exports = {
   deleteGroup,
   updateGroup,
   getNextId,
+  getGroupById,
 };

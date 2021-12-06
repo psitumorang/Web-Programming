@@ -12,15 +12,17 @@ import ProfilePage from './profile-page/ProfilePage';
 import Groups from './groups-page/Groups';
 import NotificationPage from './notifications-page/NotificationPage';
 import UpdatePassword from './profile-page/UpdatePassword';
+import ViewGroup from './view-group-page/ViewGroup';
 
 function MainPage() {
-  const [state, updateState] = useState({ link: '/', userId: -1 });
+  const [state, updateState] = useState({ link: '/', userId: -1, viewingGroup: -1 });
 
   const changeState = (input) => {
     if (typeof input.link !== 'undefined') window.history.pushState(null, '', input.link);
     updateState((oldState) => ({
       link: ((typeof input.link !== 'undefined') ? input.link : oldState.link),
       userId: ((typeof input.userId !== 'undefined') ? input.userId : oldState.userId),
+      viewingGroup: ((typeof input.viewingGroup !== 'undefined') ? input.viewingGroup : oldState.viewingGroup),
     }));
   };
 
@@ -40,8 +42,11 @@ function MainPage() {
     if (url.includes('/changepassword')) {
       return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);
     }
+    if (url.includes('/viewgroup') || url.includes('/viewgroup/error')) {
+      return (<ViewGroup changeState={changeState} state={state} />);
+    }
     const last = url.split('/').pop();
-    if (url.includes('/registration') || last === '' || url.includes('/error')) {
+    if (url.includes('/registration') || last === '' || url.includes('/registration/error')) {
       return (<LoginPage changeState={changeState} state={state} />);
     }
 

@@ -39,7 +39,15 @@ const getGroups = async (changeState) => {
   return response;
 };
 
-const parseGroups = (groups) => {
+const getAdmins = async () => {
+  const response = await database.sendGetRequest('http://localhost:8080/admins');
+
+  // eslint-disable-next-line no-console
+  console.log(response);
+  return response;
+};
+
+const parseGroups = (changeState, groups, admins) => {
   // remove all children in the box
   const element = document.getElementById('groups-area');
 
@@ -53,13 +61,19 @@ const parseGroups = (groups) => {
   for (let i = 0; i < groups.length; i += 1) {
     const group = groups[i];
 
+    // eslint-disable-next-line no-console
+    console.log(admins, group.group_id, admins[group.group_id]);
+
+    let adminLst = '';
+    const list = admins[group.group_id];
+    list.forEach((admin) => {
+      adminLst += (adminLst === '' ? `${admin}` : `, ${admin}`);
+    });
+
     const groupId = group.group_id;
     const groupName = group.group_name;
     const groupDescription = group.group_description;
     const isPublic = (group.is_public === 1) ? 'Public' : 'Private';
-
-    // eslint-disable-next-line no-console
-    console.log(groupDescription);
 
     // eslint-disable-next-line prefer-template
     const groupBlock = '<div class="group-container">'
@@ -74,6 +88,9 @@ const parseGroups = (groups) => {
     + '<li id="group-description">Group Description: '
     + groupDescription
     + '</li>'
+    + '<li id="group-admins">Admins: '
+    + adminLst
+    + '</li>'
     + '<li id="is-public">'
     + isPublic
     + '</li>'
@@ -84,6 +101,9 @@ const parseGroups = (groups) => {
 
     const div = document.createElement('div');
     div.innerHTML = groupBlock;
+    div.onclick = () => {
+      changeState({ link: '/viewgroup', viewingGroup: groupId });
+    };
 
     document.getElementById('groups-area').appendChild(div);
   }
@@ -93,4 +113,5 @@ module.exports = {
   createGroup,
   getGroups,
   parseGroups,
+  getAdmins,
 };

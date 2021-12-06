@@ -86,7 +86,7 @@ const getUsersWithName = async (db, name) => {
     const [rows] = await db.execute(query, [name]);
     // eslint-disable-next-line no-console
     console.log(`Users: ${JSON.stringify(rows)}`);
-    return [rows];
+    return rows;
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(`error: ${err.message}`);
