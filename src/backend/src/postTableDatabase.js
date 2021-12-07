@@ -37,7 +37,56 @@ const getUserPosts = async (db, id) => {
   }
 };
 
+// add a post to a group page
+const addPost = async (db, newPost) => {
+  const query = 'INSERT INTO post_lst (post_id, post_group, posting_user, caption) VALUES(?, ?, ?, ?)';
+
+  const params = [newPost.post_id, newPost.post_group, newPost.posting_user, newPost.caption];
+
+  try {
+    await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Created post with id: ${newPost.post_id}`);
+    return newPost.post_id;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+// get all groups
+const getPosts = async (db, groupId) => {
+  try {
+    const query = 'SELECT * FROM post_lst WHERE post_group = ?';
+    
+    const [rows] = await db.execute(query, [groupId]);
+    // eslint-disable-next-line no-console
+    console.log(`Posts: ${JSON.stringify(rows)}`);
+    return [rows];
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+// get next available id
+const getNextId = async (db) => {
+  try {
+    const query = 'SELECT MAX(post_id) FROM post_lst';
+    const [row] = await db.execute(query);
+    return row[0]['MAX(post_id)'];
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
 module.exports = {
   connect,
   getUserPosts,
+  addPost,
+  getPosts,
+  getNextId,
 };

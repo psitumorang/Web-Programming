@@ -91,6 +91,8 @@ webapp.post('/login', async (req, res) => {
       // TODO: increase the number of characters that
       // are able to be stored for a password for more accuracy
       const profile = await profileLib.getProfileById(profileDb, resultsUser[0].user_id);
+
+      console.log(`profile is: ${profile.user_id}`)
       res.status(200).json({
         profile: profile[0],
       });
@@ -379,6 +381,50 @@ webapp.delete('/admins', async (req, res) => {
     res.status(200).json(admin);
   } catch (err) {
     res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.post('/post', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('create a group post');
+  try {
+    const nextId = await postLib.getNextId(postDb);
+    const newPost = {
+      post_id: nextId + 1,
+      post_group: req.body.post_group,
+      posting_user: req.body.posting_user,
+      caption: req.body.caption,
+    };
+
+    console.log(`new post ${newPost.post_id}, ${newPost.post_group} , ${newPost.posting_user} , ${newPost.caption} `)
+
+    const result = await postLib.addPost(postDb, newPost);
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        post: newPost,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+webapp.get('/posts/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get posts');
+
+  try {
+    const posts = await postLib.getPosts(postDb, req.params.id);
+    if (posts === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(200).json({ result: posts });
+    }
+  } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
   }
 });
 
