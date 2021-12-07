@@ -58,7 +58,7 @@ const addPost = async (db, newPost) => {
 // get all groups
 const getPosts = async (db, groupId) => {
   try {
-    const query = 'SELECT * FROM post_lst WHERE post_group = ?';
+    const query = 'SELECT * FROM post_lst WHERE post_group = ? ORDER BY post_id DESC';
     
     const [rows] = await db.execute(query, [groupId]);
     // eslint-disable-next-line no-console
