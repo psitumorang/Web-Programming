@@ -9,7 +9,6 @@ function ViewGroup(props) {
   const { changeState, state } = props;
 
   const [groupAndAdmins, setGroupAndAdmins] = useState({ group: {}, admins: [] });
-
   const updateState = async () => {
     const group = await lib.getGroup(state.viewingGroup);
     const admins = await lib.getAdmins(state.viewingGroup);
@@ -30,7 +29,44 @@ function ViewGroup(props) {
     return adminLst;
   };
 
+  // eslint-disable-next-line no-unused-vars
+  const [allPosts, setAllPosts] = useState([]);
+
+  const updatePosts = async () => {
+    const posts = await lib.getPosts(changeState, state.viewingGroup);
+
+    // eslint-disable-next-line
+    console.log(posts.result);
+    setAllPosts(posts.result);
+    /* lib.parsePosts(posts.result[0]); */
+  };
+
+  const createPost = async () => {
+    // eslint-disable-next-line
+    const res = await lib.createPost(changeState,
+      state.viewingGroup,
+      state.userId,
+      document.getElementById('post').value);
+
+    const posts = await lib.getPosts(changeState, state.viewingGroup);
+    // eslint-disable-next-line no-console
+    console.log(`posts: ${JSON.stringify(posts.result[0])}`);
+
+    setAllPosts(posts.result[0]);
+
+    // eslint-disable-next-line no-console
+    console.log(`all posts: ${JSON.stringify(allPosts)}`);
+    lib.parsePosts(posts.result[0]);
+    /*
+    const groups = await lib.getGroups(changeState);
+    const admins = await lib.getAdmins();
+    setAllGroups(groups.result);
+    lib.parseGroups(changeState, groups.result[0], admins);
+    */
+  };
+
   useEffect(() => { updateState(); }, []);
+  useEffect(() => { updatePosts(); }, []);
 
   return (
     <div className="container">
@@ -58,7 +94,7 @@ function ViewGroup(props) {
         </div>
 
         <div className="main-area">
-          <div className="post-area">
+          <div className="info-area">
             <div className="group-view">
               <div className="group-info">
                 <ul>
@@ -98,6 +134,15 @@ function ViewGroup(props) {
               </label>
               <input type="button" value="Submit" id="submit" onClick={() => lib.addAdmin(groupAndAdmins)} />
             </div>
+          </div>
+
+          <div className="posts-area">
+            <div className="text-input">
+              Message:
+              <input className="post-input" id="post" type="post" placeholder="Post message to group" />
+              <button className="post-button" type="submit" onClick={() => createPost()}> Post Message </button>
+            </div>
+            <div className="posts" id="posts-area" />
           </div>
         </div>
 
