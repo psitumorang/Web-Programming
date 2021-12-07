@@ -1,3 +1,14 @@
+.info-area {
+  height: 40%;
+  width: 70vw;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+}
+
 .group-view {
   display: flex;
   background-color: #F3EFF5;
@@ -11,7 +22,7 @@
   align-items: center;
 
   height: 100%;
-  padding: 5px;
+  padding: 0px;
 }
 
 .view-area {
@@ -22,6 +33,28 @@
   justify-content: center;
 }
 
+.posts {
+  border-top: 0.5px solid rgb(10, 17, 40);
+  height: 60%;
+  width: 70vw;
+
+  gap: 20px 20px;
+}
+
+/* post input */
+.text-input {
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+input[type="post"] {
+  width: 400px;
+  height: 50px;
+}
+
 #revokeAdmin, #addAdmin {
   width: 200px;
 }
@@ -29,4 +62,25 @@
 #submit {
   background-color: rgb(18,130,162);
   color: white;
+}
+
+/* posts style */
+
+.post-container {
+  background-color: #F3EFF5;
+  border: 2px solid #454955;
+  border-radius: 6px;
+  padding: 15px;
+
+  gap: 20px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
+  font-family: "LibertinusSans";
+  transition: all 0.2s ease;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  height: 100px;
 }
