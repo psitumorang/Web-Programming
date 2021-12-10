@@ -32,7 +32,7 @@ function Home(props) {
           <button type="submit" className="notifications" onClick={() => changeState({ link: '/notifications' })}>Notifications</button>
           <button type="submit" className="events">Events</button>
           <button type="submit" className="groups" onClick={() => changeState({ link: '/groups' })}>Groups</button>
-          <button type="submit" className="videos">Videos</button>
+          <button type="submit" className="invitations" onClick={() => changeState({ link: '/invitations' })}>Group Invitations </button>
           <button type="submit" className="photos">Photos</button>
         </div>
 

@@ -14,7 +14,11 @@ const postCommentLib = require('./postCommentsTableDatabase');
 const groupLib = require('./groupTableDatabase');
 const notifLib = require('./notificationTableDatabase');
 const adminLib = require('./adminTableDatabase');
+<<<<<<< HEAD
 const replyLib = require('./replyTableDatabase');
+=======
+const inviteLib = require('./invitationTableDatabase');
+>>>>>>> 0ae6a8d (Get invitations and display)
 
 const port = 8080;
 
@@ -32,7 +36,11 @@ let postCommentDb;
 let groupDb;
 let notifDb;
 let adminDb;
+<<<<<<< HEAD
 let replyDb;
+=======
+let inviteDb;
+>>>>>>> 0ae6a8d (Get invitations and display)
 
 webapp.listen(port, async () => {
   userDb = await userLib.connect();
@@ -42,7 +50,11 @@ webapp.listen(port, async () => {
   groupDb = await groupLib.connect();
   notifDb = await notifLib.connect();
   adminDb = await adminLib.connect();
+<<<<<<< HEAD
   replyDb = await replyLib.connect();
+=======
+  inviteDb = await inviteLib.connect();
+>>>>>>> 0ae6a8d (Get invitations and display)
   // eslint-disable-next-line no-console
   console.log('listening');
 });
@@ -310,6 +322,22 @@ webapp.post('/notifications/:id', async (req, res) => {
     console.log('got notifications: ', notifications);
     res.status(201);
   } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/invitations/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get invitations');
+  const { id } = req.params;
+  try {
+    const invitations = await inviteLib.getPendingInvitations(inviteDb, id);
+
+    // eslint-disable-next-line no-console
+    console.log('got invitations: ', invitations);
+    res.status(200).json(invitations);
+  } catch (err) {
+    console.log('error at webserver.js. in catch, with err of ', err);
     res.status(400).json({ err: `error is ${err.message}` });
   }
 });
