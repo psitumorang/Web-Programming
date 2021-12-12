@@ -33,7 +33,27 @@ const getGroupNames = async (invitations) => {
   return invitationsLocal;
 };
 
+const putDecline = async (invitationId) => {
+  console.log('in putDecline in Invitation module, about to pass in invitationId of: ', invitationId);
+  const result = await database.sendPutRequest(`http://localhost:8080/invitations/${invitationId}`, { newStatus: 'declined' });
+  return result;
+};
+
+const declineInvite = async (invitationId, invitationName, updateInvitations, updateMessage) => {
+  // update operation on invitation to set the status to declined
+  console.log(invitationId, updateInvitations);
+  const result = putDecline(invitationId);
+
+  // update message
+  updateMessage(`Declined invitation to  ${invitationName}`);
+
+  // refetch/update invitations
+  updateInvitations();
+  return result;
+};
+
 module.exports = {
   getPendingInvitations,
   getGroupNames,
+  declineInvite,
 };

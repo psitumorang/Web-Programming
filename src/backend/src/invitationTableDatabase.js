@@ -56,8 +56,29 @@ const getPendingInvitations = async (db, id) => {
   return null;
 };
 
+// update an invitation to accept or decline it for user
+const updateInvitationStatus = async (db, invitationId, newStatus) => {
+  const query = 'UPDATE invitations SET invitation_status=? WHERE invitation_id=?';
+
+  try {
+    console.log('about to execute updateInvitation status sql with newStatus of ', newStatus, ' and invitationId of ', invitationId);
+    const [rows] = await db.execute(query, [newStatus, invitationId]);
+
+    // eslint-disable-next-line no-console
+    console.log(`Fetched invitations: ${rows.changedRows}`);
+    // change the rows we just fetched to be read now!
+
+    return rows;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
 module.exports = {
   connect,
   getPendingInvitations,
+  updateInvitationStatus,
   // addNotification,
 };

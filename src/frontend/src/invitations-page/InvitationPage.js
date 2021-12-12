@@ -7,6 +7,7 @@ function InvitationPage(props) {
   console.log('trying a console log before anything!');
   const { changeState, state } = props;
   const [invitations, setInvitations] = useState([]);
+  const [message, setMessage] = useState('test');
 
   const updateInvitations = async () => {
     console.log('about to hit getPendingInvitations with state.userId of: ', state.userId);
@@ -19,12 +20,17 @@ function InvitationPage(props) {
     setInvitations(i);
   };
 
+  const updateMessage = (newMessage) => {
+    setMessage(newMessage);
+  };
+
   // eslint-disable-next-line
-  console.log(invitations);
+  console.log('invitations now at: ', invitations);
 
   useEffect(() => {
     console.log('about to update invitations state - before db call');
     updateInvitations();
+    setMessage('test');
   }, []);
 
   return (
@@ -54,8 +60,11 @@ function InvitationPage(props) {
         </div>
 
         <div className="main-area">
+          <div id="message">
+            {message}
+          </div>
           {invitations.map((inv) => (
-            <div className="notification" key={inv.id}>
+            <div className="notification" key={inv.invitation_id}>
               <div className="title">
                 Invitation
               </div>
@@ -64,7 +73,7 @@ function InvitationPage(props) {
                   { `You have been invited to join group ${inv.groupName}. Do you accept?  ` }
                 </div>
                 <button className="accept-invitation" type="button"> Accept </button>
-                <button className="decline-invitation" type="button"> Decline </button>
+                <button className="decline-invitation" type="button" onClick={() => lib.declineInvite(inv.invitation_id, inv.groupName, updateInvitations, updateMessage)}> Decline </button>
               </div>
             </div>
           ))}

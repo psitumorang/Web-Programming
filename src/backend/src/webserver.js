@@ -334,8 +334,26 @@ webapp.get('/invitations/:id', async (req, res) => {
     const invitations = await inviteLib.getPendingInvitations(inviteDb, id);
 
     // eslint-disable-next-line no-console
-    console.log('got invitations: ', invitations);
+    // console.log('got invitations: ', invitations);
     res.status(200).json(invitations);
+  } catch (err) {
+    console.log('error at webserver.js. in catch, with err of ', err);
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.put('/invitations/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('put invitations');
+  const { id } = req.params;
+  const { newStatus } = req.body;
+  try {
+    console.log('before updateCount execution, in webserver, req.params is: ', req.params);
+    const updateCount = await inviteLib.updateInvitationStatus(inviteDb, id, newStatus);
+
+    // eslint-disable-next-line no-console
+    console.log('updated ', updateCount, 'invitations.');
+    res.status(200).json(updateCount);
   } catch (err) {
     console.log('error at webserver.js. in catch, with err of ', err);
     res.status(400).json({ err: `error is ${err.message}` });

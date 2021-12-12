@@ -109,7 +109,7 @@ const getGroupById = async (db, id) => {
     const query = 'SELECT * FROM group_lst WHERE group_id=?';
     const [rows] = await db.execute(query, [id]);
     // eslint-disable-next-line no-console
-    console.log(`Group: ${JSON.stringify(rows)}`);
+    // console.log(`Group: ${JSON.stringify(rows)}`);
     return rows[0];
   } catch (err) {
     // eslint-disable-next-line no-console
