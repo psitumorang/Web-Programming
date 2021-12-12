@@ -34,16 +34,12 @@ const getGroups = async (changeState) => {
     changeState({ link: '/error' });
   }
 
-  // eslint-disable-next-line no-console
-  console.log(response);
   return response;
 };
 
 const getAdmins = async () => {
   const response = await database.sendGetRequest('http://localhost:8080/admins');
 
-  // eslint-disable-next-line no-console
-  console.log(response);
   return response;
 };
 
@@ -60,9 +56,6 @@ const parseGroups = (changeState, groups, admins) => {
   // then add all the groups
   for (let i = 0; i < groups.length; i += 1) {
     const group = groups[i];
-
-    // eslint-disable-next-line no-console
-    console.log(admins, group.group_id, admins[group.group_id]);
 
     let adminLst = '';
     const list = admins[group.group_id];
