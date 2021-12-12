@@ -44,8 +44,6 @@ const getPendingInvitations = async (db, id) => {
   try {
     const [rows] = await db.execute(query, [id]);
 
-    // eslint-disable-next-line no-console
-    console.log(`Fetched invitations: ${rows}`);
     // change the rows we just fetched to be read now!
 
     return rows;
@@ -64,8 +62,6 @@ const updateInvitationStatus = async (db, invitationId, newStatus) => {
     console.log('about to execute updateInvitation status sql with newStatus of ', newStatus, ' and invitationId of ', invitationId);
     const [rows] = await db.execute(query, [newStatus, invitationId]);
 
-    // eslint-disable-next-line no-console
-    console.log(`Fetched invitations: ${rows.changedRows}`);
     // change the rows we just fetched to be read now!
 
     return rows;

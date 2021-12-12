@@ -14,11 +14,9 @@ const postCommentLib = require('./postCommentsTableDatabase');
 const groupLib = require('./groupTableDatabase');
 const notifLib = require('./notificationTableDatabase');
 const adminLib = require('./adminTableDatabase');
-<<<<<<< HEAD
 const replyLib = require('./replyTableDatabase');
-=======
 const inviteLib = require('./invitationTableDatabase');
->>>>>>> 0ae6a8d (Get invitations and display)
+const groupMemberLib = require('./groupMemberTableDatabase');
 
 const port = 8080;
 
@@ -36,11 +34,9 @@ let postCommentDb;
 let groupDb;
 let notifDb;
 let adminDb;
-<<<<<<< HEAD
 let replyDb;
-=======
 let inviteDb;
->>>>>>> 0ae6a8d (Get invitations and display)
+let groupMemberDb;
 
 webapp.listen(port, async () => {
   userDb = await userLib.connect();
@@ -50,11 +46,9 @@ webapp.listen(port, async () => {
   groupDb = await groupLib.connect();
   notifDb = await notifLib.connect();
   adminDb = await adminLib.connect();
-<<<<<<< HEAD
   replyDb = await replyLib.connect();
-=======
   inviteDb = await inviteLib.connect();
->>>>>>> 0ae6a8d (Get invitations and display)
+  groupMemberDb = await groupMemberLib.connect();
   // eslint-disable-next-line no-console
   console.log('listening');
 });
@@ -358,6 +352,20 @@ webapp.put('/invitations/:id', async (req, res) => {
     console.log('error at webserver.js. in catch, with err of ', err);
     res.status(400).json({ err: `error is ${err.message}` });
   }
+});
+
+webapp.post('/membership/:id', async (req, res) => {
+    // eslint-disable-next-line no-console
+    console.log('post group membership to accept invitations');
+
+    const { id } = req.params;
+    const { userId } = req.body;
+    try {
+      const postReturn = await groupMemberLib.addGroupMember(groupMemberDb, id, userId);
+      res.status(200).json(postReturn);
+    } catch (err) {
+      res.status(400).json({ err: `error is ${err.message}` });
+    }
 });
 
 webapp.post('/admins', async (req, res) => {

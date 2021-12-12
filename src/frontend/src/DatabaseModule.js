@@ -18,8 +18,6 @@ const sendPostRequest = async function sendPostRequest(url, body) {
 };
 
 const sendPutRequest = async function sendPutRequest(url, body) {
-  // eslint-disable-next-line
-  console.log('here we are in sendPutRequest at DBModule with url of ', url, ' and body of ', body);
   try {
     const res = await fetch(url, {
       method: 'PUT',

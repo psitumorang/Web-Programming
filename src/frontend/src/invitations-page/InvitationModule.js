@@ -34,15 +34,13 @@ const getGroupNames = async (invitations) => {
 };
 
 const putDecline = async (invitationId) => {
-  console.log('in putDecline in Invitation module, about to pass in invitationId of: ', invitationId);
   const result = await database.sendPutRequest(`http://localhost:8080/invitations/${invitationId}`, { newStatus: 'declined' });
   return result;
 };
 
 const declineInvite = async (invitationId, invitationName, updateInvitations, updateMessage) => {
   // update operation on invitation to set the status to declined
-  console.log(invitationId, updateInvitations);
-  const result = putDecline(invitationId);
+  const result = await putDecline(invitationId);
 
   // update message
   updateMessage(`Declined invitation to  ${invitationName}`);
@@ -52,8 +50,36 @@ const declineInvite = async (invitationId, invitationName, updateInvitations, up
   return result;
 };
 
+const acceptHTTP = async (invitationId, groupId, userId) => {
+  // update group in db
+  const groupMembershipURL = `http://localhost:8080/membership/${groupId}`;
+  const resultGroupMember = await database.sendPostRequest(groupMembershipURL, { userId });
+
+  // update invitation in db
+  const invitationURL = `http://localhost:8080/invitations/${invitationId}`;
+  const invitationBody = { newStatus: 'accepted' };
+  const resultInv = await database.sendPutRequest(invitationURL, invitationBody);
+
+  // refetch/update invitations
+  return [resultGroupMember, resultInv];
+};
+
+const acceptInvite = async (invitation, updateInvitations, updateMessage, userId) => {
+  // update operation on invitation to set the status to declined
+  const result = await acceptHTTP(invitation.invitation_id, invitation.group_id, userId);
+
+  // update message
+  updateMessage(`Accepted invitation to  ${invitation.groupName}. You can engage in the group from the groups page!`);
+
+  // refetch/update invitations
+  updateInvitations();
+
+  return result;
+};
+
 module.exports = {
   getPendingInvitations,
   getGroupNames,
   declineInvite,
+  acceptInvite,
 };
