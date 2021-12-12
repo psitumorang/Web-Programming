@@ -3,16 +3,12 @@ const database = require('../DatabaseModule');
 const getGroup = async (id) => {
   const response = await database.sendGetGroupsRequest(`http://localhost:8080/groups/${id}`);
 
-  // eslint-disable-next-line no-console
-  console.log(response);
   return response;
 };
 
 const getAdmins = async (id) => {
   const response = await database.sendGetRequest(`http://localhost:8080/admins/${id}`);
 
-  // eslint-disable-next-line no-console
-  console.log(response);
   return response;
 };
 
@@ -23,8 +19,6 @@ const revokeAdmin = async (state, changeState, groupAndAdmins) => {
     changeState({ link: '/viewgroup/error' });
   }
 
-  // eslint-disable-next-line no-console
-  console.log(response);
   return response;
 };
 
@@ -38,8 +32,6 @@ const addAdmin = async (groupAndAdmins) => {
     },
   });
 
-  // eslint-disable-next-line no-console
-  console.log(response);
   return response;
 };
 
@@ -50,37 +42,14 @@ const createPost = async (changeState, postGroup, postingUser, caption) => {
     // eslint-disable-next-line
     caption: caption,
   };
-  // eslint-disable-next-line no-console
-  console.log(newPost);
+
   // eslint-disable-next-line
   const response = await database.sendPostRequest('http://localhost:8080/post', newPost);
-
-  // eslint-disable-next-line no-console
-  console.log(response);
-  /*
-  if (response.err === undefined) {
-    changeState({ link: '/groups' });
-  } else {
-    changeState({ link: '/error' });
-  }
-  */
 };
 
 const getPosts = async (changeState, groupId) => {
-  // eslint-disable-next-line no-console
-  console.log(groupId);
   const response = await database.sendGetRequest(`http://localhost:8080/posts/${groupId}`);
 
-  /*
-  if (response.err === undefined) {
-    changeState({ link: '/groups' });
-  } else {
-    changeState({ link: '/error' });
-  }
-  */
-
-  // eslint-disable-next-line no-console
-  console.log(response);
   return response;
 };
 
@@ -103,32 +72,120 @@ const parsePosts = (posts) => {
     const caption = post.caption;
 
     // eslint-disable-next-line prefer-template
-    const postBlock = '<div class="post-container">'
+    const postBlock = `<div class="post-container" id=${postId}>`
     + '<div class="post-info">'
     + '<ul>'
-    + '<li id="post-id">Post Id: '
+    + '<li id="post-id" >Post Id: '
     + postId
     + '</li>'
     + '<li id="posting-user">Posting User: '
     + postingUser
-    + ' </li>'
+    + '</li>'
     + '<li id="caption">Caption: '
     + caption
     + '</li>'
     + '</ul>'
     + '</div>'
-    + '<button class="reply-button"> Reply </button>'
+    + '<div className=reply>'
+    + '<input className="reply-input" type="reply" placeholder="reply to this post" />'
+    + '<button type="reply-button"> Reply </button>'
+    + '</div>'
+    + '<div type="flag-and-delete">'
+    + '<button type="delete"> Delete </button>'
+    + '<button type="flag"> Flag </button>'
+    + '</div>'
     + '</div>';
 
-    const div = document.createElement('div');
-    div.innerHTML = postBlock;
+    const postDiv = document.createElement('div');
+    postDiv.innerHTML = postBlock;
+
+    document.getElementById('posts-area').appendChild(postDiv);
+  }
+};
+
+const createReply = async (changeState, postId, postingUser, caption) => {
+  const newReply = {
+    post_id: postId,
+    posting_user: postingUser,
+    // eslint-disable-next-line
+    caption: caption,
+  };
+  // eslint-disable-next-line no-console
+  console.log(newReply);
+  // eslint-disable-next-line
+  const response = await database.sendPostRequest('http://localhost:8080/reply', newReply);
+
+  // eslint-disable-next-line no-console
+  console.log(response);
+};
+
+const getReplies = async (changeState, groupId) => {
+  // eslint-disable-next-line no-console
+  console.log(groupId);
+  const response = await database.sendGetRequest(`http://localhost:8080/replies/${groupId}`);
+
+  // eslint-disable-next-line no-console
+  console.log(response);
+  return response;
+};
+
+const parseReplies = (posts, replies) => {
+  // iterate over all posts
+  for (let i = 0; i < posts.length; i += 1) {
+    const post = posts[i];
+    const postId = post.post_id;
+
+    // eslint-disable-next-line no-console
+    console.log(`postid: ${postId.toString()}`);
+    // eslint-disable-next-line no-console
+    console.log(`postdiv: ${document.getElementById(postId.toString())}`);
+    // remove all children in the box
+    const element = document.getElementById(postId.toString());
+
     /*
-    div.onclick = () => {
-      changeState({ link: '/viewgroup', viewingGroup: groupId });
-    };
+    if (element) {
+      while (element.firstChild) {
+        element.removeChild(element.firstChild);
+      }
+    }
     */
 
-    document.getElementById('posts-area').appendChild(div);
+    // iterate over all replies and those that belong to the current post will be appended
+    for (let j = 0; j < replies.length; j += 1) {
+      const reply = replies[j];
+      const replyId = reply.reply_id;
+      const replyUser = reply.posting_user;
+      // eslint-disable-next-line prefer-destructuring
+      const caption = reply.caption;
+      const replyPostId = reply.post_id;
+
+      if (replyPostId === postId) {
+        // eslint-disable-next-line prefer-template
+        const replyBlock = '<div class="reply-container">'
+        + '<div class="reply-info">'
+        + '<ul>'
+        + '<li id="reply-id" >Reply Id: '
+        + replyId
+        + '</li>'
+        + '<li id="replying-user">Replying User: '
+        + replyUser
+        + '</li>'
+        + '<li id="caption">Caption: '
+        + caption
+        + '</li>'
+        + '</ul>'
+        + '</div>'
+        + '<div type="flag-and-delete">'
+        + '<button type="delete"> Delete </button>'
+        + '<button type="flag"> Flag </button>'
+        + '</div>'
+        + '</div>';
+
+        const replyDiv = document.createElement('div');
+        replyDiv.innerHTML = replyBlock;
+        element.appendChild(replyDiv);
+      }
+    }
   }
 };
 
@@ -140,4 +197,7 @@ module.exports = {
   createPost,
   getPosts,
   parsePosts,
+  createReply,
+  getReplies,
+  parseReplies,
 };

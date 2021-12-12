@@ -35,10 +35,8 @@ function ViewGroup(props) {
   const updatePosts = async () => {
     const posts = await lib.getPosts(changeState, state.viewingGroup);
 
-    // eslint-disable-next-line
-    console.log(posts.result);
     setAllPosts(posts.result);
-    /* lib.parsePosts(posts.result[0]); */
+    lib.parsePosts(posts.result[0]);
   };
 
   const createPost = async () => {
@@ -56,17 +54,33 @@ function ViewGroup(props) {
 
     // eslint-disable-next-line no-console
     console.log(`all posts: ${JSON.stringify(allPosts)}`);
-    lib.parsePosts(posts.result[0]);
-    /*
-    const groups = await lib.getGroups(changeState);
-    const admins = await lib.getAdmins();
-    setAllGroups(groups.result);
-    lib.parseGroups(changeState, groups.result[0], admins);
-    */
+    await lib.parsePosts(posts.result[0]);
   };
 
-  useEffect(() => { updateState(); }, []);
-  useEffect(() => { updatePosts(); }, []);
+  // eslint-disable-next-line no-unused-vars
+  const [allReplies, setAllReplies] = useState([]);
+
+  // eslint-disable-next-line no-unused-vars
+  const updateReplies = async () => {
+    const posts = await lib.getPosts(changeState, state.viewingGroup);
+    const replies = await lib.getReplies(changeState, state.viewingGroup);
+
+    // eslint-disable-next-line
+    console.log(replies.result[0]);
+    setAllReplies(replies.result);
+
+    if (replies.result) {
+      await lib.parseReplies(posts.result[0], replies.result[0]);
+    }
+  };
+
+  const updates = async () => {
+    await updateState();
+    await updatePosts();
+    await updateReplies();
+  };
+
+  useEffect(() => { updates(); }, []);
 
   return (
     <div className="container">
