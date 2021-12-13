@@ -20,6 +20,7 @@ const sendPostRequest = async function sendPostRequest(url, body) {
 
 const sendPutRequest = async function sendPutRequest(url, body) {
   try {
+    console.log('in sendputrequest, with body of: ', body);
     const res = await fetch(url, {
       method: 'PUT',
       mode: 'cors',

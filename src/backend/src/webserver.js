@@ -279,9 +279,10 @@ webapp.get('/user-by-name/:name', async (req, res) => {
 webapp.put('/user/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('make it to webserver/webapp.put/user/id with params: ', req.params);
+  console.log('make it to webserver/webapp.put/user/id with body: ', req.body);
   try {
     const { id } = req.params;
-    const { userPassword } = req.body;
+    const userPassword = req.body.user_password;
     // get password from body not params!
     const userInfo = await userLib.updateUser(userDb, id, 'user_password', userPassword);
     res.status(200).json(userInfo);
@@ -295,9 +296,10 @@ webapp.put('/profile/:id', async (req, res) => {
   console.log('make it to webserver/webapp.put/profile/id with params: ', req.params);
   try {
     const { id } = req.params;
+    console.log('biography to be set: ', req.body);
     const { biography } = req.body;
     // get password from body not params!
-    const userInfo = await profileLib.updateProfile(profileDb, id, 'biography', biography);
+    const userInfo = await profileLib.updateProfile(profileDb, id, biography);
     res.status(200).json(userInfo);
   } catch (err) {
     res.status(404).json('error! at webserver/profile/id/put');
