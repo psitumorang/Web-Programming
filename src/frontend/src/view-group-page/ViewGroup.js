@@ -48,14 +48,14 @@ function ViewGroup(props) {
 
     const posts = await lib.getPosts(changeState, state.viewingGroup);
     // eslint-disable-next-line no-console
-    console.log(`posts: ${JSON.stringify(posts.result[0])}`);
+    // console.log(`posts: ${JSON.stringify(posts.result[0])}`);
 
     setAllPosts(posts.result[0]);
 
     // eslint-disable-next-line no-console
     console.log(`all posts: ${JSON.stringify(allPosts)}`);
-
     changeState({ link: '/viewgroup' });
+
     /*
     lib.parsePosts(posts.result[0]);
     */
@@ -150,6 +150,13 @@ function ViewGroup(props) {
                 <input id="addAdmin" type="text" placeholder="Enter username" />
               </label>
               <input type="button" value="Submit" id="submit" onClick={() => lib.addAdmin(groupAndAdmins)} />
+            </div>
+            <div id="add-non-admin">
+              <label htmlFor="addNonAdmin">
+                Invite a non-Admin member:
+                <input id="addNonAdmin" type="text" placeholder="Enter username" />
+              </label>
+              <input type="button" value="Submit" id="submit" onClick={() => lib.inviteNonAdmin(groupAndAdmins, state)} />
             </div>
           </div>
 

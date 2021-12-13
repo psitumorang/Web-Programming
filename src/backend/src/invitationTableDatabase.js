@@ -72,9 +72,54 @@ const updateInvitationStatus = async (db, invitationId, newStatus) => {
   return null;
 };
 
+// get accepted invitations for review by admin
+const getInvitationsToReview = async (db, adminId) => {
+  query = ' \
+  SELECT invitation_id, admin_id, group_lst.group_id, group_lst.group_name, to_user_id, from_user_id, user_lst.user_name \
+  FROM invitations \
+  LEFT JOIN group_lst on invitations.group_id = group_lst.group_id \
+  LEFT JOIN user_lst on user_lst.user_id = invitations.to_user_id \
+  LEFT JOIN admin_lst on invitations.group_id = admin_lst.group_id \
+  WHERE admin_id = ? AND invitation_status = \'accepted\'';
+  try {
+    const [invitations] = await db.execute(query, [adminId]);
+    return invitations;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+const addInvitation = async (db, invitationObject) => {
+  // get next row increment
+  const [maxInvitationId] = await db.execute('SELECT MAX(invitation_id) as max_id FROM invitations', []);
+  console.log('in addinvitation in invitationtable DB, got back maxinvitation id of: ', maxInvitationId);
+  const nextInvitationId = maxInvitationId[0].max_id + 1;
+  
+  const query = 'INSERT INTO invitations (invitation_id, to_user_id, from_user_id, invitation_status, group_id) VALUES (?, ?, ?, ?, ?)';
+  const params = [
+    nextInvitationId,
+    invitationObject.toUserId,
+    invitationObject.fromUserId,
+    invitationObject.invitationStatus,
+    invitationObject.groupId
+  ]
+  console.log('in invitationstabledb, with params ', params);
+  try {
+    const [rowsAffected] = await db.execute(query, params);
+    return rowsAffected;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
 module.exports = {
   connect,
   getPendingInvitations,
   updateInvitationStatus,
-  // addNotification,
+  addInvitation,
+  getInvitationsToReview,
 };

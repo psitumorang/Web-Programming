@@ -1,4 +1,5 @@
 const sendPostRequest = async function sendPostRequest(url, body) {
+  console.log('in database module about to sendPostrequest, url of ', url, 'body of ', body);
   try {
     const res = await fetch(url, {
       method: 'POST',
@@ -50,7 +51,7 @@ const sendGetRequest = async function sendGetRequest(url, params) {
     return res;
   } catch (err) {
     // eslint-disable-next-line
-    console.log('ERROR getting posts');
+    console.log('ERROR getting resource - from db module');
     // eslint-disable-next-line
     console.log(err);
     return null;

@@ -262,6 +262,20 @@ webapp.get('/user/:id', async (req, res) => {
   }
 });
 
+webapp.get('/user-by-name/:name', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('in webserver, retrieve user information for supplied name of: ', req.params.name);
+  try {
+    const { name } = req.params;
+    const userInfo = await userLib.getUsersWithName(userDb, name);
+    // eslint-disable-next-line no-console
+    console.log('retrieved user info from model, current at webserver/user/name/get, value of: ', userInfo);
+    res.status(200).json(userInfo);
+  } catch (err) {
+    res.status(404).json('error! at webserver/user/name/get');
+  }
+});
+
 webapp.put('/user/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('make it to webserver/webapp.put/user/id with params: ', req.params);
@@ -336,6 +350,28 @@ webapp.get('/invitations/:id', async (req, res) => {
   }
 });
 
+webapp.post('/invitations/', async (req, res) => {
+  
+
+  // const { id } = req.params;
+  // eslint-disable-next-line no-console
+  // console.log('post invitations with params of: ', req.params);
+  const { fromUserId, toUserId, groupId } = req.body;
+  const invitationObject = {
+    fromUserId: fromUserId,
+    toUserId: toUserId,
+    groupId: groupId,
+    invitationStatus: 'pending',
+  };
+  try {
+    const invitation = await inviteLib.addInvitation(inviteDb, invitationObject);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log('error! ', err);
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
 webapp.put('/invitations/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('put invitations');
@@ -356,10 +392,10 @@ webapp.put('/invitations/:id', async (req, res) => {
 
 webapp.post('/membership/:id', async (req, res) => {
     // eslint-disable-next-line no-console
-    console.log('post group membership to accept invitations');
+    console.log('post group membership to accept invitations, webserver, with req.body of:', req.body);
 
     const { id } = req.params;
-    const { userId } = req.body;
+    const userId = req.body.id;
     try {
       const postReturn = await groupMemberLib.addGroupMember(groupMemberDb, id, userId);
       res.status(200).json(postReturn);
@@ -367,6 +403,15 @@ webapp.post('/membership/:id', async (req, res) => {
       res.status(400).json({ err: `error is ${err.message}` });
     }
 });
+
+webapp.get('/membership/:id', async (req, res) => {
+  try {
+    const membershipList = await groupMemberLib.getMemberIds(groupMemberDb, req.params.id);
+    res.status(200).json(membershipList);
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+})
 
 webapp.post('/admins', async (req, res) => {
   // eslint-disable-next-line no-console
@@ -391,6 +436,7 @@ webapp.post('/admins', async (req, res) => {
   }
 });
 
+// gets all admins for a particular group (e.g. id here is group, not user)
 webapp.get('/admins/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('get admins');
@@ -415,6 +461,17 @@ webapp.get('/admins', async (req, res) => {
     console.log('got all admins: ', admins);
     res.status(200).json(admins);
   } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/administered-groups/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get all groups that the given userId administers');
+  try {
+    const administeredGroups = await adminLib.getAdministeredGroups(req.params.id);
+    res.status(200).json(administeredGroups);
+  } catch(err) {
     res.status(404).json({ err: `error is ${err.message}` });
   }
 });
@@ -582,6 +639,18 @@ webapp.get('/replies/:id', async (req, res) => {
     } else {
       res.status(200).json({ result: replies });
     }
+  } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/invitations-review/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get invitations to review - in webserver.js');
+
+  try {
+    const invitations = await inviteLib.getInvitationsToReview(inviteDb, req.params.id);
+    res.status(200).json(invitations);
   } catch (err) {
     res.status(404).json({ err: `error is ${err.message}` });
   }

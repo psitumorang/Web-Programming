@@ -5,15 +5,22 @@ const lib = require('./InvitationModule');
 
 function InvitationPage(props) {
   const { changeState, state } = props;
-  const [invitations, setInvitations] = useState([]);
+  const [pendingInvitations, setPendingInvitations] = useState([]);
+  const [invitationsToReview, setInvitationsToReview] = useState([]);
   const [message, setMessage] = useState('test');
 
-  const updateInvitations = async () => {
+  const updatePendingInvitations = async () => {
     let i = await lib.getPendingInvitations(state.userId);
     i = await lib.getGroupNames(i);
 
     // setInvitations([{ id: 1, groupName: 'testGroup!' }]);
-    setInvitations(i);
+    setPendingInvitations(i);
+  };
+
+  const updateInvitationsToReview = async () => {
+    console.log('sending invitation to review from invpage with userid of: ', state.userId);
+    const fetchedInvitationsToReview = await lib.getInvitationsToReview(state.userId);
+    setInvitationsToReview(fetchedInvitationsToReview);
   };
 
   const updateMessage = (newMessage) => {
@@ -24,7 +31,8 @@ function InvitationPage(props) {
   // console.log('invitations now at: ', invitations);
 
   useEffect(() => {
-    updateInvitations();
+    updatePendingInvitations();
+    updateInvitationsToReview();
   }, []);
 
   return (
@@ -57,7 +65,27 @@ function InvitationPage(props) {
           <div id="message">
             {message}
           </div>
-          {invitations.map((inv) => (
+          <div>
+            Invitations to review for groups for which you&apos;re an admin:
+          </div>
+          {invitationsToReview.map((invReview) => (
+            <div className="notification" key={invReview.invitation_id}>
+              <div className="title">
+                Review accepted invitation
+              </div>
+              <div className="info">
+                <div className="invite-message">
+                  { `${invReview.user_name} has accepted an invitation to join ${invReview.group_name}. Do you approve their membership?  ` }
+                </div>
+                <button className="approve-invitation" type="button" onClick={() => lib.approveInvite(invReview, updateInvitationsToReview, updateMessage)}> Accept </button>
+                <button className="decline-invitation" type="button" onClick={() => lib.notApproveInvite(invReview, updateInvitationsToReview, updateMessage)}> Decline </button>
+              </div>
+            </div>
+          ))}
+          <div>
+            Group invitations extended to you:
+          </div>
+          {pendingInvitations.map((inv) => (
             <div className="notification" key={inv.invitation_id}>
               <div className="title">
                 Invitation
@@ -66,8 +94,8 @@ function InvitationPage(props) {
                 <div className="invite-message">
                   { `You have been invited to join group ${inv.groupName}. Do you accept?  ` }
                 </div>
-                <button className="accept-invitation" type="button" onClick={() => lib.acceptInvite(inv, updateInvitations, updateMessage, state.userId)}> Accept </button>
-                <button className="decline-invitation" type="button" onClick={() => lib.declineInvite(inv.invitation_id, inv.groupName, updateInvitations, updateMessage)}> Decline </button>
+                <button className="accept-invitation" type="button" onClick={() => lib.acceptInvite(inv, updatePendingInvitations, updateMessage, state.userId)}> Accept </button>
+                <button className="decline-invitation" type="button" onClick={() => lib.declineInvite(inv.invitation_id, inv.groupName, updatePendingInvitations, updateMessage)}> Decline </button>
               </div>
             </div>
           ))}

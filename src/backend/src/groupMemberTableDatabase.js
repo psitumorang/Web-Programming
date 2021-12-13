@@ -31,7 +31,20 @@ const addGroupMember = async (db, groupId, userId) => {
   }
 }
 
+const getMemberIds = async (db, groupId) => {
+  const query = "SELECT member_id FROM group_members WHERE group_id = ?";
+  try {
+    const [membershipList] = await db.execute(query, [groupId]);
+    return membershipList;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err.message);
+    throw err;
+  }
+};
+
 module.exports = {
   connect,
   addGroupMember,
+  getMemberIds,
 };

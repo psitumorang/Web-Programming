@@ -1,5 +1,31 @@
 const database = require('../DatabaseModule');
 
+/** // get list of groups for which the user is admin
+ * [this is deprecated because I realised I could just do a join on the backend - smh!]
+// takes userId, returns Array of groupids and names
+const getAdministeredGroups = async (userId) => {
+  const administeredGroups = await database.sendGetRequest(`http://localhost:8080/administered-groups/${userId}`);
+
+  // loop through each one and get the group names
+  const groupNamePromiseContainer = [];
+  for (let i = 0; i < administeredGroups.length; i += 1) {
+    const groupNamePromise = database.sendGetRequest(`http://localhost:8080/groups/${i}`);
+    groupNamePromiseContainer.push(groupNamePromise);
+  }
+  const groupNames = await Promise.all([i, groupNamePromiseContainer]);
+
+  return groupNames;
+}; */
+
+// get list of accepted invitations to review
+const getInvitationsToReview = async (userId) => {
+  // call backend for list of invitations to review based on the userId
+  const invitationsToReview = await database.sendGetRequest(`http://localhost:8080/invitations-review/${userId}`);
+  return invitationsToReview;
+};
+
+// add to group members
+
 const getPendingInvitations = async (id) => {
   const response = await database.sendGetRequest('http://localhost:8080/invitations/', { id });
   return response;
@@ -50,10 +76,8 @@ const declineInvite = async (invitationId, invitationName, updateInvitations, up
   return result;
 };
 
-const acceptHTTP = async (invitationId, groupId, userId) => {
-  // update group in db
-  const groupMembershipURL = `http://localhost:8080/membership/${groupId}`;
-  const resultGroupMember = await database.sendPostRequest(groupMembershipURL, { userId });
+const acceptHTTP = async (invitationId) => {
+  // updating group in db taken from here. groupId, userId taken from params
 
   // update invitation in db
   const invitationURL = `http://localhost:8080/invitations/${invitationId}`;
@@ -61,12 +85,12 @@ const acceptHTTP = async (invitationId, groupId, userId) => {
   const resultInv = await database.sendPutRequest(invitationURL, invitationBody);
 
   // refetch/update invitations
-  return [resultGroupMember, resultInv];
+  return resultInv;
 };
 
-const acceptInvite = async (invitation, updateInvitations, updateMessage, userId) => {
+const acceptInvite = async (invitation, updateInvitations, updateMessage) => {
   // update operation on invitation to set the status to declined
-  const result = await acceptHTTP(invitation.invitation_id, invitation.group_id, userId);
+  const result = await acceptHTTP(invitation.invitation_id);
 
   // update message
   updateMessage(`Accepted invitation to  ${invitation.groupName}. You can engage in the group from the groups page!`);
@@ -77,9 +101,63 @@ const acceptInvite = async (invitation, updateInvitations, updateMessage, userId
   return result;
 };
 
+// for when admins approve an invitation that has already been accepted by the invitee
+const approveInvite = async (invReview, updateInvitationsToReview, updateMessage) => {
+  // get all members in a group
+  const groupMembers = await database.sendGetRequest(`http://localhost:8080/membership/${invReview.group_id}`);
+
+  // test if user is already in the group
+  for (let i = 0; i < groupMembers.length; i += 1) {
+    if (groupMembers[i].member_id === invReview.to_user_id) {
+      updateMessage('This user is already in the group! You can safely decline the invitation');
+      return;
+    }
+  }
+
+  // add to group membership (already done)
+  console.log('in approve invite, invReview is: ', invReview);
+  const groupMembershipURL = `http://localhost:8080/membership/${invReview.group_id}`;
+  const postBody = { id: invReview.to_user_id };
+  await database.sendPostRequest(groupMembershipURL, postBody);
+
+  // update invitation status to approved
+  const invitationURL = `http://localhost:8080/invitations/${invReview.invitation_id}`;
+  const invitationBody = { newStatus: 'approved' };
+  await database.sendPutRequest(invitationURL, invitationBody);
+
+  // send notification to user
+
+  // updateMessage
+  updateMessage('You\'ve approved the user - and they\'ve been added to the group! Hurrah!');
+
+  // refresh invitation page (invitations to review component)
+  updateInvitationsToReview();
+};
+
+// for when admins decline/don't approve an invitation that has already been accepted by an invitee
+const notApproveInvite = async (invReview, updateInvitationsToReview, updateMessage) => {
+  // update invitation status to declined
+  const invitationURL = `http://localhost:8080/invitations/${invReview.invitation_id}`;
+  const invitationBody = { newStatus: 'declined' };
+  const resultInv = await database.sendPutRequest(invitationURL, invitationBody);
+
+  // send notification to user
+
+  // updateMessage
+  updateMessage('You\'ve declined the user - and they\'ve NOT been added to the group! Hurrah!');
+
+  // refresh invitation page (invitations to review component)
+  updateInvitationsToReview();
+
+  return resultInv;
+};
+
 module.exports = {
   getPendingInvitations,
   getGroupNames,
   declineInvite,
   acceptInvite,
+  getInvitationsToReview,
+  approveInvite,
+  notApproveInvite,
 };
