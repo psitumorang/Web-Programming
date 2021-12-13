@@ -47,7 +47,7 @@ function Groups(props) {
       </div>
 
       <div className="top-navbar">
-        <div className="home-link">Home</div>
+        <div className="home-link" onClick={() => changeState({ link: '/main' })} onKeyDown={() => changeState({ link: '/main' })} role="link" tabIndex={0}>Home</div>
         <div className="profile-link">Profile</div>
       </div>
 
@@ -57,7 +57,7 @@ function Groups(props) {
           <button type="submit" className="notifications" onClick={() => changeState({ link: '/notifications' })}>Notifications</button>
           <button type="submit" className="events">Events</button>
           <button type="submit" className="groups" onClick={() => changeState({ link: '/groups' })}>Groups</button>
-          <button type="submit" className="videos">Videos</button>
+          <button type="submit" className="invitations" onClick={() => changeState({ link: '/invitations' })}>Group Invitations and Requests </button>
           <button type="submit" className="photos">Photos</button>
         </div>
 

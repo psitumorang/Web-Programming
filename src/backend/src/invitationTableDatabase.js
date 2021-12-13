@@ -94,7 +94,6 @@ const getInvitationsToReview = async (db, adminId) => {
 const addInvitation = async (db, invitationObject) => {
   // get next row increment
   const [maxInvitationId] = await db.execute('SELECT MAX(invitation_id) as max_id FROM invitations', []);
-  console.log('in addinvitation in invitationtable DB, got back maxinvitation id of: ', maxInvitationId);
   const nextInvitationId = maxInvitationId[0].max_id + 1;
   
   const query = 'INSERT INTO invitations (invitation_id, to_user_id, from_user_id, invitation_status, group_id) VALUES (?, ?, ?, ?, ?)';
@@ -105,7 +104,6 @@ const addInvitation = async (db, invitationObject) => {
     invitationObject.invitationStatus,
     invitationObject.groupId
   ]
-  console.log('in invitationstabledb, with params ', params);
   try {
     const [rowsAffected] = await db.execute(query, params);
     return rowsAffected;
