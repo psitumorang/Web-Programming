@@ -291,6 +291,7 @@ webapp.put('/user/:id', async (req, res) => {
   }
 });
 
+// this one only updates the bio. I originally tried to make it a dynamic variable update, but had issues.
 webapp.put('/profile/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('make it to webserver/webapp.put/profile/id with params: ', req.params);
@@ -303,6 +304,22 @@ webapp.put('/profile/:id', async (req, res) => {
     res.status(200).json(userInfo);
   } catch (err) {
     res.status(404).json('error! at webserver/profile/id/put');
+  }
+});
+
+// this updates the profile pic
+webapp.put('/profile-pic/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('make it to webserver/webapp.put/profile-pic/id with params: ', req.params);
+  try {
+    const { id } = req.params;
+    console.log('profilePictureURL to be set: ', req.body);
+    const { profilePictureURL } = req.body;
+    // get password from body not params!
+    const userInfo = await profileLib.updateProfilePic(profileDb, id, profilePictureURL);
+    res.status(200).json(userInfo);
+  } catch (err) {
+    res.status(404).json('error! at webserver/profile-pic/id/put');
   }
 });
 

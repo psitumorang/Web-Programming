@@ -82,10 +82,26 @@ const deleteProfile = async (db, userId) => {
   return null;
 };
 
-// update a user
+// update a user's biography (not just the biography - not all profile attributes)
 const updateProfile = async (db, userId, updateValue) => {
   try {
     const query = 'UPDATE profile_lst SET biography=? WHERE user_id=?';
+    const params = [updateValue, userId];
+    const [row] = await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Updated ${JSON.stringify(row.affectedRows)} player`);
+    return [row];
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+// update a user's profile picture
+const updateProfilePic = async (db, userId, updateValue) => {
+  try {
+    const query = 'UPDATE profile_lst SET profile_picture_url=? WHERE user_id=?';
     const params = [updateValue, userId];
     const [row] = await db.execute(query, params);
     // eslint-disable-next-line no-console
@@ -105,4 +121,5 @@ module.exports = {
   deleteProfile,
   updateProfile,
   getProfileById,
+  updateProfilePic,
 };

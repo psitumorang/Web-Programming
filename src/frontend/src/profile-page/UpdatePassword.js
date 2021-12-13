@@ -35,6 +35,17 @@ const changeBio = async (newBio, userId, updateMessage) => {
   updateMessage('bio updated successfully!');
 };
 
+const changeProfilePic = async (picUrl, userId, updateMessage) => {
+  const reqBody = { id: userId, profilePictureURL: picUrl };
+
+  const apiUrl = `http://localhost:8080/profile-pic/${userId}`;
+  const response = await sendPutRequest(apiUrl, reqBody);
+  // eslint-disable-next-line no-console
+  console.log('printing response ', response);
+
+  updateMessage('profile pic updated successfully!');
+};
+
 const showMessage = (message) => (
   <div>
     <p />
@@ -76,7 +87,15 @@ const UpdatePassword = (props) => {
       </div>
       <input id="updateBioButton" type="submit" value="Update Bio" onClick={() => changeBio(document.getElementById('newBioInput').value, userId, updateMessage)} />
       <p />
-      <input id="updatePasswordButton" type="submit" value="Back to profile page" onClick={() => props.changeState({ link: '/profile', id: userId })} />
+      <div className="textDiv" id="newProfilePicDiv">
+        <label htmlFor="newPic">
+          New profile pic:
+          <input className="text" id="newPicInput" type="text" placeholder="Paste the URL to an image here" />
+        </label>
+      </div>
+      <input id="updatePictureButton" type="submit" value="Update Profile Pic" onClick={() => changeProfilePic(document.getElementById('newPicInput').value, userId, updateMessage)} />
+      <p />
+      <input id="backToProfileButton" type="submit" value="Back to profile page" onClick={() => props.changeState({ link: '/profile', id: userId })} />
     </div>
   );
 };
