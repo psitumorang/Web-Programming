@@ -93,7 +93,7 @@ const acceptInvite = async (invitation, updateInvitations, updateMessage) => {
   const result = await acceptHTTP(invitation.invitation_id);
 
   // update message
-  updateMessage(`Accepted invitation to  ${invitation.groupName}. You can engage in the group from the groups page!`);
+  updateMessage(`Accepted invitation to  ${invitation.groupName}. An admin will now review your invitation!`);
 
   // refetch/update invitations
   updateInvitations();
