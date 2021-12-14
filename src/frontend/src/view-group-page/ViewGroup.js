@@ -54,7 +54,11 @@ function ViewGroup(props) {
 
     // eslint-disable-next-line no-console
     console.log(`all posts: ${JSON.stringify(allPosts)}`);
-    await lib.parsePosts(posts.result[0]);
+
+    changeState({ link: '/viewgroup' });
+    /*
+    lib.parsePosts(posts.result[0]);
+    */
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -65,12 +69,11 @@ function ViewGroup(props) {
     const posts = await lib.getPosts(changeState, state.viewingGroup);
     const replies = await lib.getReplies(changeState, state.viewingGroup);
 
-    // eslint-disable-next-line
-    console.log(replies.result[0]);
     setAllReplies(replies.result);
 
     if (replies.result) {
-      await lib.parseReplies(posts.result[0], replies.result[0]);
+      lib.parseReplies(posts.result[0], replies.result[0]);
+      lib.parseOnclicks(state, changeState, posts.result[0], replies.result[0]);
     }
   };
 
@@ -80,7 +83,7 @@ function ViewGroup(props) {
     await updateReplies();
   };
 
-  useEffect(() => { updates(); }, []);
+  useEffect(() => { updates(); }, [state]);
 
   return (
     <div className="container">

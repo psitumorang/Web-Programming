@@ -55,10 +55,64 @@ const addPost = async (db, newPost) => {
   return null;
 };
 
+// add a post to a group page
+const flagPost = async (db, postId) => {
+  const query = 'UPDATE post_lst SET is_flagged = 1 WHERE post_id = ?;';
+
+  const params = [postId];
+
+  try {
+    await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Flagged post with id: ${postId}`);
+    return postId;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+// add a post to a group page
+const hidePost = async (db, postId) => {
+  const query = 'UPDATE post_lst SET is_hidden = 1 WHERE post_id = ?;';
+
+  const params = [postId];
+
+  try {
+    await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Hid post with id: ${postId}`);
+    return postId;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+// add a post to a group page
+const deletePost = async (db, postId) => {
+  const query = 'DELETE FROM post_lst WHERE post_id = ?;';
+
+  const params = [postId];
+
+  try {
+    await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Deleted post with id: ${postId}`);
+    return postId;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
 // get all groups
 const getPosts = async (db, groupId) => {
   try {
-    const query = 'SELECT * FROM post_lst WHERE post_group = ? ORDER BY post_id DESC';
+    const query = 'SELECT * FROM post_lst WHERE post_group = ? AND is_hidden = 0 ORDER BY post_id DESC';
     
     const [rows] = await db.execute(query, [groupId]);
     // eslint-disable-next-line no-console
@@ -70,6 +124,7 @@ const getPosts = async (db, groupId) => {
   }
   return null;
 };
+
 // get next available id
 const getNextId = async (db) => {
   try {
@@ -87,6 +142,9 @@ module.exports = {
   connect,
   getUserPosts,
   addPost,
+  flagPost,
+  hidePost,
+  deletePost,
   getPosts,
   getNextId,
 };

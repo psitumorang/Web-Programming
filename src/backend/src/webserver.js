@@ -415,6 +415,63 @@ webapp.post('/post', async (req, res) => {
   return null;
 });
 
+webapp.put('/flag-post/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log(`flag a group post with id ${JSON.stringify(req.params.id)}`);
+  try {
+    const result = await postLib.flagPost(postDb, req.params.id);
+
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        result: result,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+webapp.put('/hide-post/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log(`hide a group post with id ${JSON.stringify(req.params.id)}`);
+  try {
+    const result = await postLib.hidePost(postDb, req.params.id);
+
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        result: result,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+webapp.delete('/post/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log(`deleting a group post with id ${JSON.stringify(req.params.id)}`);
+  try {
+    const result = await postLib.deletePost(postDb, req.params.id);
+
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        result: result,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
 webapp.get('/posts/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('get posts');
@@ -435,10 +492,11 @@ webapp.post('/reply', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('create reply');
   try {
-    const nextId = await Lib.getNextId(replyDb);
+    const nextId = await replyLib.getNextId(replyDb);
     const newReply = {
       reply_id: nextId + 1,
       post_id: req.body.post_id,
+      post_group: req.body.post_group,
       posting_user: req.body.posting_user,
       caption: req.body.caption,
     };
@@ -473,6 +531,63 @@ webapp.get('/replies/:id', async (req, res) => {
   } catch (err) {
     res.status(404).json({ err: `error is ${err.message}` });
   }
+});
+
+webapp.put('/flag-reply/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log(`flag a reply with id ${JSON.stringify(req.params.id)}`);
+  try {
+    const result = await replyLib.flagReply(replyDb, req.params.id);
+
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        result: result,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+webapp.put('/hide-reply/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log(`hide a reply with id ${JSON.stringify(req.params.id)}`);
+  try {
+    const result = await replyLib.hideReply(replyDb, req.params.id);
+
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        result: result,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+webapp.delete('/reply/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log(`deleting a reply with id ${JSON.stringify(req.params.id)}`);
+  try {
+    const result = await replyLib.deleteReply(replyDb, req.params.id);
+
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        result: result,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
 });
 
 webapp.use((req, res) => {

@@ -22,15 +22,69 @@ const connect = async () => {
 
 // add a post to a group page
 const addReply = async (db, newReply) => {
-  const query = 'INSERT INTO reply_lst (reply_id, post_id, posting_user, caption) VALUES(?, ?, ?, ?)';
+  const query = 'INSERT INTO reply_lst (reply_id, post_id, post_group, posting_user, caption) VALUES(?, ?, ?, ?, ?)';
 
-  const params = [newReply.reply_id, newReply.post_id, newReply.posting_user, newReply.caption];
+  const params = [newReply.reply_id, newReply.post_id, newReply.post_group, newReply.posting_user, newReply.caption];
 
   try {
     await db.execute(query, params);
     // eslint-disable-next-line no-console
-    console.log(`Created post with id: ${newReply.post_id}`);
-    return newReply.post_id;
+    console.log(`Created reply with id: ${newReply.reply_id}`);
+    return newReply.reply_id;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+// add a post to a group page
+const flagReply = async (db, replyId) => {
+  const query = 'UPDATE reply_lst SET is_flagged = 1 WHERE reply_id = ?;';
+
+  const params = [replyId];
+
+  try {
+    await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Flagged reply with id: ${replyId}`);
+    return replyId;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+// add a post to a group page
+const hideReply = async (db, replyId) => {
+  const query = 'UPDATE reply_lst SET is_hidden = 1 WHERE reply_id = ?;';
+
+  const params = [replyId];
+
+  try {
+    await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Hid reply with id: ${replyId}`);
+    return replyId;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+// add a post to a group page
+const deleteReply = async (db, replyId) => {
+  const query = 'DELETE FROM reply_lst WHERE reply_id = ?;';
+
+  const params = [replyId];
+
+  try {
+    await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Deleted reply with id: ${replyId}`);
+    return replyId;
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(`error: ${err.message}`);
@@ -41,7 +95,7 @@ const addReply = async (db, newReply) => {
 // get all replies
 const getReplies = async (db, groupId) => {
   try {
-    const query = 'SELECT * FROM reply_lst WHERE post_group = ? ORDER BY reply_id DESC';
+    const query = 'SELECT * FROM reply_lst WHERE post_group = ? AND is_hidden = 0 ORDER BY reply_id DESC';
     
     const [rows] = await db.execute(query, [groupId]);
     // eslint-disable-next-line no-console
@@ -66,9 +120,13 @@ const getNextId = async (db) => {
   return null;
 };
 
+
 module.exports = {
   connect,
   addReply,
+  flagReply,
+  hideReply,
+  deleteReply,
   getReplies,
   getNextId,
 };
