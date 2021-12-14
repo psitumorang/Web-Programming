@@ -123,7 +123,7 @@ const getReplies = async (changeState, groupId) => {
   return response;
 };
 
-const parsePosts = (state, posts) => {
+const parsePosts = (posts) => {
   // remove all children in the box
   const element = document.getElementById('posts-area');
 
@@ -172,6 +172,8 @@ const parsePosts = (state, posts) => {
     postDiv.innerHTML = postBlock;
 
     document.getElementById('posts-area').appendChild(postDiv);
+    // eslint-disable-next-line no-console
+    console.log(document.getElementById(postId));
   }
 };
 
@@ -181,8 +183,15 @@ const parseReplies = (posts, replies) => {
     const post = posts[i];
     const postId = post.post_id;
 
-    // remove all children in the box
-    const element = document.getElementById(postId.toString());
+    // eslint-disable-next-line no-console
+    console.log(post);
+
+    // eslint-disable-next-line no-console
+    console.log(postId);
+
+    const element = document.getElementById(postId);
+    // eslint-disable-next-line no-console
+    console.log(element);
 
     // iterate over all replies and those that belong to the current post will be appended
     for (let j = 0; j < replies.length; j += 1) {
@@ -225,13 +234,18 @@ const parseReplies = (posts, replies) => {
 };
 
 const parseOnclicks = (state, changeState, posts, replies) => {
+  // eslint-disable-next-line no-console
+  console.log('parsing on clicks');
   // iterate over all replies and those that belong to the current post will be appended
   for (let i = 0; i < posts.length; i += 1) {
     const post = posts[i];
     const postId = post.post_id;
 
+    // eslint-disable-next-line no-console
+    console.log(`reply-button-${postId}`);
     const replyButton = document.getElementById(`reply-button-${postId}`);
-
+    // eslint-disable-next-line no-console
+    console.log(`Reply Button: ${JSON.stringify(replyButton)}`);
     const flagPostButton = document.getElementById(`flag-post-${postId}`);
     const hidePostButton = document.getElementById(`hide-post-${postId}`);
     const deletePostButton = document.getElementById(`delete-post-${postId}`);
@@ -241,11 +255,13 @@ const parseOnclicks = (state, changeState, posts, replies) => {
     flagPostButton.onclick = () => { flagPost(changeState, postId); };
     hidePostButton.onclick = () => { hidePost(changeState, postId); };
     deletePostButton.onclick = () => { deletePost(changeState, postId); };
+
+    // eslint-disable-next-line no-console
+    console.log(`Reply Button: ${JSON.stringify(replyButton)}`);
   }
 
   for (let j = 0; j < replies.length; j += 1) {
     const reply = replies[j];
-    console.log(reply);
     const replyId = reply.reply_id;
 
     const flagReplyButton = document.getElementById(`flag-reply-${replyId}`);
