@@ -116,17 +116,26 @@ div[type="flag-and-delete"] {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
+  gap: 2px;
 }
 
 button[type="delete"] {
   width: 50px;
+  height: 25px;
   border-radius: 5px;
   background-color: #87BCDE;
 }
 
 button[type="flag"] {
   width: 50px;
+  height: 25px;
+  border-radius: 5px;
+  background-color: #87BCDE;
+}
+
+button[type="hide"] {
+  width: 50px;
+  height: 25px;
   border-radius: 5px;
   background-color: #87BCDE;
 }
@@ -145,7 +154,7 @@ button[type="reply-button"] {
   border-radius: 6px;
   padding: 15px;
 
-  gap: 20px;
+  gap: 2px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
   font-family: "LibertinusSans";
   transition: all 0.2s ease;
@@ -156,5 +165,5 @@ button[type="reply-button"] {
   align-items: center;
 
   width: 300px;
-  height: 50px;
+  height: 60px;
 }
