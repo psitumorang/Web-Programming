@@ -14,6 +14,7 @@ const postCommentLib = require('./postCommentsTableDatabase');
 const groupLib = require('./groupTableDatabase');
 const notifLib = require('./notificationTableDatabase');
 const adminLib = require('./adminTableDatabase');
+const replyLib = require('./replyTableDatabase');
 
 const port = 8080;
 
@@ -31,6 +32,7 @@ let postCommentDb;
 let groupDb;
 let notifDb;
 let adminDb;
+let replyDb;
 
 webapp.listen(port, async () => {
   userDb = await userLib.connect();
@@ -40,6 +42,7 @@ webapp.listen(port, async () => {
   groupDb = await groupLib.connect();
   notifDb = await notifLib.connect();
   adminDb = await adminLib.connect();
+  replyDb = await replyLib.connect();
   // eslint-disable-next-line no-console
   console.log('listening');
 });
@@ -422,6 +425,50 @@ webapp.get('/posts/:id', async (req, res) => {
       res.status(404).json({ err: err.message });
     } else {
       res.status(200).json({ result: posts });
+    }
+  } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.post('/reply', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('create reply');
+  try {
+    const nextId = await Lib.getNextId(replyDb);
+    const newReply = {
+      reply_id: nextId + 1,
+      post_id: req.body.post_id,
+      posting_user: req.body.posting_user,
+      caption: req.body.caption,
+    };
+
+    console.log(`new reply ${newReply.reply_id}, ${newReply.post_id} , ${newReply.posting_user} , ${newReply.caption} `)
+
+    const result = await replyLib.addReply(replyDb, newReply);
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        reply: newReply,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+webapp.get('/replies/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get replies');
+
+  try {
+    const replies = await replyLib.getReplies(replyDb, req.params.id);
+    if (replies === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(200).json({ result: replies });
     }
   } catch (err) {
     res.status(404).json({ err: `error is ${err.message}` });
