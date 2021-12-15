@@ -35,6 +35,26 @@ const addAdmin = async (groupAndAdmins) => {
   return response;
 };
 
+const inviteNonAdmin = async (groupAndAdmins, state) => {
+  const url = 'http://localhost:8080/invitations/';
+  const toUserName = document.getElementById('addNonAdmin').value;
+  console.log('in viewgroupmodule/invitenonadmin, about to sendGet request with tousername of', toUserName);
+
+  // get the userid using the username.
+  // I've just used one argument because the concatenation method in DatabaseModule
+  // produced some funny results. Didn't want to change it in case I broke somebody else's work!
+  // So I've done the url concat here.
+  const toUserId = await database.sendGetRequest(`http://localhost:8080/user-by-name/${toUserName}`);
+  const body = {
+    // put in the request username from document here
+    fromUserId: state.userId,
+    groupId: groupAndAdmins.group.group_id,
+    toUserId: toUserId[0].user_id,
+  };
+  const response = await database.sendPostRequest(url, body);
+  return response;
+};
+
 const createPost = async (changeState, postGroup, postingUser, caption) => {
   const newPost = {
     post_group: postGroup,
@@ -281,6 +301,7 @@ module.exports = {
   getAdmins,
   revokeAdmin,
   addAdmin,
+  inviteNonAdmin,
   createPost,
   getPosts,
   parsePosts,

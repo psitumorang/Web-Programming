@@ -15,6 +15,8 @@ const groupLib = require('./groupTableDatabase');
 const notifLib = require('./notificationTableDatabase');
 const adminLib = require('./adminTableDatabase');
 const replyLib = require('./replyTableDatabase');
+const inviteLib = require('./invitationTableDatabase');
+const groupMemberLib = require('./groupMemberTableDatabase');
 
 const port = 8080;
 
@@ -33,6 +35,8 @@ let groupDb;
 let notifDb;
 let adminDb;
 let replyDb;
+let inviteDb;
+let groupMemberDb;
 
 webapp.listen(port, async () => {
   userDb = await userLib.connect();
@@ -43,6 +47,8 @@ webapp.listen(port, async () => {
   notifDb = await notifLib.connect();
   adminDb = await adminLib.connect();
   replyDb = await replyLib.connect();
+  inviteDb = await inviteLib.connect();
+  groupMemberDb = await groupMemberLib.connect();
   // eslint-disable-next-line no-console
   console.log('listening');
 });
@@ -256,12 +262,27 @@ webapp.get('/user/:id', async (req, res) => {
   }
 });
 
+webapp.get('/user-by-name/:name', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('in webserver, retrieve user information for supplied name of: ', req.params.name);
+  try {
+    const { name } = req.params;
+    const userInfo = await userLib.getUsersWithName(userDb, name);
+    // eslint-disable-next-line no-console
+    console.log('retrieved user info from model, current at webserver/user/name/get, value of: ', userInfo);
+    res.status(200).json(userInfo);
+  } catch (err) {
+    res.status(404).json('error! at webserver/user/name/get');
+  }
+});
+
 webapp.put('/user/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('make it to webserver/webapp.put/user/id with params: ', req.params);
+  console.log('make it to webserver/webapp.put/user/id with body: ', req.body);
   try {
     const { id } = req.params;
-    const { userPassword } = req.body;
+    const userPassword = req.body.user_password;
     // get password from body not params!
     const userInfo = await userLib.updateUser(userDb, id, 'user_password', userPassword);
     res.status(200).json(userInfo);
@@ -270,17 +291,35 @@ webapp.put('/user/:id', async (req, res) => {
   }
 });
 
+// this one only updates the bio. I originally tried to make it a dynamic variable update, but had issues.
 webapp.put('/profile/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('make it to webserver/webapp.put/profile/id with params: ', req.params);
   try {
     const { id } = req.params;
+    console.log('biography to be set: ', req.body);
     const { biography } = req.body;
     // get password from body not params!
-    const userInfo = await profileLib.updateProfile(profileDb, id, 'biography', biography);
+    const userInfo = await profileLib.updateProfile(profileDb, id, biography);
     res.status(200).json(userInfo);
   } catch (err) {
     res.status(404).json('error! at webserver/profile/id/put');
+  }
+});
+
+// this updates the profile pic
+webapp.put('/profile-pic/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('make it to webserver/webapp.put/profile-pic/id with params: ', req.params);
+  try {
+    const { id } = req.params;
+    console.log('profilePictureURL to be set: ', req.body);
+    const { profilePictureURL } = req.body;
+    // get password from body not params!
+    const userInfo = await profileLib.updateProfilePic(profileDb, id, profilePictureURL);
+    res.status(200).json(userInfo);
+  } catch (err) {
+    res.status(404).json('error! at webserver/profile-pic/id/put');
   }
 });
 
@@ -314,6 +353,85 @@ webapp.post('/notifications/:id', async (req, res) => {
   }
 });
 
+webapp.get('/invitations/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get invitations');
+  const { id } = req.params;
+  try {
+    const invitations = await inviteLib.getPendingInvitations(inviteDb, id);
+
+    // eslint-disable-next-line no-console
+    // console.log('got invitations: ', invitations);
+    res.status(200).json(invitations);
+  } catch (err) {
+    console.log('error at webserver.js. in catch, with err of ', err);
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.post('/invitations/', async (req, res) => {
+  
+
+  // const { id } = req.params;
+  // eslint-disable-next-line no-console
+  // console.log('post invitations with params of: ', req.params);
+  const { fromUserId, toUserId, groupId } = req.body;
+  const invitationObject = {
+    fromUserId: fromUserId,
+    toUserId: toUserId,
+    groupId: groupId,
+    invitationStatus: 'pending',
+  };
+  try {
+    const invitation = await inviteLib.addInvitation(inviteDb, invitationObject);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log('error! ', err);
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.put('/invitations/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('put invitations');
+  const { id } = req.params;
+  const { newStatus } = req.body;
+  try {
+    console.log('before updateCount execution, in webserver, req.params is: ', req.params);
+    const updateCount = await inviteLib.updateInvitationStatus(inviteDb, id, newStatus);
+
+    // eslint-disable-next-line no-console
+    console.log('updated ', updateCount, 'invitations.');
+    res.status(200).json(updateCount);
+  } catch (err) {
+    console.log('error at webserver.js. in catch, with err of ', err);
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.post('/membership/:id', async (req, res) => {
+    // eslint-disable-next-line no-console
+    console.log('post group membership to accept invitations, webserver, with req.body of:', req.body);
+
+    const { id } = req.params;
+    const userId = req.body.id;
+    try {
+      const postReturn = await groupMemberLib.addGroupMember(groupMemberDb, id, userId);
+      res.status(200).json(postReturn);
+    } catch (err) {
+      res.status(400).json({ err: `error is ${err.message}` });
+    }
+});
+
+webapp.get('/membership/:id', async (req, res) => {
+  try {
+    const membershipList = await groupMemberLib.getMemberIds(groupMemberDb, req.params.id);
+    res.status(200).json(membershipList);
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+})
+
 webapp.post('/admins', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('POST admins, ', req.body.admin);
@@ -337,6 +455,7 @@ webapp.post('/admins', async (req, res) => {
   }
 });
 
+// gets all admins for a particular group (e.g. id here is group, not user)
 webapp.get('/admins/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('get admins');
@@ -361,6 +480,17 @@ webapp.get('/admins', async (req, res) => {
     console.log('got all admins: ', admins);
     res.status(200).json(admins);
   } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/administered-groups/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get all groups that the given userId administers');
+  try {
+    const administeredGroups = await adminLib.getAdministeredGroups(req.params.id);
+    res.status(200).json(administeredGroups);
+  } catch(err) {
     res.status(404).json({ err: `error is ${err.message}` });
   }
 });
@@ -528,6 +658,18 @@ webapp.get('/replies/:id', async (req, res) => {
     } else {
       res.status(200).json({ result: replies });
     }
+  } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/invitations-review/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get invitations to review - in webserver.js');
+
+  try {
+    const invitations = await inviteLib.getInvitationsToReview(inviteDb, req.params.id);
+    res.status(200).json(invitations);
   } catch (err) {
     res.status(404).json({ err: `error is ${err.message}` });
   }

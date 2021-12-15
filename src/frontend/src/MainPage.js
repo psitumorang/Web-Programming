@@ -13,6 +13,7 @@ import Groups from './groups-page/Groups';
 import NotificationPage from './notifications-page/NotificationPage';
 import UpdatePassword from './profile-page/UpdatePassword';
 import ViewGroup from './view-group-page/ViewGroup';
+import InvitationPage from './invitations-page/InvitationPage';
 
 function MainPage() {
   const [state, updateState] = useState({ link: '/', userId: -1, viewingGroup: -1 });
@@ -44,6 +45,9 @@ function MainPage() {
     }
     if (url.includes('/viewgroup') || url.includes('/viewgroup/error')) {
       return (<ViewGroup changeState={changeState} state={state} />);
+    }
+    if (url.includes('/invitations')) {
+      return (<InvitationPage changeState={changeState} state={state} />);
     }
     const last = url.split('/').pop();
     if (url.includes('/registration') || last === '' || url.includes('/registration/error')) {

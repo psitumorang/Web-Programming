@@ -31,7 +31,7 @@ function NotificationPage(props) {
       </div>
 
       <div className="top-navbar">
-        <div className="home-link">Home</div>
+        <div className="home-link" onClick={() => changeState({ link: '/main' })} onKeyDown={() => changeState({ link: '/main' })} role="link" tabIndex={0}>Home</div>
         <div className="profile-link" onClick={() => props.changeState({ link: '/profile' })} onKeyDown={() => props.changeState({ link: '/profile' })} role="link" tabIndex={0}>Profile</div>
       </div>
 

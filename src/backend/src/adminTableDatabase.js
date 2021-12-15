@@ -85,6 +85,18 @@ const getAllAdmins = async (db) => {
   return null;
 };
 
+// get all groups administered by a particular user
+const getAdministeredGroups = async (db, userId) => {
+  const query = 'SELECT group_id FROM admin_lst WHERE admin_id = ?';
+  try {
+    const [result] = await db.execute(query, [userId]);
+    console.log('in adminTable DB, result sending back, unpacked, from getAdministeredGroups is ', result[0]);
+    return result[0];
+  } catch (err) {
+    console.log('error in getAdministeredGroups, with err of: ', err);
+  }
+};
+
 // remove an admin
 const revokeAdmin = async (db, groupId, adminUser) => {
   try {
@@ -115,4 +127,5 @@ module.exports = {
   getAdmins,
   revokeAdmin,
   getAllAdmins,
+  getAdministeredGroups,
 };
