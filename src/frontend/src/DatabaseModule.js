@@ -61,6 +61,7 @@ const sendGetRequest = async function sendGetRequest(url, params) {
 
 const sendDeleteRequest = async function sendDeleteRequest(url) {
   try {
+    console.log('using sendDeleteRequest with url of: ', url);
     const res = await fetch(url, {
       method: 'DELETE',
       mode: 'cors',

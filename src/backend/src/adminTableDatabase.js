@@ -121,6 +121,17 @@ const revokeAdmin = async (db, groupId, adminUser) => {
   return null;
 };
 
+const deleteAdmins = async (db, userId) => {
+  try {
+    query = "DELETE FROM admin_lst WHERE admin_id = ?";
+    const [result] = await db.execute(query, [userId]);
+    return result;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log('error: from db execute step for deleteAdmins');
+  }
+};
+
 module.exports = {
   connect,
   addAdminForGroup,
@@ -128,4 +139,5 @@ module.exports = {
   revokeAdmin,
   getAllAdmins,
   getAdministeredGroups,
+  deleteAdmins,
 };

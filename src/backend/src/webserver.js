@@ -165,6 +165,18 @@ webapp.get('/profile/:id', async (req, res) => {
   }
 });
 
+webapp.delete('/profile/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log('in delete profile id with id of ', id);
+    // assign to res.status
+    const numDeletedProfiles = await profileLib.deleteProfile2(profileDb, id);
+    res.status(200).json(numDeletedProfiles);
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+});
+
 webapp.post('/groups', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('create a group');
@@ -291,6 +303,18 @@ webapp.put('/user/:id', async (req, res) => {
   }
 });
 
+webapp.delete('/user/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('make it to webserver/user/id/delete with ', req.params);
+  try {
+    const { id } = req.params;
+    const deletedRows = await userLib.deleteUser(userDb, id);
+    res.status(200).json(deletedRows);
+  } catch (err) {
+    res.status(404).json('error! at webserver/user/id/delete');
+  }
+});
+
 // this one only updates the bio. I originally tried to make it a dynamic variable update, but had issues.
 webapp.put('/profile/:id', async (req, res) => {
   // eslint-disable-next-line no-console
@@ -409,6 +433,20 @@ webapp.put('/invitations/:id', async (req, res) => {
   }
 });
 
+webapp.delete('/invitations/:id', async (req, res) => {
+    // eslint-disable-next-line no-console
+    console.log('deleting invitations');
+    const { id } = req.params;
+    try {
+      console.log('before executing server module for delete Invitations, id is ', id, 'and req params is ', req.params);
+      const numDeletedInvites = await inviteLib.deletePendingInvites(inviteDb, id);
+      res.status(200).json(numDeletedInvites);
+    } catch (err) {
+      console.log('error at webserver.js delete invitations. in catch, with err of ', err);
+      res.status(400).json({ err: `error is ${err.message}` });
+    }
+});
+
 webapp.post('/membership/:id', async (req, res) => {
     // eslint-disable-next-line no-console
     console.log('post group membership to accept invitations, webserver, with req.body of:', req.body);
@@ -430,6 +468,24 @@ webapp.get('/membership/:id', async (req, res) => {
   } catch (err) {
     res.status(400).json({ err: `error is ${err.message}` });
   }
+})
+
+webapp.delete('/membership/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log(`deleting memberships with userid ${JSON.stringify(req.params.id)}`);
+  try {
+    const result = await groupMemberLib.deleteUserMemberships(groupMemberDb, req.params.id);
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        result: result,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
 })
 
 webapp.post('/admins', async (req, res) => {
@@ -469,6 +525,18 @@ webapp.get('/admins/:id', async (req, res) => {
     res.status(404).json({ err: `error is ${err.message}` });
   }
 });
+
+webapp.delete('/admins/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('delete administrator records for deactivated user');
+  try {
+    const admin = await adminLib.deleteAdmins(adminDb, req.params.id);
+
+    res.status(200).json(admin);
+  } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
+  }
+})
 
 webapp.get('/admins', async (req, res) => {
   // eslint-disable-next-line no-console
@@ -734,6 +802,6 @@ webapp.delete('/reply/:id', async (req, res) => {
 
 webapp.use((req, res) => {
   // eslint-disable-next-line no-console
-  console.log('testing to see if control gets to webapp.use');
+  console.log('testing to see if control gets to webapp.use, req is: ', req);
   res.status(404);
 });

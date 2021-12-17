@@ -114,10 +114,28 @@ const addInvitation = async (db, invitationObject) => {
   return null;
 };
 
+const deletePendingInvites = async (db, userId) => {
+  const query = "DELETE FROM invitations \
+  WHERE invitation_status = 'pending' \
+  AND (to_user_id = ? OR from_user_id = ?)";
+  const params = [userId, userId];
+
+  try {
+    const [rowsAffected] = await db.execute(query, params);
+    return rowsAffected;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+
+};
+
 module.exports = {
   connect,
   getPendingInvitations,
   updateInvitationStatus,
   addInvitation,
   getInvitationsToReview,
+  deletePendingInvites,
 };
