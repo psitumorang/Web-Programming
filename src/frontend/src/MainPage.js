@@ -14,6 +14,7 @@ import NotificationPage from './notifications-page/NotificationPage';
 import UpdatePassword from './profile-page/UpdatePassword';
 import ViewGroup from './view-group-page/ViewGroup';
 import InvitationPage from './invitations-page/InvitationPage';
+import DeactivateAccountPage from './profile-page/deactivate-account-page/DeactivateAccountPage';
 
 function MainPage() {
   const [state, updateState] = useState({ link: '/', userId: -1, viewingGroup: -1 });
@@ -48,6 +49,9 @@ function MainPage() {
     }
     if (url.includes('/invitations')) {
       return (<InvitationPage changeState={changeState} state={state} />);
+    }
+    if (url.includes('/deactivate-account')) {
+      return (<DeactivateAccountPage changeState={changeState} state={state} />);
     }
     const last = url.split('/').pop();
     if (url.includes('/registration') || last === '' || url.includes('/registration/error')) {

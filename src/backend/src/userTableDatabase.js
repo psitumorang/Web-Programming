@@ -94,14 +94,14 @@ const getUsersWithName = async (db, name) => {
   return null;
 };
 
-// delete user by name
-const deleteUser = async (db, name) => {
+// delete user by id
+const deleteUser = async (db, userId) => {
   try {
-    const query = 'DELETE FROM user_lst.user_name WHERE user_name=?';
-    const [row] = await db.execute(query, [name]);
+    const query = 'DELETE FROM user_lst WHERE user_id=?';
+    const [row] = await db.execute(query, [userId]);
     // eslint-disable-next-line no-console
     console.log(`Deleted ${JSON.stringify(row.affectedRows)} users(s)`);
-    return [row];
+    return row;
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(`error: ${err.message}`);

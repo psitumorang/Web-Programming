@@ -82,6 +82,22 @@ const deleteProfile = async (db, userId) => {
   return null;
 };
 
+// delete user by id.
+// Building a second function because the other one's syntax seems wrong but I don't want to delete others' work
+const deleteProfile2 = async (db, userId) => {
+  try {
+    const query = 'DELETE FROM profile_lst WHERE user_id=?';
+    const [row] = await db.execute(query, [userId]);
+    // eslint-disable-next-line no-console
+    console.log(`Deleted ${JSON.stringify(row.affectedRows)} users(s)`);
+    return [row];
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
 // update a user's biography (not just the biography - not all profile attributes)
 const updateProfile = async (db, userId, updateValue) => {
   try {
@@ -122,4 +138,5 @@ module.exports = {
   updateProfile,
   getProfileById,
   updateProfilePic,
+  deleteProfile2,
 };
