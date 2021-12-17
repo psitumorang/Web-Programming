@@ -61,8 +61,8 @@ function NotificationPage(props) {
           ))}
         </div>
 
-        <div className="message-updates">
-          Message updates
+        <div className="side-navbar" id="forMessages">
+          <button type="submit" className="messages" onClick={() => changeState({ link: '/messages' })}>Messages</button>
         </div>
 
       </div>

@@ -15,15 +15,24 @@ import UpdatePassword from './profile-page/UpdatePassword';
 import ViewGroup from './view-group-page/ViewGroup';
 import InvitationPage from './invitations-page/InvitationPage';
 import DeactivateAccountPage from './profile-page/deactivate-account-page/DeactivateAccountPage';
+import Messages from './messages-page/Messages';
 
 function MainPage() {
-  const [state, updateState] = useState({ link: '/', userId: -1, viewingGroup: -1 });
+  const [state, updateState] = useState(
+    {
+      link: '/',
+      userId: -1,
+      username: '',
+      viewingGroup: -1,
+    },
+  );
 
   const changeState = (input) => {
     if (typeof input.link !== 'undefined') window.history.pushState(null, '', input.link);
     updateState((oldState) => ({
       link: ((typeof input.link !== 'undefined') ? input.link : oldState.link),
       userId: ((typeof input.userId !== 'undefined') ? input.userId : oldState.userId),
+      username: ((typeof input.username !== 'undefined') ? input.username : oldState.username),
       viewingGroup: ((typeof input.viewingGroup !== 'undefined') ? input.viewingGroup : oldState.viewingGroup),
     }));
   };
@@ -40,6 +49,9 @@ function MainPage() {
     }
     if (url.includes('/notifications')) {
       return (<NotificationPage changeState={changeState} state={state} />);
+    }
+    if (url.includes('/messages')) {
+      return (<Messages changeState={changeState} state={state} />);
     }
     if (url.includes('/changepassword')) {
       return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);
