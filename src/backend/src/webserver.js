@@ -377,6 +377,7 @@ webapp.post('/notifications/:id', async (req, res) => {
   }
 });
 
+// get all pending invitations (for a person I think)
 webapp.get('/invitations/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('get invitations');
@@ -393,18 +394,23 @@ webapp.get('/invitations/:id', async (req, res) => {
   }
 });
 
+// get all pending OR accepted invitations for a group
+webapp.get('/invitations-open/:id', async (req, res) => {
+
+});
+
 webapp.post('/invitations/', async (req, res) => {
   
 
   // const { id } = req.params;
   // eslint-disable-next-line no-console
   // console.log('post invitations with params of: ', req.params);
-  const { fromUserId, toUserId, groupId } = req.body;
+  const { fromUserId, toUserId, groupId, invitationStatus } = req.body;
   const invitationObject = {
     fromUserId: fromUserId,
     toUserId: toUserId,
     groupId: groupId,
-    invitationStatus: 'pending',
+    invitationStatus: invitationStatus,
   };
   try {
     const invitation = await inviteLib.addInvitation(inviteDb, invitationObject);

@@ -50,9 +50,22 @@ const inviteNonAdmin = async (groupAndAdmins, state) => {
     fromUserId: state.userId,
     groupId: groupAndAdmins.group.group_id,
     toUserId: toUserId[0].user_id,
+    invitationStatus: 'pending',
   };
   const response = await database.sendPostRequest(url, body);
   return response;
+};
+
+// request to join the group - note uses the invitations workflow,
+// treating a request as an accepted (but not yet approved) invitation
+const requestJoinGroup = async (userId, groupId) => {
+  const newRequestObj = {
+    fromUserId: 1000000,
+    toUserId: userId,
+    groupId,
+    invitationStatus: 'accepted',
+  };
+  await database.sendPostRequest('http://localhost:8080/invitations/', newRequestObj);
 };
 
 const createPost = async (changeState, postGroup, postingUser, caption) => {
@@ -309,4 +322,5 @@ module.exports = {
   getReplies,
   parseReplies,
   parseOnclicks,
+  requestJoinGroup,
 };

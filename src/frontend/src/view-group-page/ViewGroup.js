@@ -135,6 +135,12 @@ function ViewGroup(props) {
             </div>
           </div>
 
+          <p />
+          <div className="join-group" id="join-group-id">
+            <input type="button" value="Request to join group" id="submit" onClick={() => lib.requestJoinGroup(state.userId, groupAndAdmins.group.group_id)} />
+          </div>
+          <p />
+
           <div className="view-area" id="groups-area">
             <div id="revoke">
               { state.link.includes('error') ? (<p>Error: cannot revoke creator of group</p>) : (null)}
