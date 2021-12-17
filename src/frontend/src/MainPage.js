@@ -45,6 +45,7 @@ function MainPage() {
       return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);
     }
     if (url.includes('/viewgroup') || url.includes('/viewgroup/error')) {
+      console.log('view group trying to error)');
       return (<ViewGroup changeState={changeState} state={state} />);
     }
     if (url.includes('/invitations')) {
@@ -54,11 +55,12 @@ function MainPage() {
       return (<DeactivateAccountPage changeState={changeState} state={state} />);
     }
     const last = url.split('/').pop();
-    if (url.includes('/registration') || last === '' || url.includes('/registration/error')) {
+    const first = url.split('/')[3];
+    if (url.includes('/registration') || last === '' || url.includes('/registration/error') || first === 'error') {
       return (<LoginPage changeState={changeState} state={state} />);
     }
-
     // TODO: change this to something meaningful
+    // will become a page that's like Oh this is not available!
     return state;
   };
 
