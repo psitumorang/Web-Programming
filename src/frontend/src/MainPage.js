@@ -53,7 +53,7 @@ function MainPage() {
     if (url.includes('/notifications')) {
       return (<NotificationPage changeState={changeState} state={state} />);
     }
-    if (url.includes('/messages')) {
+    if (url.includes('/messages') || url.includes('/messages/error') || url.includes('/messages/group') || url.includes('/messages/user')) {
       return (<Messages changeState={changeState} state={state} />);
     }
     if (url.includes('/conversation')) {

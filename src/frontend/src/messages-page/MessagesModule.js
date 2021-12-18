@@ -46,10 +46,15 @@ const parseConvos = (changeState, convos) => {
   }
 };
 
-const startConvo = async (state, updateMessages) => {
+const startConvo = async (state, updateMessages, updateState) => {
   // creates conversation in database
   const res = await database.sendGetRequest(`http://localhost:8080/user-by-name/${document.getElementById('otherName').value}`);
   console.log(res);
+  if (res.length === 0) {
+    updateState({ link: '/messages/user' });
+    return null;
+  }
+
   const otherId = res[0].user_id;
 
   const txt = document.getElementById('firstMsg').value;
@@ -63,6 +68,15 @@ const startConvo = async (state, updateMessages) => {
   };
 
   const response = await database.sendPostRequest(`http://localhost:8080/message/text/${otherId}`, { msg });
+
+  if (typeof response.err !== 'undefined' && response.err === 'self') {
+    updateState({ link: '/messages/error' });
+    return null;
+  }
+  if (typeof response.err !== 'undefined' && response.err === 'group') {
+    updateState({ link: '/messages/group' });
+    return null;
+  }
 
   await updateMessages();
 
