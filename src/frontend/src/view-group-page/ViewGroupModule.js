@@ -101,6 +101,14 @@ const requestJoinGroup = async (userId, groupId, updateMessage) => {
   await database.sendPostRequest('http://localhost:8080/invitations/', newRequestObj);
 };
 
+const leaveGroup = async (userId, groupId, updateMessage) => {
+  // update database - delete from groupMembership
+  await database.sendBodiedDeleteRequest(`http://localhost:8080/leave-group/${groupId}`, { userId });
+
+  // update message
+  updateMessage('Membership deleted! You are no longer a member of the group');
+};
+
 const createPost = async (changeState, postGroup, postingUser, caption) => {
   const newPost = {
     post_group: postGroup,
@@ -356,4 +364,5 @@ module.exports = {
   parseReplies,
   parseOnclicks,
   requestJoinGroup,
+  leaveGroup,
 };

@@ -53,11 +53,25 @@ const deleteUserMemberships = async (db, userId) => {
     console.error(err.message);
     throw err;
   }
-}
+};
+
+const deleteSingleMembership = async (db, groupId, userId) => {
+  const query = "DELETE FROM group_members WHERE member_id = ? AND group_id = ?";
+  const params = [userId, groupId];
+  try {
+    const [numDeletedRows] = await db.execute(query, params);
+    return numDeletedRows;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err.message);
+    throw err;
+  }
+};
 
 module.exports = {
   connect,
   addGroupMember,
   getMemberIds,
   deleteUserMemberships,
+  deleteSingleMembership,
 };
