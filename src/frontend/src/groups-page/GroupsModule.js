@@ -89,7 +89,7 @@ const parseGroups = (changeState, groups, admins) => {
     + '</li>'
     + '</ul>'
     + '</div>'
-    + '<button class="join-button"> Join Group </button>'
+    + '<button class="join-button"> View Group </button>'
     + '</div>';
 
     const div = document.createElement('div');

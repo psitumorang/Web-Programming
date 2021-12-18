@@ -131,6 +131,20 @@ const deletePendingInvites = async (db, userId) => {
 
 };
 
+const getOpenInvitesByGroupId = async (db, groupId) => {
+  try {
+    const query = "SELECT * FROM invitations \
+    WHERE invitation_status IN ('pending', 'accepted') \
+    AND group_id = ?";
+    const [invites] = await db.execute(query, [groupId]);
+    console.log('in getopeninvitesbygroupid in invitetabledb with invites of: ', invites);
+    return invites;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+};
+
 module.exports = {
   connect,
   getPendingInvitations,
@@ -138,4 +152,5 @@ module.exports = {
   addInvitation,
   getInvitationsToReview,
   deletePendingInvites,
+  getOpenInvitesByGroupId,
 };
