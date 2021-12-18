@@ -4,7 +4,7 @@ import './Groups.css';
 const lib = require('./GroupsModule');
 
 function Groups(props) {
-  const { changeState } = props;
+  const { changeState, state } = props;
   // eslint-disable-next-line no-unused-vars
   const [allGroups, setAllGroups] = useState([]);
 
@@ -43,12 +43,12 @@ function Groups(props) {
         <div className="profile-picture">
           <div className="img" />
         </div>
-        <div className="username">Hi, username!</div>
+        <div className="username">{`Hi, ${state.username}!`}</div>
       </div>
 
       <div className="top-navbar">
         <div className="home-link" onClick={() => changeState({ link: '/main' })} onKeyDown={() => changeState({ link: '/main' })} role="link" tabIndex={0}>Home</div>
-        <div className="profile-link">Profile</div>
+        <div className="profile-link" onClick={() => changeState({ link: '/profile' })} onKeyDown={() => changeState({ link: '/profile' })} role="link" tabIndex={0}>Profile</div>
       </div>
 
       <div className="main-container">

@@ -43,12 +43,12 @@ function InvitationPage(props) {
         <div className="profile-picture">
           <div className="img" />
         </div>
-        <div className="username">Hi, username!</div>
+        <div className="username">{`Hi, ${state.username}!`}</div>
       </div>
 
       <div className="top-navbar">
         <div className="home-link" onClick={() => changeState({ link: '/main' })} onKeyDown={() => changeState({ link: '/main' })} role="link" tabIndex={0}>Home</div>
-        <div className="profile-link" onClick={() => props.changeState({ link: '/profile' })} onKeyDown={() => props.changeState({ link: '/profile' })} role="link" tabIndex={0}>Profile</div>
+        <div className="profile-link" onClick={() => changeState({ link: '/profile' })} onKeyDown={() => changeState({ link: '/profile' })} role="link" tabIndex={0}>Profile</div>
       </div>
 
       <div className="main-container">
@@ -57,7 +57,7 @@ function InvitationPage(props) {
           <button type="submit" className="notifications" onClick={() => changeState({ link: '/notifications' })}>Notifications</button>
           <button type="submit" className="events">Events</button>
           <button type="submit" className="groups" onClick={() => changeState({ link: '/groups' })}>Groups</button>
-          <button type="submit" className="videos">Videos</button>
+          <button type="submit" className="invitations" onClick={() => changeState({ link: '/invitations' })}>Group Invitations and Requests </button>
           <button type="submit" className="photos">Photos</button>
         </div>
 
