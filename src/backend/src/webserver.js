@@ -396,7 +396,16 @@ webapp.get('/invitations/:id', async (req, res) => {
 
 // get all pending OR accepted invitations for a group
 webapp.get('/invitations-open/:id', async (req, res) => {
-
+    // eslint-disable-next-line no-console
+    console.log('get open invitations');
+    const { id } = req.params;
+    try {
+      const openInvites = await inviteLib.getOpenInvitesByGroupId(inviteDb, id);
+      res.status(200).json(openInvites);
+    } catch (err) {
+      console.log('error at webserver.js/invitations-open. in catch, with err of ', err);
+      res.status(400).json({ err: `error is ${err.message}` });
+    }
 });
 
 webapp.post('/invitations/', async (req, res) => {

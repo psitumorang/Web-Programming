@@ -40,6 +40,7 @@ const sendPutRequest = async function sendPutRequest(url, body) {
 
 const sendGetRequest = async function sendGetRequest(url, params) {
   try {
+    console.log('in send get request with url of ', url, 'and params of ', params);
     const fullURL = url + (typeof params !== 'undefined' ? JSON.stringify(params.id) : '');
     const res = await fetch(fullURL, {
       method: 'GET',

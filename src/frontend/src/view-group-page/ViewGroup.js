@@ -9,6 +9,8 @@ function ViewGroup(props) {
   const { changeState, state } = props;
 
   const [groupAndAdmins, setGroupAndAdmins] = useState({ group: {}, admins: [] });
+  const [message, setMessage] = useState(' ');
+
   const updateState = async () => {
     const group = await lib.getGroup(state.viewingGroup);
     const admins = await lib.getAdmins(state.viewingGroup);
@@ -17,6 +19,10 @@ function ViewGroup(props) {
       group,
       admins,
     }));
+  };
+
+  const updateMessage = (newMessage) => {
+    setMessage(newMessage);
   };
 
   const processAdmins = (admins) => {
@@ -134,10 +140,10 @@ function ViewGroup(props) {
               </div>
             </div>
           </div>
-
+          {message}
           <p />
           <div className="join-group" id="join-group-id">
-            <input type="button" value="Request to join group" id="submit" onClick={() => lib.requestJoinGroup(state.userId, groupAndAdmins.group.group_id)} />
+            <input type="button" value="Request to join group" id="submit" onClick={() => lib.requestJoinGroup(state.userId, groupAndAdmins.group.group_id, updateMessage)} />
           </div>
           <p />
 
