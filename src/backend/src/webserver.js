@@ -859,7 +859,12 @@ webapp.post('/message/text/:id', async (req, res) => {
       console.log(convoId);
     } else {
       console.log("adding convo");
-      convoId = await convoLib.addConvo(convoDb, id, msg.fromId);
+      if (typeof msg.receiverName !== 'undefined') {
+        // const userName = await userDb.getUserById(userDb, id);
+        console.log("this is the username");
+        console.log(msg.receiverName);
+        convoId = await convoLib.addConvo(convoDb, id, msg.fromId, msg.receiverName, msg.senderName);
+      }
     }
     console.log(convoId, msg);
     const value = await msgLib.addTextMessage(msgDb, msg.txt, msg.fromId, id, msg.senderName, convoId);

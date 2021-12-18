@@ -9,7 +9,7 @@ function Messages(props) {
   const { changeState, state } = props;
 
   const updateMessages = async () => {
-    const convos = await lib.getConvos(state.userId, changeState);
+    const convos = await lib.getConvos(state.userId);
     console.log(convos.length, convos);
     updateMsgs(convos);
     lib.parseConvos(changeState, convos);
@@ -44,10 +44,15 @@ function Messages(props) {
 
         <div className="main-area">
           <div className="info-area">
-            will be able to create a new conversation (i.e. a first message) here
+            Start a new conversation!
+            <div id="form">
+              <input type="text" id="otherName" placeholder="your friend's username" />
+              <textArea id="firstMsg" placeholder="type in a message!" />
+              <button type="submit" id="sendFirstMsg" onClick={() => lib.startConvo(state, updateMessages)}>Start conversation!</button>
+            </div>
           </div>
 
-          <div className="view-area" id="view-convos">
+          <div className="convo-area" id="view-convos">
             You do not have any messages :(
           </div>
         </div>

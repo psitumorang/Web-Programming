@@ -22,9 +22,9 @@ const connect = async () => {
 
 // get admins for group
 const convoExists = async (db, user1, user2) => {
-  const query = 'SELECT * FROM convo_lst WHERE user1=? OR user2=?';
+  const query = 'SELECT * FROM convo_lst WHERE (user1=? AND user2=?) OR (user1=? AND user2=?)';
 
-  const params = [user1, user2];
+  const params = [user1, user2, user2, user1];
   try {
     const [rows] = await db.execute(query, params);
     // eslint-disable-next-line no-console

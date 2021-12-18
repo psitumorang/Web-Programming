@@ -1,26 +1,20 @@
 const database = require('../DatabaseModule');
 
-const getConvos = async (id, changeState) => {
+const getConvos = async (id) => {
   const response = await database.sendGetRequest(`http://localhost:8080/convo/${id}`);
-  console.log(response);
   const convoInfo = [];
-    
+  console.log(response);
   for (let i = 0; i < response.length; i += 1) {
     let otherId = -1;
+    let otherName = '';
     if (response[i].user1 === id) {
       otherId = response[i].user2;
+      otherName = response[i].user2Name;
     } else {
+      otherName = response[i].user1Name;
       otherId = response[i].user1;
     }
 
-    const name = await database.sendGetRequest(`http://localhost:8080/user/${otherId}`);
-
-    if (name !== null) {
-      changeState({ link: '/messages' });
-    } else {
-      changeState({ link: '/error' });
-    }
-    const otherName = name[0].user_name;
     convoInfo.push({ ...response[i], otherName, otherId });
   }
 
@@ -39,21 +33,44 @@ const parseConvos = (changeState, convos) => {
     }
   }
 
-  console.log(convos.length, convos);
   for (let i = 0; i < convos.length; i += 1) {
-    console.log(convos[i]);
     const convoBlock = `<div class="convo-container">
-      <div class="group-info"> <ul> <li id="group-name">Messages with: ${convos[i].otherName} </li> </ul> </div> </div>`;
-    console.log(convoBlock);
+      <div class="convo-info"> <ul> <li id="convo-name">Messages with: ${convos[i].otherName} </li> </ul> </div> </div>`;
     const div = document.createElement('div');
     div.innerHTML = convoBlock;
-    div.onclick = () => { console.log('will be view message page'); };
+    div.onclick = () => {
+      changeState({ link: '/conversation', viewingConvo: { id: convos[i].convoId, otherUserId: convos[i].otherId } });
+    };
 
     document.getElementById('view-convos').appendChild(div);
   }
 };
 
+const startConvo = async (state, updateMessages) => {
+  // creates conversation in database
+  const res = await database.sendGetRequest(`http://localhost:8080/user-by-name/${document.getElementById('otherName').value}`);
+  console.log(res);
+  const otherId = res[0].user_id;
+
+  const txt = document.getElementById('firstMsg').value;
+
+  const msg = {
+    txt,
+    toId: otherId,
+    fromId: state.userId,
+    senderName: state.username,
+    receiverName: res[0].user_name,
+  };
+
+  const response = await database.sendPostRequest(`http://localhost:8080/message/text/${otherId}`, { msg });
+
+  await updateMessages();
+
+  return response;
+};
+
 module.exports = {
   getConvos,
   parseConvos,
+  startConvo,
 };

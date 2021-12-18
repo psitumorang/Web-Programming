@@ -12,17 +12,19 @@ const getAdmins = async (id) => {
   return response;
 };
 
-const revokeAdmin = async (state, changeState, groupAndAdmins) => {
+const revokeAdmin = async (state, changeState, groupAndAdmins, setGroupAndAdmins) => {
   const response = await database.sendDeleteRequest(`http://localhost:8080/admins?groupId=${state.viewingGroup}&adminUser=${document.getElementById('revokeAdmin').value}&groupName=${groupAndAdmins.group.group_name}`);
 
   if (typeof response.message !== 'undefined') {
     changeState({ link: '/viewgroup/error' });
   }
 
+  await setGroupAndAdmins();
+
   return response;
 };
 
-const addAdmin = async (groupAndAdmins) => {
+const addAdmin = async (groupAndAdmins, setGroupAndAdmins) => {
   const response = await database.sendPostRequest('http://localhost:8080/admins', {
     admin: {
       adminUser: document.getElementById('addAdmin').value,
@@ -32,10 +34,12 @@ const addAdmin = async (groupAndAdmins) => {
     },
   });
 
+  await setGroupAndAdmins();
+
   return response;
 };
 
-const inviteNonAdmin = async (groupAndAdmins, state) => {
+const inviteNonAdmin = async (groupAndAdmins, state, setGroupAndAdmins) => {
   const url = 'http://localhost:8080/invitations/';
   const toUserName = document.getElementById('addNonAdmin').value;
   console.log('in viewgroupmodule/invitenonadmin, about to sendGet request with tousername of', toUserName);
@@ -53,12 +57,14 @@ const inviteNonAdmin = async (groupAndAdmins, state) => {
     invitationStatus: 'pending',
   };
   const response = await database.sendPostRequest(url, body);
+
+  await setGroupAndAdmins();
   return response;
 };
 
 // request to join the group - note uses the invitations workflow,
 // treating a request as an accepted (but not yet approved) invitation
-const requestJoinGroup = async (userId, groupId, updateMessage) => {
+const requestJoinGroup = async (userId, groupId, updateMessage, setGroupAndAdmins) => {
   const groupMembers = await database.sendGetRequest(`http://localhost:8080/membership/${groupId}`);
   const groupInvitations = await database.sendGetRequest(`http://localhost:8080/invitations-open/${groupId}`);
   const groupAdmins = await database.sendGetRequest(`http://localhost:8080/admins/${groupId}`);
@@ -99,6 +105,7 @@ const requestJoinGroup = async (userId, groupId, updateMessage) => {
     invitationStatus: 'accepted',
   };
   await database.sendPostRequest('http://localhost:8080/invitations/', newRequestObj);
+  await setGroupAndAdmins();
 };
 
 const leaveGroup = async (userId, groupId, updateMessage) => {

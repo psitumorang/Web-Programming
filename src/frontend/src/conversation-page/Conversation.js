@@ -1,15 +1,22 @@
-// eslint-disable-next-line
 import { useState, useEffect, React } from 'react';
 import './Conversation.css';
 
-// eslint-disable-next-line
 const lib = require('./ConversationModule');
 
 function Conversation(props) {
-  // eslint-disable-next-line
   const { changeState, state } = props;
+  // eslint-disable-next-line
+  const [message, setMessage] = useState([]);
 
-  //  useEffect(() => { updates(); }, [state]);
+  const updateState = async () => {
+    const msgs = await lib.getMessages(state.viewingConvo.id);
+
+    setMessage(msgs);
+    lib.parseMessages(msgs, state.userId);
+    document.getElementById('view-msgs').scrollTop = document.getElementById('view-msgs').scrollHeight;
+  };
+
+  useEffect(() => { updateState(); }, []);
 
   return (
     <div className="container">
@@ -36,11 +43,20 @@ function Conversation(props) {
           <button type="submit" className="photos">Photos</button>
         </div>
 
-        <div className="main-area"> will be list of messages? </div>
-      </div>
+        <div className="main-area">
+          <div id="view-msgs">
+            You do not have any messages! Send a message.
+          </div>
+          <div id="send-msg">
+            <textarea id="sendMsgTxt" placeholder="Send a message!" />
+            <button type="submit" id="sendMsgButton" onClick={() => lib.sendMessage(state, updateState)}>Send</button>
+          </div>
+        </div>
 
-      <div className="side-navbar" id="forMessages">
-        <button type="submit" className="messages" onClick={() => changeState({ link: '/messages' })}>Messages</button>
+        <div className="side-navbar" id="forMessages">
+          <button type="submit" className="messages" onClick={() => changeState({ link: '/messages' })}>Messages</button>
+        </div>
+
       </div>
     </div>
   );

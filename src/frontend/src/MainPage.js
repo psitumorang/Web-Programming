@@ -16,6 +16,7 @@ import ViewGroup from './view-group-page/ViewGroup';
 import InvitationPage from './invitations-page/InvitationPage';
 import DeactivateAccountPage from './profile-page/deactivate-account-page/DeactivateAccountPage';
 import Messages from './messages-page/Messages';
+import Conversation from './conversation-page/Conversation';
 
 function MainPage() {
   const [state, updateState] = useState(
@@ -24,6 +25,7 @@ function MainPage() {
       userId: -1,
       username: '',
       viewingGroup: -1,
+      viewingConvo: { id: -1, otherUserId: -1 },
     },
   );
 
@@ -34,6 +36,7 @@ function MainPage() {
       userId: ((typeof input.userId !== 'undefined') ? input.userId : oldState.userId),
       username: ((typeof input.username !== 'undefined') ? input.username : oldState.username),
       viewingGroup: ((typeof input.viewingGroup !== 'undefined') ? input.viewingGroup : oldState.viewingGroup),
+      viewingConvo: ((typeof input.viewingConvo !== 'undefined') ? input.viewingConvo : oldState.viewingConvo),
     }));
   };
 
@@ -52,6 +55,9 @@ function MainPage() {
     }
     if (url.includes('/messages')) {
       return (<Messages changeState={changeState} state={state} />);
+    }
+    if (url.includes('/conversation')) {
+      return (<Conversation changeState={changeState} state={state} />);
     }
     if (url.includes('/changepassword')) {
       return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);

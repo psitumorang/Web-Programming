@@ -143,7 +143,7 @@ function ViewGroup(props) {
           {message}
           <p />
           <div className="join-group" id="join-group-id">
-            <input type="button" value="Request to join group" id="submit" onClick={() => lib.requestJoinGroup(state.userId, groupAndAdmins.group.group_id, updateMessage)} />
+            <input type="button" value="Request to join group" id="submit" onClick={() => lib.requestJoinGroup(state.userId, groupAndAdmins.group.group_id, updateMessage, setGroupAndAdmins)} />
             <input type="button" value="Leave group" id="submit" onClick={() => lib.leaveGroup(state.userId, groupAndAdmins.group.group_id, updateMessage)} />
           </div>
           <p />
@@ -155,21 +155,21 @@ function ViewGroup(props) {
                 {'Revoke Admin: '}
                 <input id="revokeAdmin" type="text" placeholder="Enter username" />
               </label>
-              <input type="button" value="Submit" id="submit" onClick={() => lib.revokeAdmin(state, changeState, groupAndAdmins)} />
+              <input type="button" value="Submit" id="submit" onClick={() => lib.revokeAdmin(state, changeState, groupAndAdmins, setGroupAndAdmins)} />
             </div>
             <div id="add">
               <label htmlFor="addAdmin">
                 {'Add Admin: '}
                 <input id="addAdmin" type="text" placeholder="Enter username" />
               </label>
-              <input type="button" value="Submit" id="submit" onClick={() => lib.addAdmin(groupAndAdmins)} />
+              <input type="button" value="Submit" id="submit" onClick={() => lib.addAdmin(groupAndAdmins, setGroupAndAdmins)} />
             </div>
             <div id="add-non-admin">
               <label htmlFor="addNonAdmin">
                 Invite a non-Admin member:
                 <input id="addNonAdmin" type="text" placeholder="Enter username" />
               </label>
-              <input type="button" value="Submit" id="submit" onClick={() => lib.inviteNonAdmin(groupAndAdmins, state)} />
+              <input type="button" value="Submit" id="submit" onClick={() => lib.inviteNonAdmin(groupAndAdmins, state, setGroupAndAdmins)} />
             </div>
           </div>
 
