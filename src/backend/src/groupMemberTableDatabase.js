@@ -68,10 +68,28 @@ const deleteSingleMembership = async (db, groupId, userId) => {
   }
 };
 
+const getGroupsForUser = async (db, id) => {
+  const query = "SELECT group_id from group_members where member_id=?";
+  const params = [id];
+  try {
+    const [ret] = await db.execute(query, params);
+    const arr = [];
+    for (let i = 0; i < ret.length; i +=1) {
+      arr.push(ret[i].group_id);
+    }
+    return arr;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err.message);
+    throw err;
+  }
+}
+
 module.exports = {
   connect,
   addGroupMember,
   getMemberIds,
   deleteUserMemberships,
   deleteSingleMembership,
+  getGroupsForUser,
 };

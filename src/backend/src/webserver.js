@@ -849,24 +849,38 @@ webapp.post('/message/text/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('POST text message, ', id, msg);
   try {
-    console.log("getting convo exists ", typeof msg);
+    console.log(msg.fromId);
+    if (msg.toId === msg.fromId) {
+      res.status(404).json({ err: "self" });
+      return null;
+    }
+
+    const myGroups = await groupMemberLib.getGroupsForUser(groupMemberDb, id);
+    const theirGroups = await groupMemberLib.getGroupsForUser(groupMemberDb, msg.fromId);
+
+    let same = false;
+    for (let i = 0; i < myGroups.length; i += 1) {
+      if (theirGroups.includes(myGroups[i])) {
+        same = true;
+        break;
+      }
+    }
+
+    if (!same) {
+      res.status(404).json({ err: "group" });
+      return null;
+    }
+
     const exists = await convoLib.convoExists(convoDb, id, msg.fromId);
-    console.log(exists);
     let convoId;
     if (exists) {
-      console.log("getting convo id");
       convoId = await convoLib.getConvoId(convoDb, id, msg.fromId);
-      console.log(convoId);
     } else {
-      console.log("adding convo");
       if (typeof msg.receiverName !== 'undefined') {
         // const userName = await userDb.getUserById(userDb, id);
-        console.log("this is the username");
-        console.log(msg.receiverName);
         convoId = await convoLib.addConvo(convoDb, id, msg.fromId, msg.receiverName, msg.senderName);
       }
     }
-    console.log(convoId, msg);
     const value = await msgLib.addTextMessage(msgDb, msg.txt, msg.fromId, id, msg.senderName, convoId);
 
     // eslint-disable-next-line no-console

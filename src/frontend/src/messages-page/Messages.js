@@ -45,10 +45,14 @@ function Messages(props) {
         <div className="main-area">
           <div className="info-area">
             Start a new conversation!
+            <br />
+            {window.location.href.split('/').pop() === 'error' ? 'ERROR sending message: cannot message self.' : null}
+            {window.location.href.split('/').pop() === 'group' ? 'ERROR sending message: cannot message user not in a group with you.' : null}
+            {window.location.href.split('/').pop() === 'user' ? 'ERROR sending message: cannot message to user that does not exist.' : null}
             <div id="form">
               <input type="text" id="otherName" placeholder="your friend's username" />
-              <textArea id="firstMsg" placeholder="type in a message!" />
-              <button type="submit" id="sendFirstMsg" onClick={() => lib.startConvo(state, updateMessages)}>Start conversation!</button>
+              <textarea id="firstMsg" placeholder="type in a message!" />
+              <button type="submit" id="sendFirstMsg" onClick={() => lib.startConvo(state, updateMessages, changeState)}>Start conversation!</button>
             </div>
           </div>
 
