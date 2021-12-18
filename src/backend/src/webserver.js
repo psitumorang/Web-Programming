@@ -485,11 +485,33 @@ webapp.get('/membership/:id', async (req, res) => {
   }
 })
 
+// deletes ALL the membership associated with a user id
 webapp.delete('/membership/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log(`deleting memberships with userid ${JSON.stringify(req.params.id)}`);
   try {
     const result = await groupMemberLib.deleteUserMemberships(groupMemberDb, req.params.id);
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        result: result,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+// deletes the membership of one group-user pair. Takes group id in param, userid in body
+webapp.delete('/leave-group/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('deleting single membership of userid with req body of ', req.body);
+  const groupId = req.params.id;
+  const { userId } = req.body;
+  try {
+    const result = await groupMemberLib.deleteSingleMembership(groupMemberDb, groupId, userId);
     if (result === null) {
       res.status(404).json({ err: err.message });
     } else {

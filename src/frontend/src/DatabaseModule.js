@@ -80,6 +80,25 @@ const sendDeleteRequest = async function sendDeleteRequest(url) {
   }
 };
 
+const sendBodiedDeleteRequest = async function sendBodiedDeleteRequest(url, body) {
+  try {
+    console.log('in sendbodieddeleterequest, with body of: ', body);
+    const res = await fetch(url, {
+      method: 'DELETE',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+      .then((response) => response.json())
+      .then((result) => result);
+    return res;
+  } catch (err) {
+    // eslint-disable-next-line
+    console.log('ERROR');
+    return null;
+  }
+};
+
 const sendGetGroupsRequest = async function sendGetGroupsRequest(url) {
   try {
     const res = await fetch(url)
@@ -99,4 +118,5 @@ module.exports = {
   sendPutRequest,
   sendGetGroupsRequest,
   sendDeleteRequest,
+  sendBodiedDeleteRequest,
 };
