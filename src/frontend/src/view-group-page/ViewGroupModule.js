@@ -324,6 +324,5 @@ module.exports = {
   getReplies,
   parseReplies,
   parseOnclicks,
-  requestJoinGroup,
   leaveGroup,
 };
