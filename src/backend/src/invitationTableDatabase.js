@@ -95,15 +95,15 @@ const addInvitation = async (db, invitationObject) => {
   // get next row increment
   const [maxInvitationId] = await db.execute('SELECT MAX(invitation_id) as max_id FROM invitations', []);
   const nextInvitationId = maxInvitationId[0].max_id + 1;
-  
+
   const query = 'INSERT INTO invitations (invitation_id, to_user_id, from_user_id, invitation_status, group_id) VALUES (?, ?, ?, ?, ?)';
   const params = [
     nextInvitationId,
     invitationObject.toUserId,
     invitationObject.fromUserId,
     invitationObject.invitationStatus,
-    invitationObject.groupId
-  ]
+    invitationObject.groupId,
+  ];
   try {
     const [rowsAffected] = await db.execute(query, params);
     return rowsAffected;
@@ -128,7 +128,6 @@ const deletePendingInvites = async (db, userId) => {
     console.log(`error: ${err.message}`);
   }
   return null;
-
 };
 
 const getOpenInvitesByGroupId = async (db, groupId) => {

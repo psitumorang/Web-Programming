@@ -48,22 +48,33 @@ const parseConvos = (changeState, convos) => {
   }
 };
 
-const uploadImgConvo = async (selected, state, updateMessages, updateState) => {
+const uploadMediaConvo = async (selected, state, updateMessages, updateState) => {
   const file = document.getElementById('firstMsg').files[0];
+
+  // check if the file is too large (defined as > 10MB)
+  if (selected === 'image' && file.size > 10000000) {
+    updateState({ link: '/messages/img' });
+    return null;
+  }
+
   const data = new FormData();
   data.append('file', file);
   data.append('upload_preset', ['yj7lgb8v']);
   console.log(data.get('upload_preset'));
-  const res = sendUploadPostRequest('https://api.cloudinary.com/v1_1/cis557-project-group-18/image/upload', data).then((mediaUrl) => {
+  const res = sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
     // TODO change this to be right
-    console.log('SENT IMAGE');
-    console.log(res, mediaUrl);
+    console.log('SENT MEDIA');
+    console.log(res, mediaUrl, state);
     // creates conversation in database
     return database.sendGetRequest(`http://localhost:8080/user-by-name/${document.getElementById('otherName').value}`).then((resp) => {
       console.log(resp);
       if (resp.length === 0) {
         // MAYBE MAKE THIS THE ERROR PAGE DUDE?!?!?!?!?!
         updateState({ link: '/messages/user' });
+        return null;
+      }
+      if ((selected === 'audio' || selected === 'video') && file.size > 100000000) {
+        updateState({ link: '/messages/av' });
         return null;
       }
 
@@ -74,9 +85,17 @@ const uploadImgConvo = async (selected, state, updateMessages, updateState) => {
         fromId: state.userId,
         senderName: state.username,
         receiverName: resp[0].user_name,
-        img: mediaUrl.data.url,
       };
-      return database.sendPostRequest(`http://localhost:8080/message/image/${otherId}`, { msg }).then((response) => {
+
+      if (selected === 'image') {
+        msg.img = mediaUrl.data.url;
+      } else if (selected === 'video') {
+        msg.video = mediaUrl.data.url;
+      } else {
+        msg.audio = mediaUrl.data.url;
+      }
+
+      return database.sendPostRequest(`http://localhost:8080/message/${selected}/${otherId}`, { msg }).then((response) => {
         if (typeof response.err !== 'undefined' && response.err === 'self') {
           updateState({ link: '/messages/error' });
           return null;
@@ -95,11 +114,13 @@ const uploadImgConvo = async (selected, state, updateMessages, updateState) => {
 
 const startConvo = async (selected, state, updateMessages, updateState) => {
   if (selected === 'audio') {
-    console.log('hi');
-  } else if (selected === 'video') {
-    console.log('hi');
-  } else if (selected === 'image') {
-    return uploadImgConvo(selected, state, updateMessages, updateState);
+    return uploadMediaConvo(selected, state, updateMessages, updateState);
+  }
+  if (selected === 'video') {
+    return uploadMediaConvo(selected, state, updateMessages, updateState);
+  }
+  if (selected === 'image') {
+    return uploadMediaConvo(selected, state, updateMessages, updateState);
   }
 
   // creates conversation in database

@@ -29,7 +29,7 @@ const convoExists = async (db, user1, user2) => {
     const [rows] = await db.execute(query, params);
     // eslint-disable-next-line no-console
     console.log(`Got convos: ${rows}`);
-    return rows.length != 0;
+    return rows.length !== 0;
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(`error: ${err.message}`);

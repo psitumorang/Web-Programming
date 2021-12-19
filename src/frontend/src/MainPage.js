@@ -53,10 +53,10 @@ function MainPage() {
     if (url.includes('/notifications')) {
       return (<NotificationPage changeState={changeState} state={state} />);
     }
-    if (url.includes('/messages') || url.includes('/messages/error') || url.includes('/messages/group') || url.includes('/messages/user')) {
+    if (url.includes('/messages') || url.includes('/messages/error') || url.includes('/messages/group') || url.includes('/messages/user') || url.includes('/messages/img') || url.includes('/messages/av')) {
       return (<Messages changeState={changeState} state={state} />);
     }
-    if (url.includes('/conversation')) {
+    if (url.includes('/conversation') || url.includes('/conversation/img') || url.includes('/conversation/av')) {
       return (<Conversation changeState={changeState} state={state} />);
     }
     if (url.includes('/changepassword')) {

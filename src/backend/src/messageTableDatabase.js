@@ -30,12 +30,11 @@ const getNextOrderNumber = async (db, fromId, toId) => {
     console.log(row);
     // eslint-disable-next-line no-console
     console.log(`Got max id: ${row[0]['MAX(orderNumber)']}`);
-    //TODO: handle the case where this is the first message
+    // TODO: handle the case where this is the first message
     if (row[0]['MAX(orderNumber)'] === null) {
       return 0;
-    } else {
-      return row[0]['MAX(orderNumber)'] + 1;
     }
+    return row[0]['MAX(orderNumber)'] + 1;
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log('error: msg already exists');
@@ -46,7 +45,7 @@ const getNextOrderNumber = async (db, fromId, toId) => {
 
 // add text message from a user to another user
 const addTextMessage = async (db, txt, fromId, toId, senderName, convoId) => {
-  //need to get the order number
+  // need to get the order number
   const orderNumber = await getNextOrderNumber(db, fromId, toId);
 
   const query = 'INSERT INTO msg_lst (txt, fromId, toId, orderNumber, senderName, convoId) VALUES(?, ?, ?, ?, ?, ?)';
@@ -67,12 +66,12 @@ const addTextMessage = async (db, txt, fromId, toId, senderName, convoId) => {
 };
 
 const addImageMessage = async (db, img, fromId, toId, senderName, convoId) => {
-  //need to get the order number
+  // need to get the order number
   console.log('uploading image message');
   const orderNumber = await getNextOrderNumber(db, fromId, toId);
   const query = 'INSERT INTO msg_lst (img, fromId, toId, orderNumber, senderName, convoId) VALUES(?, ?, ?, ?, ?, ?)';
   const params = [img, fromId, toId, orderNumber, senderName, convoId];
-  
+
   try {
     const [row] = await db.execute(query, params);
 
@@ -87,12 +86,12 @@ const addImageMessage = async (db, img, fromId, toId, senderName, convoId) => {
 };
 
 const addAudioMessage = async (db, audio, fromId, toId, senderName, convoId) => {
-  //need to get the order number
+  // need to get the order number
   const orderNumber = await getNextOrderNumber(db, fromId, toId);
 
   const query = 'INSERT INTO msg_lst (audio, fromId, toId, orderNumber, senderName, convoId) VALUES(?, ?, ?, ?, ?, ?)';
   const params = [audio, fromId, toId, orderNumber, senderName, convoId];
-  
+
   try {
     const [row] = await db.execute(query, params);
 
@@ -107,12 +106,12 @@ const addAudioMessage = async (db, audio, fromId, toId, senderName, convoId) => 
 };
 
 const addVideoMessage = async (db, video, fromId, toId, senderName, convoId) => {
-  //need to get the order number
+  // need to get the order number
   const orderNumber = await getNextOrderNumber(db, fromId, toId);
 
   const query = 'INSERT INTO msg_lst (video, fromId, toId, orderNumber, senderName, convoId) VALUES(?, ?, ?, ?, ?, ?)';
   const params = [video, fromId, toId, orderNumber, senderName, convoId];
-  
+
   try {
     const [row] = await db.execute(query, params);
 

@@ -113,7 +113,7 @@ const deletePost = async (db, postId) => {
 const getPosts = async (db, groupId) => {
   try {
     const query = 'SELECT * FROM post_lst WHERE post_group = ? AND is_hidden = 0 ORDER BY post_id DESC';
-    
+
     const [rows] = await db.execute(query, [groupId]);
     // eslint-disable-next-line no-console
     console.log(`Posts: ${JSON.stringify(rows)}`);

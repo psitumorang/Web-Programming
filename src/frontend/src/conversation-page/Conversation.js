@@ -78,6 +78,8 @@ function Conversation(props) {
             You do not have any messages! Send a message.
           </div>
           <div id="send-msg">
+            {window.location.href.split('/').pop() === 'img' ? 'ERROR sending message: image file too large' : null}
+            {window.location.href.split('/').pop() === 'av' ? 'ERROR sending message: audio/video file size too large' : null}
             <div id="options">
               <label htmlFor="textInput" className="list">
                 <input type="radio" id="textInput" name="msgType" onClick={() => updateSelected('text')} />
@@ -97,7 +99,7 @@ function Conversation(props) {
               </label>
             </div>
             { conditionalRender() }
-            <button type="submit" id="sendMsgButton" onClick={() => sendMessage(updateState, selected, state)}>Send</button>
+            <button type="submit" id="sendMsgButton" onClick={() => sendMessage(updateState, selected, state, changeState)}>Send</button>
           </div>
         </div>
 
