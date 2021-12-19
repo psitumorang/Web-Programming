@@ -4,17 +4,33 @@ import './Groups.css';
 const lib = require('./GroupsModule');
 
 function Groups(props) {
-  const { changeState, state } = props;
+  const { changeState } = props;
+  const [message, setMessage] = useState(' ');
   // eslint-disable-next-line no-unused-vars
   const [allGroups, setAllGroups] = useState([]);
+  const [nonMemberGroups, setNonMemberGroups] = useState([]);
 
   const updateGroups = async () => {
     const groups = await lib.getGroups(changeState);
     const admins = await lib.getAdmins();
+    const groupMemberships = await lib.getGroupMemberships(props.state.userId);
+
     // eslint-disable-next-line
-    console.log(groups.result);
+    console.log('in update groups, group.result is:', groups.result);
+    // eslint-disable-next-line
+    console.log('in update groups, groupMemberships is:', groupMemberships);
+    // eslint-disable-next-line
+    console.log('in update groups, admins is:', admins);
     setAllGroups(groups.result);
-    lib.parseGroups(changeState, groups.result[0], admins);
+    lib.parseGroups(changeState, groups.result[0], admins, groupMemberships);
+    const groups2 = groups.result[0];
+    const nonMemberGroupsResolved = await lib.nonMemberPublicGroups(groupMemberships, groups2);
+    console.log('nonMemberGroups before set state is:', nonMemberGroupsResolved);
+    setNonMemberGroups(nonMemberGroupsResolved);
+  };
+
+  const updateMessage = (newMessage) => {
+    setMessage(newMessage);
   };
 
   const createGroup = async () => {
@@ -34,7 +50,9 @@ function Groups(props) {
     lib.parseGroups(changeState, groups.result[0], admins);
   };
 
-  useEffect(() => { updateGroups(); }, []);
+  useEffect(() => {
+    updateGroups();
+  }, []);
 
   return (
     <div className="container">
@@ -107,9 +125,40 @@ function Groups(props) {
             <button type="submit" className="createGroup" onClick={() => { createGroup(); updateGroups(); }}> Create A Group </button>
           </div>
 
+          <div className="heading-for-groups" id="heading-for-groups">
+            Groups in which you&apos;re a member:
+          </div>
+
           <div className="groups-area" id="groups-area">
             There are no groups yet!
           </div>
+
+          <div className="groups-non-member-message" id="groups-non-member-message">
+            {message}
+          </div>
+
+          <div className="heading-for-groups" id="heading-for-groups-non-member">
+            Other public groups you can request to join:
+          </div>
+
+          <div className="groups-area" id="groups-area-non-member">
+            <p />
+            {nonMemberGroups.map((group) => (
+              <div className="non-member-group">
+                <div>
+                  {`Group name: ${group.group_name}`}
+                </div>
+                <div>
+                  {`Group description: ${group.group_description}`}
+                </div>
+                <div>
+                  <input type="button" value="Request to join group" id="submit" onClick={() => lib.requestJoinGroup(props.state.userId, group.group_id, updateMessage)} />
+                </div>
+                <p />
+              </div>
+            ))}
+          </div>
+
         </div>
 
         <div className="side-navbar" id="forMessages">

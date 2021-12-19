@@ -208,3 +208,8 @@ body {
   margin: 0;
   padding: 0;
 }
+
+.non-member-group {
+  background-color: white;
+  border-color: white;
+}

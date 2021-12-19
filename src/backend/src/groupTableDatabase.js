@@ -103,7 +103,7 @@ const getGroups = async (db) => {
   return null;
 };
 
-// get all groups
+// get group by its id
 const getGroupById = async (db, id) => {
   try {
     const query = 'SELECT * FROM group_lst WHERE group_id=?';
