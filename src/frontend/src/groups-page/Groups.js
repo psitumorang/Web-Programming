@@ -144,7 +144,7 @@ function Groups(props) {
           <div className="groups-area" id="groups-area-non-member">
             <p />
             {nonMemberGroups.map((group) => (
-              <div className="non-member-group">
+              <div className="non-member-group group-container">
                 <div>
                   {`Group name: ${group.group_name}`}
                 </div>
