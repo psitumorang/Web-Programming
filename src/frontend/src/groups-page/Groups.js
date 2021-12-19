@@ -13,7 +13,9 @@ function Groups(props) {
   const updateGroups = async () => {
     const groups = await lib.getGroups(changeState);
     const admins = await lib.getAdmins();
-    const groupMemberships = await lib.getGroupMemberships(props.state.userId);
+    // eslint-disable-next-line
+    // const propsState = props.state;
+    const groupMemberships = await lib.getGroupMemberships(state.userId);
 
     // eslint-disable-next-line
     console.log('in update groups, group.result is:', groups.result);
@@ -152,7 +154,7 @@ function Groups(props) {
                   {`Group description: ${group.group_description}`}
                 </div>
                 <div>
-                  <input type="button" value="Request to join group" id="submit" onClick={() => lib.requestJoinGroup(props.state.userId, group.group_id, updateMessage)} />
+                  <input type="button" value="Request to join group" id="submit" onClick={() => lib.requestJoinGroup(state.userId, group.group_id, updateMessage)} />
                 </div>
                 <p />
               </div>

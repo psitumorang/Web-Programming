@@ -55,7 +55,7 @@ const showMessage = (message) => (
 );
 
 const UpdatePassword = (props) => {
-  const { userId } = props;
+  const { userId, changeState } = props;
   const [message, mutateMessage] = useState('');
 
   const updateMessage = (newMessage) => {
@@ -95,7 +95,7 @@ const UpdatePassword = (props) => {
       </div>
       <input id="updatePictureButton" type="submit" value="Update Profile Pic" onClick={() => changeProfilePic(document.getElementById('newPicInput').value, userId, updateMessage)} />
       <p />
-      <input id="backToProfileButton" type="submit" value="Back to profile page" onClick={() => props.changeState({ link: '/profile', id: userId })} />
+      <input id="backToProfileButton" type="submit" value="Back to profile page" onClick={() => changeState({ link: '/profile', id: userId })} />
     </div>
   );
 };
