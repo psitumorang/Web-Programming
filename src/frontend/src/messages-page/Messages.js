@@ -1,27 +1,24 @@
 import { useState, useEffect, React } from 'react';
-import './NotificationPage.css';
+import './Messages.css';
 
-const lib = require('./NotificationModule');
+const lib = require('./MessagesModule');
 
-function NotificationPage(props) {
+function Messages(props) {
+  // eslint-disable-next-line
+  const [msgs, updateMsgs] = useState([]);
   const { changeState, state } = props;
 
-  const [notifs, setNotifs] = useState([]);
-
-  const updateNotifs = async () => {
-    const n = await lib.getNotifications(state.userId);
-
-    setNotifs(n);
+  const updateMessages = async () => {
+    const convos = await lib.getConvos(state.userId);
+    console.log(convos.length, convos);
+    updateMsgs(convos);
+    lib.parseConvos(changeState, convos);
   };
 
-  // eslint-disable-next-line
-  console.log(notifs);
-
-  useEffect(() => { updateNotifs(); }, []);
+  useEffect(() => { updateMessages(); }, []);
 
   return (
     <div className="container">
-
       <div className="header">
         <div className="social-media-title">Social Media</div>
         <div className="profile-picture">
@@ -46,19 +43,22 @@ function NotificationPage(props) {
         </div>
 
         <div className="main-area">
-          {notifs.map((n) => (
-            <div className="notification" key={n.id}>
-              <div className="title">
-                {
-                  `Notification! ${new Date(Date.parse(n.date)).getMonth()}-${new Date(Date.parse(n.date)).getDate()}-${new Date(Date.parse(n.date)).getFullYear()} at ${new Date(Date.parse(n.date)).getHours()}:${new Date(Date.parse(n.date)).getMinutes()}`
-                }
-              </div>
-              <div className="info">
-                <div className={`mark-as-read-dot ${n.is_read === 1 ? 'read' : 'unread'}`} />
-                <div className="message">{n.msg}</div>
-              </div>
+          <div className="info-area">
+            Start a new conversation!
+            <br />
+            {window.location.href.split('/').pop() === 'error' ? 'ERROR sending message: cannot message self.' : null}
+            {window.location.href.split('/').pop() === 'group' ? 'ERROR sending message: cannot message user not in a group with you.' : null}
+            {window.location.href.split('/').pop() === 'user' ? 'ERROR sending message: cannot message to user that does not exist.' : null}
+            <div id="form">
+              <input type="text" id="otherName" placeholder="your friend's username" />
+              <textarea id="firstMsg" placeholder="type in a message!" />
+              <button type="submit" id="sendFirstMsg" onClick={() => lib.startConvo(state, updateMessages, changeState)}>Start conversation!</button>
             </div>
-          ))}
+          </div>
+
+          <div className="convo-area" id="view-convos">
+            You do not have any messages :(
+          </div>
         </div>
 
         <div className="side-navbar" id="forMessages">
@@ -70,4 +70,4 @@ function NotificationPage(props) {
   );
 }
 
-export default NotificationPage;
+export default Messages;

@@ -57,7 +57,6 @@ const inviteNonAdmin = async (groupAndAdmins, state, setGroupAndAdmins) => {
     invitationStatus: 'pending',
   };
   const response = await database.sendPostRequest(url, body);
-
   await setGroupAndAdmins();
   return response;
 };

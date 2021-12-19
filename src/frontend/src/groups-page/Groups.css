@@ -143,6 +143,8 @@ body {
   width: 70vw;
 
   gap: 20px 20px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 /*live updates*/
 

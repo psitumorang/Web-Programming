@@ -1,27 +1,25 @@
 import { useState, useEffect, React } from 'react';
-import './NotificationPage.css';
+import './Conversation.css';
 
-const lib = require('./NotificationModule');
+const lib = require('./ConversationModule');
 
-function NotificationPage(props) {
+function Conversation(props) {
   const { changeState, state } = props;
+  // eslint-disable-next-line
+  const [message, setMessage] = useState([]);
 
-  const [notifs, setNotifs] = useState([]);
+  const updateState = async () => {
+    const msgs = await lib.getMessages(state.viewingConvo.id);
 
-  const updateNotifs = async () => {
-    const n = await lib.getNotifications(state.userId);
-
-    setNotifs(n);
+    setMessage(msgs);
+    lib.parseMessages(msgs, state.userId);
+    document.getElementById('view-msgs').scrollTop = document.getElementById('view-msgs').scrollHeight;
   };
 
-  // eslint-disable-next-line
-  console.log(notifs);
-
-  useEffect(() => { updateNotifs(); }, []);
+  useEffect(() => { updateState(); }, []);
 
   return (
     <div className="container">
-
       <div className="header">
         <div className="social-media-title">Social Media</div>
         <div className="profile-picture">
@@ -46,19 +44,13 @@ function NotificationPage(props) {
         </div>
 
         <div className="main-area">
-          {notifs.map((n) => (
-            <div className="notification" key={n.id}>
-              <div className="title">
-                {
-                  `Notification! ${new Date(Date.parse(n.date)).getMonth()}-${new Date(Date.parse(n.date)).getDate()}-${new Date(Date.parse(n.date)).getFullYear()} at ${new Date(Date.parse(n.date)).getHours()}:${new Date(Date.parse(n.date)).getMinutes()}`
-                }
-              </div>
-              <div className="info">
-                <div className={`mark-as-read-dot ${n.is_read === 1 ? 'read' : 'unread'}`} />
-                <div className="message">{n.msg}</div>
-              </div>
-            </div>
-          ))}
+          <div id="view-msgs">
+            You do not have any messages! Send a message.
+          </div>
+          <div id="send-msg">
+            <textarea id="sendMsgTxt" placeholder="Send a message!" />
+            <button type="submit" id="sendMsgButton" onClick={() => lib.sendMessage(state, updateState)}>Send</button>
+          </div>
         </div>
 
         <div className="side-navbar" id="forMessages">
@@ -70,4 +62,4 @@ function NotificationPage(props) {
   );
 }
 
-export default NotificationPage;
+export default Conversation;

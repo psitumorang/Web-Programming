@@ -98,12 +98,12 @@ function ViewGroup(props) {
         <div className="profile-picture">
           <div className="img" />
         </div>
-        <div className="username">Hi, username!</div>
+        <div className="username">{`Hi, ${state.username}!`}</div>
       </div>
 
       <div className="top-navbar">
-        <div className="home-link">Home</div>
-        <div className="profile-link">Profile</div>
+        <div className="home-link" onClick={() => changeState({ link: '/main' })} onKeyDown={() => changeState({ link: '/main' })} role="link" tabIndex={0}>Home</div>
+        <div className="profile-link" onClick={() => changeState({ link: '/profile' })} onKeyDown={() => changeState({ link: '/profile' })} role="link" tabIndex={0}>Profile</div>
       </div>
 
       <div className="main-container">
@@ -112,7 +112,7 @@ function ViewGroup(props) {
           <button type="submit" className="notifications" onClick={() => changeState({ link: '/notifications' })}>Notifications</button>
           <button type="submit" className="events">Events</button>
           <button type="submit" className="groups" onClick={() => changeState({ link: '/groups' })}>Groups</button>
-          <button type="submit" className="videos">Videos</button>
+          <button type="submit" className="invitations" onClick={() => changeState({ link: '/invitations' })}>Group Invitations and Requests </button>
           <button type="submit" className="photos">Photos</button>
         </div>
 
@@ -154,21 +154,21 @@ function ViewGroup(props) {
                 {'Revoke Admin: '}
                 <input id="revokeAdmin" type="text" placeholder="Enter username" />
               </label>
-              <input type="button" value="Submit" id="submit" onClick={() => lib.revokeAdmin(state, changeState, groupAndAdmins)} />
+              <input type="button" value="Submit" id="submit" onClick={() => lib.revokeAdmin(state, changeState, groupAndAdmins, setGroupAndAdmins)} />
             </div>
             <div id="add">
               <label htmlFor="addAdmin">
                 {'Add Admin: '}
                 <input id="addAdmin" type="text" placeholder="Enter username" />
               </label>
-              <input type="button" value="Submit" id="submit" onClick={() => lib.addAdmin(groupAndAdmins)} />
+              <input type="button" value="Submit" id="submit" onClick={() => lib.addAdmin(groupAndAdmins, setGroupAndAdmins)} />
             </div>
             <div id="add-non-admin">
               <label htmlFor="addNonAdmin">
                 Invite a non-Admin member:
                 <input id="addNonAdmin" type="text" placeholder="Enter username" />
               </label>
-              <input type="button" value="Submit" id="submit" onClick={() => lib.inviteNonAdmin(groupAndAdmins, state)} />
+              <input type="button" value="Submit" id="submit" onClick={() => lib.inviteNonAdmin(groupAndAdmins, state, setGroupAndAdmins)} />
             </div>
           </div>
 
@@ -182,8 +182,8 @@ function ViewGroup(props) {
           </div>
         </div>
 
-        <div className="message-updates">
-          Message updates
+        <div className="side-navbar" id="forMessages">
+          <button type="submit" className="messages" onClick={() => changeState({ link: '/messages' })}>Messages</button>
         </div>
 
       </div>

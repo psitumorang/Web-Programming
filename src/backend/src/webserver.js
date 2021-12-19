@@ -17,6 +17,8 @@ const adminLib = require('./adminTableDatabase');
 const replyLib = require('./replyTableDatabase');
 const inviteLib = require('./invitationTableDatabase');
 const groupMemberLib = require('./groupMemberTableDatabase');
+const msgLib = require('./messageTableDatabase');
+const convoLib = require('./convoTableDatabase');
 
 const port = 8080;
 
@@ -37,6 +39,8 @@ let adminDb;
 let replyDb;
 let inviteDb;
 let groupMemberDb;
+let msgDb;
+let convoDb;
 
 webapp.listen(port, async () => {
   userDb = await userLib.connect();
@@ -49,6 +53,8 @@ webapp.listen(port, async () => {
   replyDb = await replyLib.connect();
   inviteDb = await inviteLib.connect();
   groupMemberDb = await groupMemberLib.connect();
+  msgDb = await msgLib.connect();
+  convoDb = await convoLib.connect();
   // eslint-disable-next-line no-console
   console.log('listening');
 });
@@ -844,6 +850,81 @@ webapp.delete('/reply/:id', async (req, res) => {
     res.status(404).json({ err: err.message });
   }
   return null;
+});
+
+webapp.post('/message/text/:id', async (req, res) => {
+  const { msg } = req.body;
+  const { id } = req.params;
+  // eslint-disable-next-line no-console
+  console.log('POST text message, ', id, msg);
+  try {
+    console.log(msg.fromId);
+    if (msg.toId === msg.fromId) {
+      res.status(404).json({ err: "self" });
+      return null;
+    }
+
+    const myGroups = await groupMemberLib.getGroupsForUser(groupMemberDb, id);
+    const theirGroups = await groupMemberLib.getGroupsForUser(groupMemberDb, msg.fromId);
+
+    let same = false;
+    for (let i = 0; i < myGroups.length; i += 1) {
+      if (theirGroups.includes(myGroups[i])) {
+        same = true;
+        break;
+      }
+    }
+
+    if (!same) {
+      res.status(404).json({ err: "group" });
+      return null;
+    }
+
+    const exists = await convoLib.convoExists(convoDb, id, msg.fromId);
+    let convoId;
+    if (exists) {
+      convoId = await convoLib.getConvoId(convoDb, id, msg.fromId);
+    } else {
+      if (typeof msg.receiverName !== 'undefined') {
+        // const userName = await userDb.getUserById(userDb, id);
+        convoId = await convoLib.addConvo(convoDb, id, msg.fromId, msg.receiverName, msg.senderName);
+      }
+    }
+    const value = await msgLib.addTextMessage(msgDb, msg.txt, msg.fromId, id, msg.senderName, convoId);
+
+    // eslint-disable-next-line no-console
+    console.log('created text msg: ', value);
+    //TODO: will carry delivered receipt when we do level 3 task
+    res.status(201).json({});
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/message/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const convo = await msgLib.getConversation(msgDb, id);
+
+    // eslint-disable-next-line no-console
+    console.log('got conversation: ', convo);
+    res.status(200).json(convo);
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/convo/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const convo = await convoLib.getConvosForUser(convoDb, id);
+
+    // eslint-disable-next-line no-console
+    console.log('got conversation: ', convo);
+    res.status(200).json(convo);
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
 });
 
 webapp.use((req, res) => {

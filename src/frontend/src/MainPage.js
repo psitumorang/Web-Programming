@@ -15,16 +15,28 @@ import UpdatePassword from './profile-page/UpdatePassword';
 import ViewGroup from './view-group-page/ViewGroup';
 import InvitationPage from './invitations-page/InvitationPage';
 import DeactivateAccountPage from './profile-page/deactivate-account-page/DeactivateAccountPage';
+import Messages from './messages-page/Messages';
+import Conversation from './conversation-page/Conversation';
 
 function MainPage() {
-  const [state, updateState] = useState({ link: '/', userId: -1, viewingGroup: -1 });
+  const [state, updateState] = useState(
+    {
+      link: '/',
+      userId: -1,
+      username: '',
+      viewingGroup: -1,
+      viewingConvo: { id: -1, otherUserId: -1 },
+    },
+  );
 
   const changeState = (input) => {
     if (typeof input.link !== 'undefined') window.history.pushState(null, '', input.link);
     updateState((oldState) => ({
       link: ((typeof input.link !== 'undefined') ? input.link : oldState.link),
       userId: ((typeof input.userId !== 'undefined') ? input.userId : oldState.userId),
+      username: ((typeof input.username !== 'undefined') ? input.username : oldState.username),
       viewingGroup: ((typeof input.viewingGroup !== 'undefined') ? input.viewingGroup : oldState.viewingGroup),
+      viewingConvo: ((typeof input.viewingConvo !== 'undefined') ? input.viewingConvo : oldState.viewingConvo),
     }));
   };
 
@@ -40,6 +52,12 @@ function MainPage() {
     }
     if (url.includes('/notifications')) {
       return (<NotificationPage changeState={changeState} state={state} />);
+    }
+    if (url.includes('/messages') || url.includes('/messages/error') || url.includes('/messages/group') || url.includes('/messages/user')) {
+      return (<Messages changeState={changeState} state={state} />);
+    }
+    if (url.includes('/conversation')) {
+      return (<Conversation changeState={changeState} state={state} />);
     }
     if (url.includes('/changepassword')) {
       return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);
