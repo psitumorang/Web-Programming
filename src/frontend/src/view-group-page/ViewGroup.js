@@ -143,7 +143,6 @@ function ViewGroup(props) {
           {message}
           <p />
           <div className="join-group" id="join-group-id">
-            <input type="button" value="Request to join group" id="submit" onClick={() => lib.requestJoinGroup(state.userId, groupAndAdmins.group.group_id, updateMessage)} />
             <input type="button" value="Leave group" id="submit" onClick={() => lib.leaveGroup(state.userId, groupAndAdmins.group.group_id, updateMessage)} />
           </div>
           <p />

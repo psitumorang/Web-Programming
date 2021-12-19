@@ -56,42 +56,6 @@ const inviteNonAdmin = async (groupAndAdmins, state) => {
   return response;
 };
 
-// request to join the group - note uses the invitations workflow,
-// treating a request as an accepted (but not yet approved) invitation
-const requestJoinGroup = async (userId, groupId, updateMessage) => {
-  const groupMembers = await database.sendGetRequest(`http://localhost:8080/membership/${groupId}`);
-  const groupInvitations = await database.sendGetRequest(`http://localhost:8080/invitations-open/${groupId}`);
-  const groupAdmins = await database.sendGetRequest(`http://localhost:8080/admins/${groupId}`);
-
-  // console log testing
-  console.log('group members:', groupMembers);
-  console.log('groupInvitations: ', groupInvitations);
-  console.log('groupAdmins: ', groupAdmins);
-
-  // check if in group already
-  for (let i = 0; i < groupMembers.length; i += 1) {
-    if (groupMembers[i].member_id === userId) {
-      updateMessage('You\'re already a member of this group!');
-      return;
-    }
-  }
-
-  // check if already have an open invite
-  for (let i = 0; i < groupInvitations.length; i += 1) {
-    if (groupInvitations[i].to_user_id === userId) {
-      updateMessage('You\'ve already got an open request or invitation to this group!');
-      return;
-    }
-  }
-
-  // check if already an admin
-  for (let i = 0; i < groupAdmins.length; i += 1) {
-    if (groupAdmins[i].admin_id === userId) {
-      updateMessage('You\'re already an admin of this group!');
-      return;
-    }
-  }
-
   const newRequestObj = {
     fromUserId: 1000000,
     toUserId: userId,
@@ -363,6 +327,5 @@ module.exports = {
   getReplies,
   parseReplies,
   parseOnclicks,
-  requestJoinGroup,
   leaveGroup,
 };

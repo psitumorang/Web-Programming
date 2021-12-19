@@ -483,7 +483,16 @@ webapp.get('/membership/:id', async (req, res) => {
   } catch (err) {
     res.status(400).json({ err: `error is ${err.message}` });
   }
-})
+});
+
+webapp.get('/membership-of-user/:id', async (req, res) => {
+  try {
+    const membershipList = await groupMemberLib.getGroupMembershipsByUserId(groupMemberDb, req.params.id);
+    res.status(200).json(membershipList);
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
 
 // deletes ALL the membership associated with a user id
 webapp.delete('/membership/:id', async (req, res) => {

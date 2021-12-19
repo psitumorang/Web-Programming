@@ -43,6 +43,18 @@ const getMemberIds = async (db, groupId) => {
   }
 };
 
+const getGroupMembershipsByUserId = async (db, userId) => {
+  const query = "SELECT group_id FROM group_members WHERE member_id = ?";
+  try {
+    const [membershipList] = await db.execute(query, [userId]);
+    return membershipList;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err.message);
+    throw err;
+  }
+};
+
 const deleteUserMemberships = async (db, userId) => {
   const query = "DELETE FROM group_members WHERE member_id = ?";
   try {
@@ -74,4 +86,5 @@ module.exports = {
   getMemberIds,
   deleteUserMemberships,
   deleteSingleMembership,
+  getGroupMembershipsByUserId,
 };
