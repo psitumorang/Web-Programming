@@ -123,7 +123,7 @@ const revokeAdmin = async (db, groupId, adminUser) => {
 
 const deleteAdmins = async (db, userId) => {
   try {
-    query = "DELETE FROM admin_lst WHERE admin_id = ?";
+    query = 'DELETE FROM admin_lst WHERE admin_id = ?';
     const [result] = await db.execute(query, [userId]);
     return result;
   } catch (err) {

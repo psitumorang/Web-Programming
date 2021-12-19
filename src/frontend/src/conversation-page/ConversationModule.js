@@ -33,6 +33,20 @@ const parseMessages = (msgs, id) => {
         <div class="content txt">
           <img src=${msgs[i].img} class="image" alt="${msgs[i].senderName}'s image" />
         </div>`;
+    } else if (msgs[i].audio !== null) {
+      msg = `${msgs[i].senderName}
+        <div class="content txt">
+          <audio controls>
+            <source src=${msgs[i].audio}>
+          </audio>
+        </div>`;
+    } else if (msgs[i].video !== null) {
+      msg = `${msgs[i].senderName}
+        <div class="content txt">
+          <video src=${msgs[i].video} controls>
+            Something went wrong!
+          </video>
+        </div>`;
     }
 
     const div = document.createElement('div');
@@ -43,16 +57,27 @@ const parseMessages = (msgs, id) => {
   }
 };
 
-const uploadImgConvo = async (selected, state, updateMessages) => {
+const uploadMediaConvo = async (selected, state, updateMessages, updateState) => {
   console.log(updateMessages);
   const file = document.getElementById('firstMsg').files[0];
+
+  // check if the file is too large (defined as > 10MB)
+  if (selected === 'image' && file.size > 10000000) {
+    updateState({ link: '/conversation/img' });
+    return null;
+  }
+  if ((selected === 'audio' || selected === 'video') && file.size > 100000000) {
+    updateState({ link: '/conversation/av' });
+    return null;
+  }
+
   const data = new FormData();
   data.append('file', file);
   data.append('upload_preset', ['yj7lgb8v']);
   console.log(data.get('upload_preset'));
-  const res = sendUploadPostRequest('https://api.cloudinary.com/v1_1/cis557-project-group-18/image/upload', data).then((mediaUrl) => {
+  const res = sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
     // TODO change this to be right
-    console.log('SENT IMAGE');
+    console.log('SENT MEDIA');
     console.log(res, mediaUrl, state);
     // creates conversation in database
 
@@ -60,9 +85,17 @@ const uploadImgConvo = async (selected, state, updateMessages) => {
       toId: state.viewingConvo.otherUserId,
       fromId: state.userId,
       senderName: state.username,
-      img: mediaUrl.data.url,
     };
-    return database.sendPostRequest(`http://localhost:8080/message/image/${state.viewingConvo.otherUserId}`, { msg })
+
+    if (selected === 'image') {
+      msg.img = mediaUrl.data.url;
+    } else if (selected === 'video') {
+      msg.video = mediaUrl.data.url;
+    } else {
+      msg.audio = mediaUrl.data.url;
+    }
+
+    return database.sendPostRequest(`http://localhost:8080/message/${selected}/${state.viewingConvo.otherUserId}`, { msg })
       .then((response) => {
         updateMessages().then(() => response);
       });
@@ -71,13 +104,15 @@ const uploadImgConvo = async (selected, state, updateMessages) => {
   return null;
 };
 
-const sendMessage = async (updateConvo, selected, state) => {
+const sendMessage = async (updateConvo, selected, state, updateState) => {
   if (selected === 'audio') {
-    console.log('waddup');
-  } else if (selected === 'video') {
-    console.log('waddup');
-  } else if (selected === 'image') {
-    return uploadImgConvo(selected, state, updateConvo);
+    return uploadMediaConvo(selected, state, updateConvo, updateState);
+  }
+  if (selected === 'video') {
+    return uploadMediaConvo(selected, state, updateConvo, updateState);
+  }
+  if (selected === 'image') {
+    return uploadMediaConvo(selected, state, updateConvo, updateState);
   }
 
   const msg = {

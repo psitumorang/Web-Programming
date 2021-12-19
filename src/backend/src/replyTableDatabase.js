@@ -96,7 +96,7 @@ const deleteReply = async (db, replyId) => {
 const getReplies = async (db, groupId) => {
   try {
     const query = 'SELECT * FROM reply_lst WHERE post_group = ? AND is_hidden = 0 ORDER BY reply_id DESC';
-    
+
     const [rows] = await db.execute(query, [groupId]);
     // eslint-disable-next-line no-console
     console.log(`Replies: ${JSON.stringify(rows)}`);
@@ -119,7 +119,6 @@ const getNextId = async (db) => {
   }
   return null;
 };
-
 
 module.exports = {
   connect,

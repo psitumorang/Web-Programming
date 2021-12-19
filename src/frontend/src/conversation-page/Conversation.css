@@ -179,6 +179,11 @@ body {
     height: auto;
 }
 
+video {
+    width: 300px;
+    height: auto;
+}
+
 #they-sent {
     color: rgb(3,64,120);
     font-weight: bold;
@@ -223,7 +228,7 @@ body {
 }
 
 #options {
-    font-size: 12px;
+    font-size: 11px;
 }
 
 /*live updates*/

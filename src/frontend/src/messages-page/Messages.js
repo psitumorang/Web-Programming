@@ -93,6 +93,8 @@ function Messages(props) {
             {window.location.href.split('/').pop() === 'error' ? 'ERROR sending message: cannot message self.' : null}
             {window.location.href.split('/').pop() === 'group' ? 'ERROR sending message: cannot message user not in a group with you.' : null}
             {window.location.href.split('/').pop() === 'user' ? 'ERROR sending message: cannot message to user that does not exist.' : null}
+            {window.location.href.split('/').pop() === 'img' ? 'ERROR sending message: image file too large.' : null}
+            {window.location.href.split('/').pop() === 'av' ? 'ERROR sending message: audio/video file too large.' : null}
             <div>
               <label htmlFor="textInput" className="list">
                 <input type="radio" id="textInput" name="msgType" onClick={() => updateSelected('text')} />

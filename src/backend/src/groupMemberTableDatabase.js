@@ -20,7 +20,7 @@ const connect = async () => {
 };
 
 const addGroupMember = async (db, groupId, userId) => {
-  const query = "INSERT INTO group_members VALUES (?, ?)";
+  const query = 'INSERT INTO group_members VALUES (?, ?)';
   try {
     const [verifyRow] = await db.execute(query, [groupId, userId]);
     return verifyRow;
@@ -29,10 +29,10 @@ const addGroupMember = async (db, groupId, userId) => {
     console.error(err.message);
     throw err;
   }
-}
+};
 
 const getMemberIds = async (db, groupId) => {
-  const query = "SELECT member_id FROM group_members WHERE group_id = ?";
+  const query = 'SELECT member_id FROM group_members WHERE group_id = ?';
   try {
     const [membershipList] = await db.execute(query, [groupId]);
     return membershipList;
@@ -44,7 +44,7 @@ const getMemberIds = async (db, groupId) => {
 };
 
 const getGroupMembershipsByUserId = async (db, userId) => {
-  const query = "SELECT group_id FROM group_members WHERE member_id = ?";
+  const query = 'SELECT group_id FROM group_members WHERE member_id = ?';
   try {
     const [membershipList] = await db.execute(query, [userId]);
     return membershipList;
@@ -56,7 +56,7 @@ const getGroupMembershipsByUserId = async (db, userId) => {
 };
 
 const deleteUserMemberships = async (db, userId) => {
-  const query = "DELETE FROM group_members WHERE member_id = ?";
+  const query = 'DELETE FROM group_members WHERE member_id = ?';
   try {
     const [numDeletedRows] = await db.execute(query, [userId]);
     return numDeletedRows;
@@ -68,7 +68,7 @@ const deleteUserMemberships = async (db, userId) => {
 };
 
 const deleteSingleMembership = async (db, groupId, userId) => {
-  const query = "DELETE FROM group_members WHERE member_id = ? AND group_id = ?";
+  const query = 'DELETE FROM group_members WHERE member_id = ? AND group_id = ?';
   const params = [userId, groupId];
   try {
     const [numDeletedRows] = await db.execute(query, params);
@@ -81,12 +81,12 @@ const deleteSingleMembership = async (db, groupId, userId) => {
 };
 
 const getGroupsForUser = async (db, id) => {
-  const query = "SELECT group_id from group_members where member_id=?";
+  const query = 'SELECT group_id from group_members where member_id=?';
   const params = [id];
   try {
     const [ret] = await db.execute(query, params);
     const arr = [];
-    for (let i = 0; i < ret.length; i +=1) {
+    for (let i = 0; i < ret.length; i += 1) {
       arr.push(ret[i].group_id);
     }
     return arr;
@@ -95,7 +95,7 @@ const getGroupsForUser = async (db, id) => {
     console.error(err.message);
     throw err;
   }
-}
+};
 
 module.exports = {
   connect,
@@ -104,4 +104,5 @@ module.exports = {
   deleteUserMemberships,
   deleteSingleMembership,
   getGroupMembershipsByUserId,
+  getGroupsForUser,
 };

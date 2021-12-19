@@ -107,7 +107,7 @@ webapp.post('/login', async (req, res) => {
       // are able to be stored for a password for more accuracy
       const profile = await profileLib.getProfileById(profileDb, resultsUser[0].user_id);
 
-      console.log(`profile is: ${profile.user_id}`)
+      console.log(`profile is: ${profile.user_id}`);
       res.status(200).json({
         profile: profile[0],
       });
@@ -402,30 +402,30 @@ webapp.get('/invitations/:id', async (req, res) => {
 
 // get all pending OR accepted invitations for a group
 webapp.get('/invitations-open/:id', async (req, res) => {
-    // eslint-disable-next-line no-console
-    console.log('get open invitations');
-    const { id } = req.params;
-    try {
-      const openInvites = await inviteLib.getOpenInvitesByGroupId(inviteDb, id);
-      res.status(200).json(openInvites);
-    } catch (err) {
-      console.log('error at webserver.js/invitations-open. in catch, with err of ', err);
-      res.status(400).json({ err: `error is ${err.message}` });
-    }
+  // eslint-disable-next-line no-console
+  console.log('get open invitations');
+  const { id } = req.params;
+  try {
+    const openInvites = await inviteLib.getOpenInvitesByGroupId(inviteDb, id);
+    res.status(200).json(openInvites);
+  } catch (err) {
+    console.log('error at webserver.js/invitations-open. in catch, with err of ', err);
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
 });
 
 webapp.post('/invitations/', async (req, res) => {
-  
-
   // const { id } = req.params;
   // eslint-disable-next-line no-console
   // console.log('post invitations with params of: ', req.params);
-  const { fromUserId, toUserId, groupId, invitationStatus } = req.body;
+  const {
+    fromUserId, toUserId, groupId, invitationStatus,
+  } = req.body;
   const invitationObject = {
-    fromUserId: fromUserId,
-    toUserId: toUserId,
-    groupId: groupId,
-    invitationStatus: invitationStatus,
+    fromUserId,
+    toUserId,
+    groupId,
+    invitationStatus,
   };
   try {
     const invitation = await inviteLib.addInvitation(inviteDb, invitationObject);
@@ -455,31 +455,31 @@ webapp.put('/invitations/:id', async (req, res) => {
 });
 
 webapp.delete('/invitations/:id', async (req, res) => {
-    // eslint-disable-next-line no-console
-    console.log('deleting invitations');
-    const { id } = req.params;
-    try {
-      console.log('before executing server module for delete Invitations, id is ', id, 'and req params is ', req.params);
-      const numDeletedInvites = await inviteLib.deletePendingInvites(inviteDb, id);
-      res.status(200).json(numDeletedInvites);
-    } catch (err) {
-      console.log('error at webserver.js delete invitations. in catch, with err of ', err);
-      res.status(400).json({ err: `error is ${err.message}` });
-    }
+  // eslint-disable-next-line no-console
+  console.log('deleting invitations');
+  const { id } = req.params;
+  try {
+    console.log('before executing server module for delete Invitations, id is ', id, 'and req params is ', req.params);
+    const numDeletedInvites = await inviteLib.deletePendingInvites(inviteDb, id);
+    res.status(200).json(numDeletedInvites);
+  } catch (err) {
+    console.log('error at webserver.js delete invitations. in catch, with err of ', err);
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
 });
 
 webapp.post('/membership/:id', async (req, res) => {
-    // eslint-disable-next-line no-console
-    console.log('post group membership to accept invitations, webserver, with req.body of:', req.body);
+  // eslint-disable-next-line no-console
+  console.log('post group membership to accept invitations, webserver, with req.body of:', req.body);
 
-    const { id } = req.params;
-    const userId = req.body.id;
-    try {
-      const postReturn = await groupMemberLib.addGroupMember(groupMemberDb, id, userId);
-      res.status(200).json(postReturn);
-    } catch (err) {
-      res.status(400).json({ err: `error is ${err.message}` });
-    }
+  const { id } = req.params;
+  const userId = req.body.id;
+  try {
+    const postReturn = await groupMemberLib.addGroupMember(groupMemberDb, id, userId);
+    res.status(200).json(postReturn);
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
 });
 
 webapp.get('/membership/:id', async (req, res) => {
@@ -510,7 +510,7 @@ webapp.delete('/membership/:id', async (req, res) => {
       res.status(404).json({ err: err.message });
     } else {
       res.status(201).json({
-        result: result,
+        result,
       });
     }
   } catch (err) {
@@ -531,14 +531,14 @@ webapp.delete('/leave-group/:id', async (req, res) => {
       res.status(404).json({ err: err.message });
     } else {
       res.status(201).json({
-        result: result,
+        result,
       });
     }
   } catch (err) {
     res.status(404).json({ err: err.message });
   }
   return null;
-})
+});
 
 webapp.post('/admins', async (req, res) => {
   // eslint-disable-next-line no-console
@@ -588,7 +588,7 @@ webapp.delete('/admins/:id', async (req, res) => {
   } catch (err) {
     res.status(404).json({ err: `error is ${err.message}` });
   }
-})
+});
 
 webapp.get('/admins', async (req, res) => {
   // eslint-disable-next-line no-console
@@ -610,7 +610,7 @@ webapp.get('/administered-groups/:id', async (req, res) => {
   try {
     const administeredGroups = await adminLib.getAdministeredGroups(req.params.id);
     res.status(200).json(administeredGroups);
-  } catch(err) {
+  } catch (err) {
     res.status(404).json({ err: `error is ${err.message}` });
   }
 });
@@ -649,7 +649,7 @@ webapp.post('/post', async (req, res) => {
       caption: req.body.caption,
     };
 
-    console.log(`new post ${newPost.post_id}, ${newPost.post_group} , ${newPost.posting_user} , ${newPost.caption} `)
+    console.log(`new post ${newPost.post_id}, ${newPost.post_group} , ${newPost.posting_user} , ${newPost.caption} `);
 
     const result = await postLib.addPost(postDb, newPost);
     if (result === null) {
@@ -675,7 +675,7 @@ webapp.put('/flag-post/:id', async (req, res) => {
       res.status(404).json({ err: err.message });
     } else {
       res.status(201).json({
-        result: result,
+        result,
       });
     }
   } catch (err) {
@@ -694,7 +694,7 @@ webapp.put('/hide-post/:id', async (req, res) => {
       res.status(404).json({ err: err.message });
     } else {
       res.status(201).json({
-        result: result,
+        result,
       });
     }
   } catch (err) {
@@ -713,7 +713,7 @@ webapp.delete('/post/:id', async (req, res) => {
       res.status(404).json({ err: err.message });
     } else {
       res.status(201).json({
-        result: result,
+        result,
       });
     }
   } catch (err) {
@@ -751,7 +751,7 @@ webapp.post('/reply', async (req, res) => {
       caption: req.body.caption,
     };
 
-    console.log(`new reply ${newReply.reply_id}, ${newReply.post_id} , ${newReply.posting_user} , ${newReply.caption} `)
+    console.log(`new reply ${newReply.reply_id}, ${newReply.post_id} , ${newReply.posting_user} , ${newReply.caption} `);
 
     const result = await replyLib.addReply(replyDb, newReply);
     if (result === null) {
@@ -805,7 +805,7 @@ webapp.put('/flag-reply/:id', async (req, res) => {
       res.status(404).json({ err: err.message });
     } else {
       res.status(201).json({
-        result: result,
+        result,
       });
     }
   } catch (err) {
@@ -824,7 +824,7 @@ webapp.put('/hide-reply/:id', async (req, res) => {
       res.status(404).json({ err: err.message });
     } else {
       res.status(201).json({
-        result: result,
+        result,
       });
     }
   } catch (err) {
@@ -843,7 +843,7 @@ webapp.delete('/reply/:id', async (req, res) => {
       res.status(404).json({ err: err.message });
     } else {
       res.status(201).json({
-        result: result,
+        result,
       });
     }
   } catch (err) {
@@ -860,12 +860,12 @@ const msgPreprocessing = async (req, res) => {
   try {
     console.log(msg.fromId);
     if (msg.toId === msg.fromId) {
-      return { err: "self" };
+      return { err: 'self' };
     }
 
     const myGroups = await groupMemberLib.getGroupsForUser(groupMemberDb, id);
     const theirGroups = await groupMemberLib.getGroupsForUser(groupMemberDb, msg.fromId);
-
+    console.log(myGroups, theirGroups);
     let same = false;
     for (let i = 0; i < myGroups.length; i += 1) {
       if (theirGroups.includes(myGroups[i])) {
@@ -875,42 +875,43 @@ const msgPreprocessing = async (req, res) => {
     }
 
     if (!same) {
-      return { err: "group" };
+      return { err: 'group' };
     }
 
     const exists = await convoLib.convoExists(convoDb, id, msg.fromId);
     let convoId;
     if (exists) {
       convoId = await convoLib.getConvoId(convoDb, id, msg.fromId);
-    } else {
-      if (typeof msg.receiverName !== 'undefined') {
-        // const userName = await userDb.getUserById(userDb, id);
-        convoId = await convoLib.addConvo(convoDb, id, msg.fromId, msg.receiverName, msg.senderName);
-      }
+    } else if (typeof msg.receiverName !== 'undefined') {
+      // const userName = await userDb.getUserById(userDb, id);
+      convoId = await convoLib.addConvo(convoDb, id, msg.fromId, msg.receiverName, msg.senderName);
     }
     return { convoId, id, msg };
   } catch (err) {
-    return {err: err.message};
+    return { err: err.message };
   }
-  return {err: 'unfinished'};
+  return { err: 'unfinished' };
 };
 
 webapp.post('/message/text/:id', async (req, res) => {
   console.log('PROCESSING FOR TXT');
   const ret = await msgPreprocessing(req, res);
   if (typeof ret.err !== 'undefined') {
-    res.status(404).json(ret.err);
+    res.status(404).json(ret);
+    return;
   }
   const { msg, convoId, id } = ret;
-  try { 
+  try {
     const value = await msgLib.addTextMessage(msgDb, msg.txt, msg.fromId, id, msg.senderName, convoId);
 
     // eslint-disable-next-line no-console
     console.log('created text msg: ', value);
-    //TODO: will carry delivered receipt when we do level 3 task
+    // TODO: will carry delivered receipt when we do level 3 task
     res.status(201).json({});
+    return;
   } catch (err) {
     res.status(400).json({ err: `error is ${err.message}` });
+    return null;
   }
 });
 
@@ -919,7 +920,8 @@ webapp.post('/message/image/:id', async (req, res) => {
   const ret = await msgPreprocessing(req, res);
   console.log(ret);
   if (typeof ret.err !== 'undefined') {
-    res.status(404).json(ret.err);
+    res.status(404).json(ret);
+    return;
   }
   const { msg, convoId, id } = ret;
   try {
@@ -928,7 +930,7 @@ webapp.post('/message/image/:id', async (req, res) => {
 
     // eslint-disable-next-line no-console
     console.log('created img msg: ', value);
-    //TODO: will carry delivered receipt when we do level 3 task
+    // TODO: will carry delivered receipt when we do level 3 task
     res.status(201).json({});
   } catch (err) {
     res.status(400).json({ err: `error is ${err.message}` });
@@ -939,7 +941,8 @@ webapp.post('/message/audio/:id', async (req, res) => {
   console.log('PROCESSING FOR AUDIO');
   const ret = await msgPreprocessing(req, res);
   if (typeof ret.err !== 'undefined') {
-    res.status(404).json(ret.err);
+    res.status(404).json(ret);
+    return;
   }
   const { msg, convoId, id } = ret;
   try {
@@ -947,7 +950,7 @@ webapp.post('/message/audio/:id', async (req, res) => {
 
     // eslint-disable-next-line no-console
     console.log('created audio msg: ', value);
-    //TODO: will carry delivered receipt when we do level 3 task
+    // TODO: will carry delivered receipt when we do level 3 task
     res.status(201).json({});
   } catch (err) {
     res.status(400).json({ err: `error is ${err.message}` });
@@ -958,7 +961,8 @@ webapp.post('/message/video/:id', async (req, res) => {
   console.log('PROCESSING FOR VIDEO');
   const ret = await msgPreprocessing(req, res);
   if (typeof ret.err !== 'undefined') {
-    res.status(404).json(ret.err);
+    res.status(404).json(ret);
+    return;
   }
   const { msg, convoId, id } = ret;
   try {
@@ -966,7 +970,7 @@ webapp.post('/message/video/:id', async (req, res) => {
 
     // eslint-disable-next-line no-console
     console.log('created video msg: ', value);
-    //TODO: will carry delivered receipt when we do level 3 task
+    // TODO: will carry delivered receipt when we do level 3 task
     res.status(201).json({});
   } catch (err) {
     res.status(400).json({ err: `error is ${err.message}` });
