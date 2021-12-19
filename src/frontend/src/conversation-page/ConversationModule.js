@@ -2,8 +2,8 @@ import sendUploadPostRequest from '../UploadModule';
 
 const database = require('../DatabaseModule');
 
-const getMessages = async (convoId) => {
-  const response = await database.sendGetRequest(`http://localhost:8080/message/${convoId}`);
+const getMessages = async (convoId, user) => {
+  const response = await database.sendGetRequest(`http://localhost:8080/message/${convoId}/${user}`);
   console.log(response);
   return response;
 };
@@ -22,31 +22,32 @@ const parseMessages = (msgs, id) => {
 
   for (let i = 0; i < msgs.length; i += 1) {
     console.log(msgs[i]);
-    let msg = '';
+    let msg = `${msgs[i].senderName}`;
     if (msgs[i].txt !== null) {
-      msg = `${msgs[i].senderName}
-        <div class="content txt">
+      msg += `<div class="content txt">
           ${msgs[i].txt}
         </div>`;
     } else if (msgs[i].img !== null) {
-      msg = `${msgs[i].senderName}
-        <div class="content txt">
+      msg += `<div class="content txt">
           <img src=${msgs[i].img} class="image" alt="${msgs[i].senderName}'s image" />
         </div>`;
     } else if (msgs[i].audio !== null) {
-      msg = `${msgs[i].senderName}
-        <div class="content txt">
+      msg += `<div class="content txt">
           <audio controls>
             <source src=${msgs[i].audio}>
           </audio>
         </div>`;
     } else if (msgs[i].video !== null) {
-      msg = `${msgs[i].senderName}
-        <div class="content txt">
+      msg += `<div class="content txt">
           <video src=${msgs[i].video} controls>
             Something went wrong!
           </video>
         </div>`;
+    }
+    if (id === msgs[i].fromId) {
+      const isDeliveredDateFormat = `${new Date(Date.parse(msgs[i].isDelivered)).getMonth()}-${new Date(Date.parse(msgs[i].isDelivered)).getDate()}-${new Date(Date.parse(msgs[i].isDelivered)).getFullYear()} at ${new Date(Date.parse(msgs[i].isDelivered)).getHours()}:${new Date(Date.parse(msgs[i].isDelivered)).getMinutes() < 10 ? `0${new Date(Date.parse(msgs[i].isDelivered)).getMinutes()}` : new Date(Date.parse(msgs[i].isDelivered)).getMinutes()}`;
+      const isReadDateFormat = `${new Date(Date.parse(msgs[i].isRead)).getMonth()}-${new Date(Date.parse(msgs[i].isRead)).getDate()}-${new Date(Date.parse(msgs[i].isRead)).getFullYear()} at ${new Date(Date.parse(msgs[i].isRead)).getHours()}:${new Date(Date.parse(msgs[i].isRead)).getMinutes() < 10 ? `0${new Date(Date.parse(msgs[i].isRead)).getMinutes()}` : new Date(Date.parse(msgs[i].isRead)).getMinutes()}`;
+      msg += `${msgs[i].isRead === null ? `Delivered ${isDeliveredDateFormat}` : `Read ${isReadDateFormat}`}`;
     }
 
     const div = document.createElement('div');

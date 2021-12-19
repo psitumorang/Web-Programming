@@ -11,7 +11,7 @@ function Conversation(props) {
   const [message, setMessage] = useState([]);
 
   const updateState = async () => {
-    const msgs = await getMessages(state.viewingConvo.id);
+    const msgs = await getMessages(state.viewingConvo.id, state.userId);
 
     setMessage(msgs);
     parseMessages(msgs, state.userId);

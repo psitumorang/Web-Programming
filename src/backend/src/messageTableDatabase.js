@@ -21,8 +21,8 @@ const connect = async () => {
 };
 
 const getNextOrderNumber = async (db, fromId, toId) => {
-  const query = 'SELECT MAX(orderNumber) FROM msg_lst WHERE fromId=? AND toId=?';
-  const params = [fromId, toId];
+  const query = 'SELECT MAX(orderNumber) FROM msg_lst WHERE (fromId=? AND toId=?) OR (fromId=? AND toId=?)';
+  const params = [fromId, toId, toId, fromId];
 
   try {
     const [row] = await db.execute(query, params);
@@ -48,7 +48,7 @@ const addTextMessage = async (db, txt, fromId, toId, senderName, convoId) => {
   // need to get the order number
   const orderNumber = await getNextOrderNumber(db, fromId, toId);
 
-  const query = 'INSERT INTO msg_lst (txt, fromId, toId, orderNumber, senderName, convoId) VALUES(?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO msg_lst (txt, fromId, toId, orderNumber, senderName, convoId, isDelivered) VALUES(?, ?, ?, ?, ?, ?, NOW())';
   const params = [txt, fromId, toId, orderNumber, senderName, convoId];
 
   try {
@@ -69,7 +69,7 @@ const addImageMessage = async (db, img, fromId, toId, senderName, convoId) => {
   // need to get the order number
   console.log('uploading image message');
   const orderNumber = await getNextOrderNumber(db, fromId, toId);
-  const query = 'INSERT INTO msg_lst (img, fromId, toId, orderNumber, senderName, convoId) VALUES(?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO msg_lst (img, fromId, toId, orderNumber, senderName, convoId, isDelivered) VALUES(?, ?, ?, ?, ?, ?, NOW())';
   const params = [img, fromId, toId, orderNumber, senderName, convoId];
 
   try {
@@ -89,7 +89,7 @@ const addAudioMessage = async (db, audio, fromId, toId, senderName, convoId) => 
   // need to get the order number
   const orderNumber = await getNextOrderNumber(db, fromId, toId);
 
-  const query = 'INSERT INTO msg_lst (audio, fromId, toId, orderNumber, senderName, convoId) VALUES(?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO msg_lst (audio, fromId, toId, orderNumber, senderName, convoId, isDelivered) VALUES(?, ?, ?, ?, ?, ?, NOW())';
   const params = [audio, fromId, toId, orderNumber, senderName, convoId];
 
   try {
@@ -109,7 +109,7 @@ const addVideoMessage = async (db, video, fromId, toId, senderName, convoId) => 
   // need to get the order number
   const orderNumber = await getNextOrderNumber(db, fromId, toId);
 
-  const query = 'INSERT INTO msg_lst (video, fromId, toId, orderNumber, senderName, convoId) VALUES(?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO msg_lst (video, fromId, toId, orderNumber, senderName, convoId, isDelivered) VALUES(?, ?, ?, ?, ?, ?, NOW())';
   const params = [video, fromId, toId, orderNumber, senderName, convoId];
 
   try {
@@ -126,13 +126,20 @@ const addVideoMessage = async (db, video, fromId, toId, senderName, convoId) => 
 };
 
 // get admins for group
-const getConversation = async (db, convoId) => {
-  const query = 'SELECT * FROM msg_lst WHERE convoId=? ORDER BY orderNumber ASC';
-
-  const params = [convoId];
-
+const getConversation = async (db, convoId, id) => {
   try {
+    //TODO this has to change to where the messages with the 
+    //from id equal this id that we are getting for (like the user we are getting for)
+    const readQuery = 'UPDATE msg_lst SET isRead=NOW() WHERE convoId=? AND toId=?';
+    const readParams = [convoId, id];
+    
+    await db.execute(readQuery, readParams);
+    
+    const query = 'SELECT * FROM msg_lst WHERE convoId=? ORDER BY orderNumber ASC';
+    const params = [convoId];
+
     const [rows] = await db.execute(query, params);
+
     // eslint-disable-next-line no-console
     console.log(`Got messages: ${rows}`);
     return rows;
