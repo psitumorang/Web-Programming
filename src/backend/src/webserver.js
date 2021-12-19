@@ -977,10 +977,10 @@ webapp.post('/message/video/:id', async (req, res) => {
   }
 });
 
-webapp.get('/message/:id', async (req, res) => {
-  const { id } = req.params;
+webapp.get('/message/:id/:user', async (req, res) => {
+  const { id, user } = req.params;
   try {
-    const convo = await msgLib.getConversation(msgDb, id);
+    const convo = await msgLib.getConversation(msgDb, id, user);
 
     // eslint-disable-next-line no-console
     console.log('got conversation: ', convo);
