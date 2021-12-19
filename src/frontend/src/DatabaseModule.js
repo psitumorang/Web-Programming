@@ -9,11 +9,31 @@ const sendPostRequest = async function sendPostRequest(url, body) {
     })
       .then((response) => response.json())
       .then((result) => result);
-
+    console.log(res);
     return res;
   } catch (err) {
     // eslint-disable-next-line
     console.log('ERROR');
+    return null;
+  }
+};
+
+const sendUploadPostRequest = async function sendUploadPostRequest(url, body) {
+  console.log('in database module about to sendPostrequest, url of ', url, 'body of ', body);
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      body,
+    })
+      .then((response) => response.json())
+      .then((result) => result);
+
+    return res;
+  } catch (err) {
+    // eslint-disable-next-line
+    console.log(err);
     return null;
   }
 };
@@ -119,4 +139,5 @@ module.exports = {
   sendGetGroupsRequest,
   sendDeleteRequest,
   sendBodiedDeleteRequest,
+  sendUploadPostRequest,
 };

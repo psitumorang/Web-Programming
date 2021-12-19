@@ -1,21 +1,65 @@
 import { useState, useEffect, React } from 'react';
+import { getConvos, parseConvos, startConvo } from './MessagesModule';
 import './Messages.css';
-
-const lib = require('./MessagesModule');
 
 function Messages(props) {
   // eslint-disable-next-line
   const [msgs, updateMsgs] = useState([]);
+  const [selected, updateSelected] = useState('text');
   const { changeState, state } = props;
 
   const updateMessages = async () => {
-    const convos = await lib.getConvos(state.userId);
+    const convos = await getConvos(state.userId);
     console.log(convos.length, convos);
     updateMsgs(convos);
-    lib.parseConvos(changeState, convos);
+    parseConvos(changeState, convos);
   };
 
   useEffect(() => { updateMessages(); }, []);
+
+  const conditionalRender = () => {
+    if (selected === 'text') {
+      console.log('text');
+      return (
+        <div id="form">
+          <input type="text" id="otherName" placeholder="your friend's username" />
+          <textarea id="firstMsg" placeholder="type in a message!" />
+          <button type="submit" id="sendFirstMsg" onClick={() => startConvo(selected, state, updateMessages, changeState)}>Start conversation!</button>
+        </div>
+      );
+    }
+    if (selected === 'audio') {
+      console.log('audio');
+      return (
+        <div id="form">
+          <input type="text" id="otherName" placeholder="your friend's username" />
+          <input type="file" id="firstMsg" multiple accept="audio/*" />
+          <button type="submit" id="sendFirstMsg" onClick={() => startConvo(selected, state, updateMessages, changeState)}>Start conversation!</button>
+        </div>
+      );
+    }
+    if (selected === 'video') {
+      console.log('video');
+      return (
+        <div id="form">
+          <input type="text" id="otherName" placeholder="your friend's username" />
+          <input type="file" id="firstMsg" multiple accept="video/*" />
+          <button type="submit" id="sendFirstMsg" onClick={() => startConvo(selected, state, updateMessages, changeState)}>Start conversation!</button>
+        </div>
+      );
+    }
+    if (selected === 'image') {
+      console.log('image');
+      return (
+        <div id="form">
+          <input type="text" id="otherName" placeholder="your friend's username" />
+          <input type="file" id="firstMsg" multiple accept="image/*" />
+          <button type="submit" id="sendFirstMsg" onClick={() => startConvo(selected, state, updateMessages, changeState)}>Start conversation!</button>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="container">
@@ -49,11 +93,25 @@ function Messages(props) {
             {window.location.href.split('/').pop() === 'error' ? 'ERROR sending message: cannot message self.' : null}
             {window.location.href.split('/').pop() === 'group' ? 'ERROR sending message: cannot message user not in a group with you.' : null}
             {window.location.href.split('/').pop() === 'user' ? 'ERROR sending message: cannot message to user that does not exist.' : null}
-            <div id="form">
-              <input type="text" id="otherName" placeholder="your friend's username" />
-              <textarea id="firstMsg" placeholder="type in a message!" />
-              <button type="submit" id="sendFirstMsg" onClick={() => lib.startConvo(state, updateMessages, changeState)}>Start conversation!</button>
+            <div>
+              <label htmlFor="textInput" className="list">
+                <input type="radio" id="textInput" name="msgType" onClick={() => updateSelected('text')} />
+                Text message
+              </label>
+              <label htmlFor="audioInput" className="list">
+                <input type="radio" id="audioInput" name="msgType" onClick={() => updateSelected('audio')} />
+                Audio message
+              </label>
+              <label htmlFor="videoInput" className="list">
+                <input type="radio" id="videoInput" name="msgType" onClick={() => updateSelected('video')} />
+                Video message
+              </label>
+              <label htmlFor="imageInput" className="list">
+                <input type="radio" id="imageInput" name="msgType" onClick={() => updateSelected('image')} />
+                Image message
+              </label>
             </div>
+            {conditionalRender()}
           </div>
 
           <div className="convo-area" id="view-convos">

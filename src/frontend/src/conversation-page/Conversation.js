@@ -1,19 +1,49 @@
 import { useState, useEffect, React } from 'react';
+import { getMessages, parseMessages, sendMessage } from './ConversationModule';
 import './Conversation.css';
-
-const lib = require('./ConversationModule');
 
 function Conversation(props) {
   const { changeState, state } = props;
   // eslint-disable-next-line
+  const [selected, updateSelected] = useState('text');
+
+  // eslint-disable-next-line
   const [message, setMessage] = useState([]);
 
   const updateState = async () => {
-    const msgs = await lib.getMessages(state.viewingConvo.id);
+    const msgs = await getMessages(state.viewingConvo.id);
 
     setMessage(msgs);
-    lib.parseMessages(msgs, state.userId);
+    parseMessages(msgs, state.userId);
     document.getElementById('view-msgs').scrollTop = document.getElementById('view-msgs').scrollHeight;
+  };
+
+  const conditionalRender = () => {
+    if (selected === 'text') {
+      console.log('text');
+      return (
+        <textarea id="firstMsg" placeholder="type in a message!" />
+      );
+    }
+    if (selected === 'audio') {
+      console.log('audio');
+      return (
+        <input type="file" id="firstMsg" multiple accept="audio/*" />
+      );
+    }
+    if (selected === 'video') {
+      console.log('video');
+      return (
+        <input type="file" id="firstMsg" multiple accept="video/*" />
+      );
+    }
+    if (selected === 'image') {
+      console.log('image');
+      return (
+        <input type="file" id="firstMsg" multiple accept="image/*" />
+      );
+    }
+    return null;
   };
 
   useEffect(() => { updateState(); }, []);
@@ -48,8 +78,26 @@ function Conversation(props) {
             You do not have any messages! Send a message.
           </div>
           <div id="send-msg">
-            <textarea id="sendMsgTxt" placeholder="Send a message!" />
-            <button type="submit" id="sendMsgButton" onClick={() => lib.sendMessage(state, updateState)}>Send</button>
+            <div id="options">
+              <label htmlFor="textInput" className="list">
+                <input type="radio" id="textInput" name="msgType" onClick={() => updateSelected('text')} />
+                Text message
+              </label>
+              <label htmlFor="audioInput" className="list">
+                <input type="radio" id="audioInput" name="msgType" onClick={() => updateSelected('audio')} />
+                Audio message
+              </label>
+              <label htmlFor="videoInput" className="list">
+                <input type="radio" id="videoInput" name="msgType" onClick={() => updateSelected('video')} />
+                Video message
+              </label>
+              <label htmlFor="imageInput" className="list">
+                <input type="radio" id="imageInput" name="msgType" onClick={() => updateSelected('image')} />
+                Image message
+              </label>
+            </div>
+            { conditionalRender() }
+            <button type="submit" id="sendMsgButton" onClick={() => sendMessage(updateState, selected, state)}>Send</button>
           </div>
         </div>
 

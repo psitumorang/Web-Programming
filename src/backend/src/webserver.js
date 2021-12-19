@@ -852,16 +852,15 @@ webapp.delete('/reply/:id', async (req, res) => {
   return null;
 });
 
-webapp.post('/message/text/:id', async (req, res) => {
+const msgPreprocessing = async (req, res) => {
   const { msg } = req.body;
   const { id } = req.params;
   // eslint-disable-next-line no-console
-  console.log('POST text message, ', id, msg);
+  console.log('POST message, ', id, msg);
   try {
     console.log(msg.fromId);
     if (msg.toId === msg.fromId) {
-      res.status(404).json({ err: "self" });
-      return null;
+      return { err: "self" };
     }
 
     const myGroups = await groupMemberLib.getGroupsForUser(groupMemberDb, id);
@@ -876,8 +875,7 @@ webapp.post('/message/text/:id', async (req, res) => {
     }
 
     if (!same) {
-      res.status(404).json({ err: "group" });
-      return null;
+      return { err: "group" };
     }
 
     const exists = await convoLib.convoExists(convoDb, id, msg.fromId);
@@ -890,10 +888,84 @@ webapp.post('/message/text/:id', async (req, res) => {
         convoId = await convoLib.addConvo(convoDb, id, msg.fromId, msg.receiverName, msg.senderName);
       }
     }
+    return { convoId, id, msg };
+  } catch (err) {
+    return {err: err.message};
+  }
+  return {err: 'unfinished'};
+};
+
+webapp.post('/message/text/:id', async (req, res) => {
+  console.log('PROCESSING FOR TXT');
+  const ret = await msgPreprocessing(req, res);
+  if (typeof ret.err !== 'undefined') {
+    res.status(404).json(ret.err);
+  }
+  const { msg, convoId, id } = ret;
+  try { 
     const value = await msgLib.addTextMessage(msgDb, msg.txt, msg.fromId, id, msg.senderName, convoId);
 
     // eslint-disable-next-line no-console
     console.log('created text msg: ', value);
+    //TODO: will carry delivered receipt when we do level 3 task
+    res.status(201).json({});
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.post('/message/image/:id', async (req, res) => {
+  console.log('PROCESSING FOR IMG');
+  const ret = await msgPreprocessing(req, res);
+  console.log(ret);
+  if (typeof ret.err !== 'undefined') {
+    res.status(404).json(ret.err);
+  }
+  const { msg, convoId, id } = ret;
+  try {
+    console.log('sending the value now ', typeof ret.err);
+    const value = await msgLib.addImageMessage(msgDb, msg.img, msg.fromId, id, msg.senderName, convoId);
+
+    // eslint-disable-next-line no-console
+    console.log('created img msg: ', value);
+    //TODO: will carry delivered receipt when we do level 3 task
+    res.status(201).json({});
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.post('/message/audio/:id', async (req, res) => {
+  console.log('PROCESSING FOR AUDIO');
+  const ret = await msgPreprocessing(req, res);
+  if (typeof ret.err !== 'undefined') {
+    res.status(404).json(ret.err);
+  }
+  const { msg, convoId, id } = ret;
+  try {
+    const value = await msgLib.addAudioMessage(msgDb, msg.audio, msg.fromId, id, msg.senderName, convoId);
+
+    // eslint-disable-next-line no-console
+    console.log('created audio msg: ', value);
+    //TODO: will carry delivered receipt when we do level 3 task
+    res.status(201).json({});
+  } catch (err) {
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.post('/message/video/:id', async (req, res) => {
+  console.log('PROCESSING FOR VIDEO');
+  const ret = await msgPreprocessing(req, res);
+  if (typeof ret.err !== 'undefined') {
+    res.status(404).json(ret.err);
+  }
+  const { msg, convoId, id } = ret;
+  try {
+    const value = await msgLib.addVideoMessage(msgDb, msg.video, msg.fromId, id, msg.senderName, convoId);
+
+    // eslint-disable-next-line no-console
+    console.log('created video msg: ', value);
     //TODO: will carry delivered receipt when we do level 3 task
     res.status(201).json({});
   } catch (err) {

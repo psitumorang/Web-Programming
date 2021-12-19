@@ -1,3 +1,5 @@
+import sendUploadPostRequest from '../UploadModule';
+
 const database = require('../DatabaseModule');
 
 const getConvos = async (id) => {
@@ -46,7 +48,60 @@ const parseConvos = (changeState, convos) => {
   }
 };
 
-const startConvo = async (state, updateMessages, updateState) => {
+const uploadImgConvo = async (selected, state, updateMessages, updateState) => {
+  const file = document.getElementById('firstMsg').files[0];
+  const data = new FormData();
+  data.append('file', file);
+  data.append('upload_preset', ['yj7lgb8v']);
+  console.log(data.get('upload_preset'));
+  const res = sendUploadPostRequest('https://api.cloudinary.com/v1_1/cis557-project-group-18/image/upload', data).then((mediaUrl) => {
+    // TODO change this to be right
+    console.log('SENT IMAGE');
+    console.log(res, mediaUrl);
+    // creates conversation in database
+    return database.sendGetRequest(`http://localhost:8080/user-by-name/${document.getElementById('otherName').value}`).then((resp) => {
+      console.log(resp);
+      if (resp.length === 0) {
+        // MAYBE MAKE THIS THE ERROR PAGE DUDE?!?!?!?!?!
+        updateState({ link: '/messages/user' });
+        return null;
+      }
+
+      const otherId = resp[0].user_id;
+
+      const msg = {
+        toId: otherId,
+        fromId: state.userId,
+        senderName: state.username,
+        receiverName: resp[0].user_name,
+        img: mediaUrl.data.url,
+      };
+      return database.sendPostRequest(`http://localhost:8080/message/image/${otherId}`, { msg }).then((response) => {
+        if (typeof response.err !== 'undefined' && response.err === 'self') {
+          updateState({ link: '/messages/error' });
+          return null;
+        }
+        if (typeof response.err !== 'undefined' && response.err === 'group') {
+          updateState({ link: '/messages/group' });
+          return null;
+        }
+
+        return updateMessages().then(() => response);
+      });
+    });
+  });
+  return null;
+};
+
+const startConvo = async (selected, state, updateMessages, updateState) => {
+  if (selected === 'audio') {
+    console.log('hi');
+  } else if (selected === 'video') {
+    console.log('hi');
+  } else if (selected === 'image') {
+    return uploadImgConvo(selected, state, updateMessages, updateState);
+  }
+
   // creates conversation in database
   const res = await database.sendGetRequest(`http://localhost:8080/user-by-name/${document.getElementById('otherName').value}`);
   console.log(res);
@@ -57,14 +112,12 @@ const startConvo = async (state, updateMessages, updateState) => {
 
   const otherId = res[0].user_id;
 
-  const txt = document.getElementById('firstMsg').value;
-
   const msg = {
-    txt,
     toId: otherId,
     fromId: state.userId,
     senderName: state.username,
     receiverName: res[0].user_name,
+    txt: document.getElementById('firstMsg').value,
   };
 
   const response = await database.sendPostRequest(`http://localhost:8080/message/text/${otherId}`, { msg });
@@ -83,7 +136,7 @@ const startConvo = async (state, updateMessages, updateState) => {
   return response;
 };
 
-module.exports = {
+export {
   getConvos,
   parseConvos,
   startConvo,
