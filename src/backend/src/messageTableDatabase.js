@@ -66,60 +66,65 @@ const addTextMessage = async (db, txt, fromId, toId, senderName, convoId) => {
   return null;
 };
 
-//TODO: will do after text message works e2e
-// const addImageMessage = async (db, img, fromId, toId, senderName) => {
-//   //need to get the order number
-//   const orderNumber = getNextOrderNumber(db, fromId, toId);
-
-//   const query = 'INSERT INTO msg_lst (txt, fromId, toid, orderNumber, senderName) VALUES(?, ?, ?, ?)';
-//   const params = [txt, fromId, toId, orderNumber,senderName];
+const addImageMessage = async (db, img, fromId, toId, senderName, convoId) => {
+  //need to get the order number
+  console.log('uploading image message');
+  const orderNumber = await getNextOrderNumber(db, fromId, toId);
+  const query = 'INSERT INTO msg_lst (img, fromId, toId, orderNumber, senderName, convoId) VALUES(?, ?, ?, ?, ?, ?)';
+  const params = [img, fromId, toId, orderNumber, senderName, convoId];
   
-//   try {
-//     const [row] = await db.execute(query, params);
+  try {
+    const [row] = await db.execute(query, params);
 
-//     // eslint-disable-next-line no-console
-//     console.log(`Created admin: ${row}`);
-//     return row;
-//   } catch (err) {
-//     // eslint-disable-next-line no-console
-//     console.log('error: admin already exists');
-//   }
-//   return null;
-// };
+    // eslint-disable-next-line no-console
+    console.log(`Created img: ${row}`);
+    return row;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(err);
+  }
+  return null;
+};
 
-// const addAudioMessage = async (db, groupId, adminId, isCreator, name) => {
-//   const query = 'INSERT INTO admin_lst (group_id, admin_id, is_creator, user_name) VALUES(?, ?, ?, ?)';
+const addAudioMessage = async (db, audio, fromId, toId, senderName, convoId) => {
+  //need to get the order number
+  const orderNumber = await getNextOrderNumber(db, fromId, toId);
 
-//   const params = [groupId, adminId, isCreator, name];
-//   try {
-//     const [row] = await db.execute(query, params);
+  const query = 'INSERT INTO msg_lst (audio, fromId, toId, orderNumber, senderName, convoId) VALUES(?, ?, ?, ?, ?, ?)';
+  const params = [audio, fromId, toId, orderNumber, senderName, convoId];
+  
+  try {
+    const [row] = await db.execute(query, params);
 
-//     // eslint-disable-next-line no-console
-//     console.log(`Created admin: ${row}`);
-//     return row;
-//   } catch (err) {
-//     // eslint-disable-next-line no-console
-//     console.log('error: admin already exists');
-//   }
-//   return null;
-// };
+    // eslint-disable-next-line no-console
+    console.log(`Created audio: ${row}`);
+    return row;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log('error: admin already exists');
+  }
+  return null;
+};
 
-// const addVideoMessage = async (db, groupId, adminId, isCreator, name) => {
-//   const query = 'INSERT INTO admin_lst (group_id, admin_id, is_creator, user_name) VALUES(?, ?, ?, ?)';
+const addVideoMessage = async (db, video, fromId, toId, senderName, convoId) => {
+  //need to get the order number
+  const orderNumber = await getNextOrderNumber(db, fromId, toId);
 
-//   const params = [groupId, adminId, isCreator, name];
-//   try {
-//     const [row] = await db.execute(query, params);
+  const query = 'INSERT INTO msg_lst (video, fromId, toId, orderNumber, senderName, convoId) VALUES(?, ?, ?, ?, ?, ?)';
+  const params = [video, fromId, toId, orderNumber, senderName, convoId];
+  
+  try {
+    const [row] = await db.execute(query, params);
 
-//     // eslint-disable-next-line no-console
-//     console.log(`Created admin: ${row}`);
-//     return row;
-//   } catch (err) {
-//     // eslint-disable-next-line no-console
-//     console.log('error: admin already exists');
-//   }
-//   return null;
-// };
+    // eslint-disable-next-line no-console
+    console.log(`Created video: ${row}`);
+    return row;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log('error: admin already exists');
+  }
+  return null;
+};
 
 // get admins for group
 const getConversation = async (db, convoId) => {
@@ -142,8 +147,8 @@ const getConversation = async (db, convoId) => {
 module.exports = {
   connect,
   addTextMessage,
-  // addImageMessage,
-  // addVideoMessage,
-  // addAudioMessage,
+  addImageMessage,
+  addVideoMessage,
+  addAudioMessage,
   getConversation,
 };
