@@ -209,7 +209,7 @@ body {
   padding: 0;
 }
 
-.non-member-group {
-  background-color: white;
-  border-color: white;
+.heading-for-groups {
+    font-weight: bold;
+    color: rgb(3,64,120);
 }

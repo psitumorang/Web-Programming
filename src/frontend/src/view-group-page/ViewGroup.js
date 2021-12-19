@@ -117,7 +117,7 @@ function ViewGroup(props) {
         </div>
 
         <div className="main-area">
-          <div className="info-area">
+          <div className="info-area" id="info-area">
             <div className="group-view">
               <div className="group-info">
                 <ul>
@@ -139,13 +139,11 @@ function ViewGroup(props) {
                 </ul>
               </div>
             </div>
+            <div className="join-group" id="join-group-id">
+              <input type="button" value="Leave group" id="submit" onClick={() => lib.leaveGroup(state.userId, groupAndAdmins.group.group_id, updateMessage)} />
+            </div>
           </div>
           {message}
-          <p />
-          <div className="join-group" id="join-group-id">
-            <input type="button" value="Leave group" id="submit" onClick={() => lib.leaveGroup(state.userId, groupAndAdmins.group.group_id, updateMessage)} />
-          </div>
-          <p />
 
           <div className="view-area" id="groups-area">
             <div id="revoke">
@@ -175,7 +173,7 @@ function ViewGroup(props) {
           <div className="posts-area">
             <div className="text-input">
               Message:
-              <input className="post-input" id="post" type="post" placeholder="Post message to group" />
+              <textarea className="post-input" id="post" type="post" placeholder="Post message to group" />
               <button className="post-button" type="submit" onClick={() => createPost()}> Post Message </button>
             </div>
             <div className="posts" id="posts-area" />

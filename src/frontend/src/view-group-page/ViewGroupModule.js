@@ -190,8 +190,10 @@ const parsePosts = (posts) => {
     + '</li>'
     + '</ul>'
     + '</div>'
-    + '<div className=reply>'
-    + `<input className="reply-input" type="reply" id="input-${postId}" placeholder="reply to this post" />`
+    + `<div class="comments" id="comments-${postId}">`
+    + '<div class="create-comment">'
+    + '<div class="reply">'
+    + `<textarea class="reply-input" id="input-${postId}" placeholder="reply to this post"></textarea>`
     // eslint-disable-next-line prefer-template
     + `<button type="reply-button" id="reply-button-${postId}"> Reply </button>`
     + '</div>'
@@ -199,6 +201,8 @@ const parsePosts = (posts) => {
     + `<button type="flag" id="flag-post-${postId}"> Flag </button>`
     + `<button type="hide" id="hide-post-${postId}"> Hide </button>`
     + `<button type="delete" id="delete-post-${postId}"> Delete </button>`
+    + '</div>'
+    + '</div>'
     + '</div>'
     + '</div>';
 
@@ -223,7 +227,7 @@ const parseReplies = (posts, replies) => {
     // eslint-disable-next-line no-console
     console.log(postId);
 
-    const element = document.getElementById(postId);
+    const element = document.getElementById(`comments-${postId}`);
     // eslint-disable-next-line no-console
     console.log(element);
 
