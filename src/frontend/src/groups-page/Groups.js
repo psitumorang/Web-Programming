@@ -4,7 +4,7 @@ import './Groups.css';
 const lib = require('./GroupsModule');
 
 function Groups(props) {
-  const { changeState } = props;
+  const { state, changeState } = props;
   const [message, setMessage] = useState(' ');
   // eslint-disable-next-line no-unused-vars
   const [allGroups, setAllGroups] = useState([]);
