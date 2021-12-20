@@ -122,10 +122,15 @@ const approveInvite = async (invReview, updateInvitationsToReview, updateMessage
 
   // update invitation status to approved
   const invitationURL = `http://localhost:8080/invitations/${invReview.invitation_id}`;
+  console.log('in invitation module with invitationurl of ', invitationURL);
   const invitationBody = { newStatus: 'approved' };
+  console.log('in invitation module with invitationbody of ', invitationBody);
   await database.sendPutRequest(invitationURL, invitationBody);
 
   // send notification to user
+  const approveNotifURL = `http://localhost:8080/notifications/${invReview.to_user_id}`;
+  const approvedNotifBody = { notification: { isRead: false, msg: `You've been approved to join ${invReview.group_name}!` } };
+  await database.sendPostRequest(approveNotifURL, approvedNotifBody);
 
   // updateMessage
   updateMessage('You\'ve approved the user - and they\'ve been added to the group! Hurrah!');
