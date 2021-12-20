@@ -61,7 +61,9 @@ webapp.listen(port, async () => {
 
 webapp.post('/registration', async (req, res) => {
   try {
+    console.log(req.body);
     const nextId = await userLib.getNextId(userDb);
+    console.log(nextId);
     const newUser = {
       user_id: nextId + 1,
       user_name: req.body.user_name,
@@ -76,7 +78,7 @@ webapp.post('/registration', async (req, res) => {
     };
     const resultsUser = await userLib.addUser(userDb, newUser);
     if (resultsUser === null) {
-      res.status(404).json({ err: 'username already taken' });
+      res.status(400).json({ err: 'username already taken' });
     } else {
       profileLib.addProfile(profileDb, newProfile);
 
@@ -86,11 +88,7 @@ webapp.post('/registration', async (req, res) => {
       });
     }
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log('testing to see if control gets to catch in webserver.js for rego post');
-    // eslint-disable-next-line no-console
-    console.log('testing to see if control gets to catch in webserver.js for rego post');
-    res.status(404).json({ err: err.message });
+    res.status(400).json({ err: 'error in registration' });
   }
 });
 
@@ -1346,6 +1344,9 @@ webapp.get('/analytics-posts', async (req, res) => {
 
 webapp.use((req, res) => {
   // eslint-disable-next-line no-console
-  console.log('testing to see if control gets to webapp.use, req is: ', req);
-  res.status(404);
+  res.status(404).json({ err: 'link does not exist' });
 });
+
+//for testing
+module.exports = webapp;
+
