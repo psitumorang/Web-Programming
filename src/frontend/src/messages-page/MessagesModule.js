@@ -55,6 +55,9 @@ const uploadMediaConvo = async (selected, state, updateMessages, updateState) =>
   if (selected === 'image' && file.size > 10000000) {
     updateState({ link: '/messages/img' });
     return null;
+  } if ((selected === 'audio' || selected === 'video') && file.size > 100000000) {
+    updateState({ link: '/messages/av' });
+    return null;
   }
 
   const data = new FormData();
@@ -71,10 +74,6 @@ const uploadMediaConvo = async (selected, state, updateMessages, updateState) =>
       if (resp.length === 0) {
         // MAYBE MAKE THIS THE ERROR PAGE DUDE?!?!?!?!?!
         updateState({ link: '/messages/user' });
-        return null;
-      }
-      if ((selected === 'audio' || selected === 'video') && file.size > 100000000) {
-        updateState({ link: '/messages/av' });
         return null;
       }
 

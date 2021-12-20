@@ -38,10 +38,61 @@ const getUserPosts = async (db, id) => {
 };
 
 // add a post to a group page
-const addPost = async (db, newPost) => {
-  const query = 'INSERT INTO post_lst (post_id, post_group, posting_user, caption) VALUES(?, ?, ?, ?)';
+const addTextPost = async (db, newPost) => {
+  const query = 'INSERT INTO post_lst (post_id, post_group, posting_user, caption, posting_username) VALUES(?, ?, ?, ?, ?)';
 
-  const params = [newPost.post_id, newPost.post_group, newPost.posting_user, newPost.caption];
+  const params = [newPost.post_id, newPost.post_group, newPost.posting_user, newPost.caption, newPost.posting_username];
+
+  try {
+    await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Created post with id: ${newPost.post_id}`);
+    return newPost.post_id;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+const addImagePost = async (db, newPost) => {
+  const query = 'INSERT INTO post_lst (post_id, post_group, posting_user, caption, photourl, posting_username) VALUES(?, ?, ?, ?, ?, ?)';
+
+  const params = [newPost.post_id, newPost.post_group, newPost.posting_user, newPost.caption, newPost.photourl, newPost.posting_username];
+
+  try {
+    await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Created post with id: ${newPost.post_id}`);
+    return newPost.post_id;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+const addAudioPost = async (db, newPost) => {
+  const query = 'INSERT INTO post_lst (post_id, post_group, posting_user, caption, audioUrl, posting_username) VALUES(?, ?, ?, ?, ?, ?)';
+  console.log(newPost);
+  const params = [newPost.post_id, newPost.post_group, newPost.posting_user, newPost.caption, newPost.audioUrl, newPost.posting_username];
+
+  try {
+    await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Created post with id: ${newPost.post_id}`);
+    return newPost.post_id;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+const addVideoPost = async (db, newPost) => {
+  const query = 'INSERT INTO post_lst (post_id, post_group, posting_user, caption, videoUrl, posting_username) VALUES(?, ?, ?, ?, ?, ?)';
+
+  const params = [newPost.post_id, newPost.post_group, newPost.posting_user, newPost.caption, newPost.videoUrl, newPost.posting_username];
 
   try {
     await db.execute(query, params);
@@ -141,7 +192,10 @@ const getNextId = async (db) => {
 module.exports = {
   connect,
   getUserPosts,
-  addPost,
+  addTextPost,
+  addImagePost,
+  addAudioPost,
+  addVideoPost,
   flagPost,
   hidePost,
   deletePost,

@@ -152,8 +152,9 @@ button[type="reply-button"] {
   background-color: rgb(18,130,162);
 }
 
-.comments {
-  
+.post-button {
+    height: 25px;
+    width: 100px;
 }
 
 /* replies style */
