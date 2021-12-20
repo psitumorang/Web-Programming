@@ -26,7 +26,7 @@ function ProfilePage(props) {
     profile_picture_url: 'https://www.psypost.org/wp-content/uploads/2017/08/meditating-woman.jpg',
   };
 
-  const { changeState } = props;
+  const { changeState, state } = props;
 
   const [userProfile, setUserProfile] = useState(dummyProfile);
   const [userPosts, setUserPosts] = useState([]);
@@ -34,8 +34,8 @@ function ProfilePage(props) {
 
   const updateUserPosts = async () => {
     // extract id from props
-    const { state } = props;
     const { userId } = state;
+    console.log('state is: ', state);
 
     // const dummyId = 9;
 
@@ -68,7 +68,7 @@ function ProfilePage(props) {
       <div id="cover_space">
         <img id="user_profile_pic" src={userProfile.profile_picture_url} alt="" />
         <div id="main_title">
-          {`${userProfile.first_name} ${userProfile.last_name}`}
+          {`${state.username}`}
           &apos;s FaceTok Page
         </div>
       </div>
@@ -82,7 +82,7 @@ function ProfilePage(props) {
       <div id="main_content_container">
         <div id="key_bio_info">
           <b>
-            {userProfile.first_name}
+            {state.username}
             &apos;s bio
           </b>
           <p />
