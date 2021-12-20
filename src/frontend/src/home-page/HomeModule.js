@@ -1,7 +1,19 @@
 const database = require('../DatabaseModule');
 
-const changeSelected = (updateSelected) => {
+const changeSelectedFilter = (updateSelected) => {
   updateSelected(document.getElementById('topics').value);
+};
+
+const changeSelectedSort = (updateSelected) => {
+  updateSelected(document.getElementById('sorts').value);
+};
+
+const resetSelectedSort = (updateSelected) => {
+  updateSelected('none');
+};
+
+const resetSelected = (updateSelected) => {
+  updateSelected('');
 };
 
 const getFilterOptions = async (setFilters) => {
@@ -18,12 +30,12 @@ const parseFilters = (filters) => {
   return output;
 };
 
-const getFilteredGroups = async (filter) => {
+const getFilteredGroups = async (filter, sort) => {
   let groups = {};
   if (filter === '') {
-    groups = await database.sendGetRequest('http://localhost:8080/topics/all');
+    groups = await database.sendGetRequest(`http://localhost:8080/topics/all/${sort}`);
   } else {
-    groups = await database.sendGetRequest(`http://localhost:8080/topics/${filter}`);
+    groups = await database.sendGetRequest(`http://localhost:8080/topics/${filter}/none`);
   }
   console.log(groups);
   console.log(groups.groups);
@@ -95,7 +107,10 @@ const parseFilteredGroups = (groups, changeState, selected) => {
 };
 
 module.exports = {
-  changeSelected,
+  changeSelectedFilter,
+  resetSelectedSort,
+  changeSelectedSort,
+  resetSelected,
   parseFilters,
   getFilterOptions,
   getFilteredGroups,

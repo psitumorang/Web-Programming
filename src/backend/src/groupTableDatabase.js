@@ -22,7 +22,7 @@ const connect = async () => {
 
 // add a group
 const addGroup = async (db, newGroup) => {
-  const query = 'INSERT INTO group_lst (group_id, group_name, group_creator, group_description, is_public) VALUES(?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO group_lst (group_id, group_name, group_creator, group_description, is_public, member_number) VALUES(?, ?, ?, ?, ?, 1)';
 
   const verifyQuery = 'SELECT COUNT(*) FROM group_lst WHERE group_name=?';
 
@@ -160,9 +160,20 @@ const getGroupsWithTopic = async (db, topic) => {
 };
 
 // get all groups
-const getPublicGroups = async (db) => {
+const getPublicGroups = async (db, sort) => {
   try {
-    const query = 'SELECT * FROM group_lst WHERE is_public=1';
+    let query = '';
+    if (sort === 'newest') {
+      query = 'SELECT * FROM group_lst WHERE is_public=1 ORDER BY last_post DESC';
+    }
+    if (sort === 'posts') {
+      query = 'SELECT * FROM group_lst WHERE is_public=1 ORDER BY post_number DESC';
+    }
+    if (sort === 'members') {
+      query = 'SELECT * FROM group_lst WHERE is_public=1 ORDER BY member_number DESC';
+    } else {
+      query = 'SELECT * FROM group_lst WHERE is_public=1';
+    }
     const [rows] = await db.execute(query);
     // eslint-disable-next-line no-console
     console.log(`Group: ${JSON.stringify(rows)}`);

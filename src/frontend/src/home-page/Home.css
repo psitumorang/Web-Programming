@@ -157,6 +157,18 @@ button:hover {
 
   gap: 20px 20px;
 }
+
+#buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#filterInput {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
 /*message updates*/
 
 .message-updates {
