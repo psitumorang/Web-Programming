@@ -130,7 +130,7 @@ const addVideoPost = async (db, newPost) => {
 };
 
 // add a post to a group page
-const flagPost = async (db, postId) => {
+const flagPost = async (db, postId, flagger) => {
   const query = 'UPDATE post_lst SET is_flagged = 1 WHERE post_id = ?;';
 
   const params = [postId];
@@ -138,7 +138,11 @@ const flagPost = async (db, postId) => {
   try {
     await db.execute(query, params);
     // eslint-disable-next-line no-console
-    console.log(`Flagged post with id: ${postId}`);
+    console.log(`Flagged post with id: ${postId} ${flagger}`);
+
+    const addFlagger = 'INSERT INTO post_flags (post_id, flagging_user) VALUES(?, ?)';
+    await db.execute(addFlagger, [postId, flagger]);
+
     return postId;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -146,6 +150,41 @@ const flagPost = async (db, postId) => {
   }
   return null;
 };
+
+// add a post to a group page
+const isFlagged = async (db, postId) => {
+  const query = 'SELECT * from post_flags WHERE post_id=?';
+
+  const params = [postId];
+
+  try {
+    const [rows] = await db.execute(query, params);
+    console.log('FLAGS ', rows);
+    return rows;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+const removePostFlag = async (db, postId) => {
+  const query = 'DELETE from post_flags WHERE post_id=?';
+
+  const params = [postId];
+
+  try {
+    await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Flagged post with id: ${postId}`);
+
+    return postId;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+}
 
 // add a post to a group page
 const hidePost = async (db, postId) => {
@@ -189,6 +228,22 @@ const getPosts = async (db, groupId) => {
     const query = 'SELECT * FROM post_lst WHERE post_group = ? AND is_hidden = 0 ORDER BY post_id DESC';
 
     const [rows] = await db.execute(query, [groupId]);
+    // eslint-disable-next-line no-console
+    console.log(`Posts: ${JSON.stringify(rows)}`);
+    return [rows];
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+// get all groups
+const getPostById = async (db, postId) => {
+  try {
+    const query = 'SELECT * FROM post_lst WHERE post_id=?';
+
+    const [rows] = await db.execute(query, [postId]);
     // eslint-disable-next-line no-console
     console.log(`Posts: ${JSON.stringify(rows)}`);
     return [rows];
@@ -252,4 +307,7 @@ module.exports = {
   getPosts,
   getNextId,
   getPostAnalyticsFacts,
+  removePostFlag,
+  getPostById,
+  isFlagged,
 };
