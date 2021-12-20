@@ -119,10 +119,22 @@
 div[type="flag-and-delete"] {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: 2px;
   width: 100px;
+  height: 75px;
+}
+
+div[type="flag-and-delete-post"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+/*
+  width: 100px;
+  height: 75px;
+*/
 }
 
 button[type="delete"] {
@@ -133,6 +145,13 @@ button[type="delete"] {
 }
 
 button[type="flag"] {
+  width: 50px;
+  height: 25px;
+  border-radius: 5px;
+  background-color: rgb(18,130,162);
+}
+
+button[type="edit"] {
   width: 50px;
   height: 25px;
   border-radius: 5px;

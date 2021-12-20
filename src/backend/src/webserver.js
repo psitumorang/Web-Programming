@@ -829,6 +829,22 @@ webapp.get('/posts/:id', async (req, res) => {
   }
 });
 
+webapp.post('/reply/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('edit reply');
+  console.log(req.params);
+  console.log(req.body);
+  const { id } = req.params;
+  const { caption } = req.body;
+  try {
+    const result = await replyLib.editReply(replyDb, id, caption);
+    res.status(200).json({});
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
 webapp.post('/reply', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('create reply');

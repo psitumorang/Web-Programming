@@ -25,6 +25,7 @@ function ViewGroup(props) {
 
   const [groupAndAdmins, setGroupAndAdmins] = useState({ group: {}, admins: [] });
   const [message, setMessage] = useState(' ');
+  const [editComment, setEditComment] = useState(-1);
 
   const updateState = async () => {
     const group = await getGroup(state.viewingGroup);
@@ -90,10 +91,10 @@ function ViewGroup(props) {
     const replies = await getReplies(changeState, state.viewingGroup);
 
     setAllReplies(replies.result);
-
+    console.log(editComment);
     if (replies.result) {
-      parseReplies(posts.result[0], replies.result[0]);
-      parseOnclicks(state, changeState, posts.result[0], replies.result[0]);
+      parseReplies(posts.result[0], replies.result[0], editComment, setEditComment);
+      parseOnclicks(state, changeState, posts.result[0], replies.result[0], setEditComment);
     }
   };
 
@@ -142,7 +143,7 @@ function ViewGroup(props) {
     await updateReplies();
   };
 
-  useEffect(() => { updates(); }, [state]);
+  useEffect(() => { updates(); }, [state, editComment]);
 
   return (
     <div className="container">
