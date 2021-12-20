@@ -189,6 +189,33 @@ const getNextId = async (db) => {
   return null;
 };
 
+const getPostAnalyticsFacts = async (db) => {
+  const analyticsFactsData = [];
+  
+  // total posts
+  const totalPostsQuery = "SELECT COUNT(*) as total_posts FROM post_lst";
+  const [[totalPostsResult]] = await db.execute(totalPostsQuery);
+  analyticsFactsData.push(['Total posts', totalPostsResult.total_posts]);
+
+  // total hidden posts
+  const hiddenPostsQuery = "SELECT COUNT(*) as hidden_posts FROM post_lst WHERE is_hidden = 1";
+  const [[hiddenPostsResult]] = await db.execute(hiddenPostsQuery);
+  analyticsFactsData.push(['Hidden posts', hiddenPostsResult.hidden_posts]);
+
+  // total distinct posters
+  const numUniquePostersQuery = "SELECT COUNT(DISTINCT posting_user) as unique_posters FROM post_lst";
+  const [[numUniquePostersResult]] = await db.execute(numUniquePostersQuery);
+  analyticsFactsData.push(['Unique posters', numUniquePostersResult.unique_posters]);
+
+  // total comments (in groups)
+  const totalCommentsQuery = "SELECT COUNT(*) as total_comments FROM reply_lst";
+  const [[totalCommentsResult]] = await db.execute(totalCommentsQuery);
+  analyticsFactsData.push(['Total comments', totalCommentsResult.total_comments]);
+
+  // return the Array of factname:value pairs
+  return analyticsFactsData;
+};
+
 module.exports = {
   connect,
   getUserPosts,
@@ -201,4 +228,5 @@ module.exports = {
   deletePost,
   getPosts,
   getNextId,
+  getPostAnalyticsFacts,
 };
