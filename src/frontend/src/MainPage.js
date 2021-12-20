@@ -62,7 +62,7 @@ function MainPage() {
     if (url.includes('/changepassword')) {
       return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);
     }
-    if (url.includes('/viewgroup') || url.includes('/viewgroup/error') || url.includes('/view-group-page/post/error')) {
+    if (url.includes('/viewgroup') || url.includes('/viewgroup/error') || url.includes('/viewgroup/post/error') || url.includes('/viewgroup/admin')) {
       console.log('view group trying to error)');
       return (<ViewGroup changeState={changeState} state={state} />);
     }
@@ -74,7 +74,7 @@ function MainPage() {
     }
     const last = url.split('/').pop();
     const first = url.split('/')[3];
-    if (url.includes('/registration') || last === '' || url.includes('/registration/error') || first === 'error') {
+    if (url.includes('/loginchangepassword') || url.includes('/registration') || last === '' || url.includes('/registration/error') || first === 'error' || first === 'locked') {
       return (<LoginPage changeState={changeState} state={state} />);
     }
     // TODO: change this to something meaningful

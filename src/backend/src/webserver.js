@@ -100,11 +100,33 @@ webapp.post('/login', async (req, res) => {
   try {
     const name = req.body.user_name;
     const resultsUser = await userLib.getUsersWithName(userDb, name);
+
+    // checks to make sure we don't have to get locked out
+    if (req.body.attempt >= 2) {
+      const response = await userLib.lockoutUser(userDb, resultsUser[0].user_id);
+      res.status(404).json( {err: 'jail'} );
+      return;
+    }
+
+    // check if we are locked out
+    if (resultsUser.length !== 0 && resultsUser[0].locked_out !== null) {
+      //we do be locked out
+
+      const locked = new Date(resultsUser[0].locked_out);
+      const now = new Date();
+      if (now - locked >= 1800000) {
+        // yay 30 minutes has passed
+        userLib.unlockUser(userDb, resultsUser[0].user_id);
+        //we can login as usual
+      } else {
+        res.status(404).json({ err: 'locked' });
+        return;
+      }
+    }
+
     if (resultsUser.length === 0) {
       res.status(404).json({ err: 'User does not exist' });
     } else if (req.body.user_password.includes(resultsUser[0].user_password)) {
-      // TODO: increase the number of characters that
-      // are able to be stored for a password for more accuracy
       const profile = await profileLib.getProfileById(profileDb, resultsUser[0].user_id);
 
       console.log(`profile is: ${profile.user_id}`);
@@ -213,6 +235,7 @@ webapp.post('/groups', async (req, res) => {
     }
 
     const userId = await userLib.getUsersWithName(userDb, newGroup.group_creator);
+    await groupMemberLib.addGroupMember(groupMemberDb, newGroup.group_id, newGroup.group_creator);
     await adminLib.addAdminForGroup(
       adminDb,
       newGroup.group_id,
@@ -280,6 +303,20 @@ webapp.get('/user/:id', async (req, res) => {
   }
 });
 
+webapp.get('/user/lockout/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('lockout user with id of ', req.params.id);
+  try {
+    const { id } = req.params;
+    const userInfo = await userLib.getUserById(userDb, id);
+    // eslint-disable-next-line no-console
+    console.log('locked out user, return val: ', userInfo);
+    res.status(200).json(userInfo);
+  } catch (err) {
+    res.status(404).json('error! at webserver/user/id/get');
+  }
+});
+
 webapp.get('/user-by-name/:name', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('in webserver, retrieve user information for supplied name of: ', req.params.name);
@@ -303,6 +340,12 @@ webapp.put('/user/:id', async (req, res) => {
     const userPassword = req.body.user_password;
     // get password from body not params!
     const userInfo = await userLib.updateUser(userDb, id, 'user_password', userPassword);
+
+    if (typeof userInfo.err !== 'undefined') {
+      res.status(404).json(userInfo);
+      return;
+    }
+
     res.status(200).json(userInfo);
   } catch (err) {
     res.status(404).json('error! at webserver/user/id/put');
@@ -545,6 +588,21 @@ webapp.post('/admins', async (req, res) => {
   console.log('POST admins, ', req.body.admin);
   try {
     const userId = await userLib.getUsersWithName(userDb, req.body.admin.adminUser);
+
+    const memberIds = await groupMemberLib.getMemberIds(groupMemberDb, req.body.admin.groupId);
+
+    let seen = false;
+    for (let i = 0; i < memberIds; i += 1) {
+      if (memberIds[i].member_id === userId) {
+        seen = true;
+        break;
+      }
+    }
+    if (!seen) {
+      //user is not member of group yet
+      res.status(400).json({ err: 'user is not member of group' });
+      return;
+    }
 
     const admin = await adminLib.addAdminForGroup(
       adminDb,

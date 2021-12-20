@@ -1,16 +1,16 @@
 const { createHash } = require('crypto');
 const database = require('../DatabaseModule');
 
-const validatePassword = (changeState, password1, password2) => {
+const validatePassword = (changeState, password1, password2, link) => {
   if (password1 !== password2) {
-    changeState({ link: '/registration/invalid' });
+    changeState({ link });
     return false;
   }
   return true;
 };
 
 const createAccount = async (changeState, username, password1, password2) => {
-  if (validatePassword(changeState, password1, password2)) {
+  if (validatePassword(changeState, password1, password2, '/registration/invalid')) {
     // username is not taken, we can create the account and empty profile!
     const newUser = {
       user_name: username,

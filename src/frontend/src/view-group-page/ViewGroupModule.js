@@ -26,7 +26,7 @@ const revokeAdmin = async (state, changeState, groupAndAdmins, setGroupAndAdmins
   return response;
 };
 
-const addAdmin = async (groupAndAdmins, setGroupAndAdmins) => {
+const addAdmin = async (groupAndAdmins, setGroupAndAdmins, changeState) => {
   const response = await database.sendPostRequest('http://localhost:8080/admins', {
     admin: {
       adminUser: document.getElementById('addAdmin').value,
@@ -35,6 +35,11 @@ const addAdmin = async (groupAndAdmins, setGroupAndAdmins) => {
       groupName: groupAndAdmins.group.group_name,
     },
   });
+
+  if (typeof response.err !== 'undefined') {
+    changeState({ link: '/viewgroup/admin' });
+    return null;
+  }
 
   await setGroupAndAdmins();
 

@@ -209,11 +209,12 @@ function ViewGroup(props) {
               <input type="button" value="Submit" id="submit" onClick={() => revokeAdmin(state, changeState, groupAndAdmins, setGroupAndAdmins)} />
             </div>
             <div id="add">
+              { state.link.includes('/viewgroup/admin') ? (<p>Error: potential admin is not a group member</p>) : (null)}
               <label htmlFor="addAdmin">
                 {'Add Admin: '}
                 <input id="addAdmin" type="text" placeholder="Enter username" />
               </label>
-              <input type="button" value="Submit" id="submit" onClick={() => addAdmin(groupAndAdmins, setGroupAndAdmins)} />
+              <input type="button" value="Submit" id="submit" onClick={() => addAdmin(groupAndAdmins, setGroupAndAdmins, changeState)} />
             </div>
             <div id="add-non-admin">
               <label htmlFor="addNonAdmin">

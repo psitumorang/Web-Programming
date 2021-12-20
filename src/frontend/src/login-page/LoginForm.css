@@ -23,7 +23,7 @@ input[type="submit"] {
     
 }
 
-.LoginForm, .RegistrationForm {
+.LoginForm, .RegistrationForm, .ChangePasswordForm {
     border: 0.5px solid rgb(0,31,84);
     border-radius: 5px;
     display: flex;
