@@ -9,6 +9,7 @@ function Groups(props) {
   // eslint-disable-next-line no-unused-vars
   const [allGroups, setAllGroups] = useState([]);
   const [nonMemberGroups, setNonMemberGroups] = useState([]);
+  const [suggestedGroup, setSuggestedGroup] = useState([]);
 
   const updateGroups = async () => {
     const groups = await lib.getGroups(changeState);
@@ -21,7 +22,16 @@ function Groups(props) {
     lib.parseGroups(changeState, groups.result[0], admins, groupMemberships);
     const groups2 = groups.result[0];
     const nonMemberGroupsResolved = await lib.nonMemberPublicGroups(groupMemberships, groups2);
+    console.log('about to go into new suggested group with groupMemberships of ', groupMemberships);
+    console.log('about to go into new suggested group with groups2 of ', groups);
+    let newSuggestedGroup = await lib.suggestGroup(groupMemberships, groups2);
+
     setNonMemberGroups(nonMemberGroupsResolved);
+    console.log('about to go into setsuggestedgroup with newsuggestedgroup of ', newSuggestedGroup);
+    if (typeof newSuggestedGroup[0] === 'undefined') {
+      newSuggestedGroup = [];
+    }
+    setSuggestedGroup(newSuggestedGroup);
   };
 
   const updateMessage = (newMessage) => {
@@ -154,8 +164,25 @@ function Groups(props) {
             ))}
           </div>
 
+          <div className="heading-for-groups" id="heading-for-suggested-group">
+            Here&apos;s a heavily personalised (not randomised at all) group recommendation:
+          </div>
+
           <div className="groups-area" id="groups-area-suggestions">
-            Here!
+            {suggestedGroup.map((group) => (
+              <div className="non-member-group group-container">
+                <div>
+                  {`Group name: ${group.group_name}`}
+                </div>
+                <div>
+                  {`Group description: ${group.group_description}`}
+                </div>
+                <div>
+                  <input type="button" value="Request to join group" id="submit" onClick={() => lib.requestJoinGroup(state.userId, group.group_id, updateMessage)} />
+                </div>
+                <p />
+              </div>
+            ))}
           </div>
 
         </div>

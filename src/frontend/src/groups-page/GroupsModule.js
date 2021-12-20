@@ -178,12 +178,9 @@ const getNonMemberPublicGroups = async (groupMemberships, groups) => {
     groupMembershipsSimplifiedArray.push(groupMemberships[i].group_id);
   }
 
-  console.log('in groupsmodulechecking nonmember section, simplied array is: ', groupMembershipsSimplifiedArray);
-
   // filter groups data, taking only groups that (a) the user is NOT in and (b) that are public
   const publicGroupsUserNotIn = [];
   for (let i = 0; i < groups.length; i += 1) {
-    console.log('in loop checking group[i].group_id', groups[i].group_id);
     if (!(groupMembershipsSimplifiedArray.includes(groups[i].group_id))) {
       if (groups[i].is_public === 1) {
         publicGroupsUserNotIn.push(groups[i]);
@@ -211,6 +208,25 @@ const nonMemberPublicGroups = async (groupMemberships, groups) => {
   return publicGroupsUserNotIn;
 };
 
+// abstracting a level from the math module b/c I think you can't mock the math module directly?
+const getRandomNum = (num) => {
+  const ranNum = Math.floor((Math.random() * num));
+  return ranNum;
+};
+
+// returns a random public group the user is not yet a member of.
+// Note - returns an ARRAY, not a single group object
+const suggestGroup = async (groupMemberships, groups) => {
+  const potentialSuggestions = await getNonMemberPublicGroups(groupMemberships, groups);
+  console.log('back in suggestgroup with potential suggestions of ', potentialSuggestions);
+  const numPotentialSuggestions = potentialSuggestions.length;
+  const choice = getRandomNum(numPotentialSuggestions);
+  console.log('choice num is ', choice);
+  const suggestedGroup = potentialSuggestions[choice];
+
+  return [suggestedGroup];
+};
+
 module.exports = {
   createGroup,
   getGroups,
@@ -219,4 +235,6 @@ module.exports = {
   getGroupMemberships,
   nonMemberPublicGroups,
   requestJoinGroup,
+  getRandomNum,
+  suggestGroup,
 };
