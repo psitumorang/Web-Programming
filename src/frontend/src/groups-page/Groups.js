@@ -17,17 +17,10 @@ function Groups(props) {
     // const propsState = props.state;
     const groupMemberships = await lib.getGroupMemberships(state.userId);
 
-    // eslint-disable-next-line
-    console.log('in update groups, group.result is:', groups.result);
-    // eslint-disable-next-line
-    console.log('in update groups, groupMemberships is:', groupMemberships);
-    // eslint-disable-next-line
-    console.log('in update groups, admins is:', admins);
     setAllGroups(groups.result);
     lib.parseGroups(changeState, groups.result[0], admins, groupMemberships);
     const groups2 = groups.result[0];
     const nonMemberGroupsResolved = await lib.nonMemberPublicGroups(groupMemberships, groups2);
-    console.log('nonMemberGroups before set state is:', nonMemberGroupsResolved);
     setNonMemberGroups(nonMemberGroupsResolved);
   };
 
@@ -159,6 +152,10 @@ function Groups(props) {
                 <p />
               </div>
             ))}
+          </div>
+
+          <div className="groups-area" id="groups-area-suggestions">
+            Here!
           </div>
 
         </div>

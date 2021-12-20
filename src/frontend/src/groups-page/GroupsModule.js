@@ -171,15 +171,7 @@ const requestJoinGroup = async (userId, groupId, updateMessage) => {
   await database.sendPostRequest('http://localhost:8080/invitations/', newRequestObj);
 };
 
-const nonMemberPublicGroups = async (groupMemberships, groups) => {
-  // delete any existing children in the inner html
-  const element = document.getElementById('groups-area-non-member');
-  if (element) {
-    while (element.firstChild) {
-      element.removeChild(element.firstChild);
-    }
-  }
-
+const getNonMemberPublicGroups = async (groupMemberships, groups) => {
   // simplify groupMembershipsArray to be just ids
   const groupMembershipsSimplifiedArray = [];
   for (let i = 0; i < groupMemberships.length; i += 1) {
@@ -202,6 +194,20 @@ const nonMemberPublicGroups = async (groupMemberships, groups) => {
   console.log('in groupsmodulechecking nonmember section, final array is: ', publicGroupsUserNotIn);
 
   // return Array
+  return publicGroupsUserNotIn;
+};
+
+const nonMemberPublicGroups = async (groupMemberships, groups) => {
+  // delete any existing children in the inner html
+  const element = document.getElementById('groups-area-non-member');
+  if (element) {
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+  }
+
+  // get nonmember public groups
+  const publicGroupsUserNotIn = getNonMemberPublicGroups(groupMemberships, groups);
   return publicGroupsUserNotIn;
 };
 
