@@ -15,13 +15,22 @@ exports[`Test Profile Page UI Profile page renders correctly 1`] = `
     <div
       id="main_title"
     >
-      Stacy Shapiro
+      me
       's FaceTok Page
     </div>
   </div>
   <div
     id="nav_button_container"
   >
+    <div
+      className="nav_button"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      role="link"
+      tabIndex={0}
+    >
+      Home
+    </div>
     <div
       className="nav_button"
       onClick={[Function]}
@@ -43,10 +52,14 @@ exports[`Test Profile Page UI Profile page renders correctly 1`] = `
       role="link"
       tabIndex={0}
     >
-      Change password
+      Change password or bio
     </div>
     <div
       className="nav_button"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      role="link"
+      tabIndex={0}
     >
       Deactivate account
     </div>
@@ -58,7 +71,7 @@ exports[`Test Profile Page UI Profile page renders correctly 1`] = `
       id="key_bio_info"
     >
       <b>
-        Stacy
+        me
         's bio
       </b>
       <p />

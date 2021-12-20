@@ -22,7 +22,7 @@ exports[`Test Home Page UI Home page renders correctly 1`] = `
     <div
       className="username"
     >
-      Hi, username!
+      Hi, me!
     </div>
   </div>
   <div
@@ -30,6 +30,10 @@ exports[`Test Home Page UI Home page renders correctly 1`] = `
   >
     <div
       className="home-link"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      role="link"
+      tabIndex={0}
     >
       Home
     </div>
@@ -58,9 +62,10 @@ exports[`Test Home Page UI Home page renders correctly 1`] = `
       </button>
       <button
         className="events"
+        onClick={[Function]}
         type="submit"
       >
-        Events
+        Analytics
       </button>
       <button
         className="groups"
@@ -70,16 +75,18 @@ exports[`Test Home Page UI Home page renders correctly 1`] = `
         Groups
       </button>
       <button
-        className="videos"
+        className="invitations"
+        onClick={[Function]}
         type="submit"
       >
-        Videos
+        Group Invitations and Requests 
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -88,50 +95,98 @@ exports[`Test Home Page UI Home page renders correctly 1`] = `
       <div
         className="post-create-area"
       >
-        User can create post here
         <div
-          className="text-area"
-        />
+          id="filterForm"
+        >
+          Filter group list by topic:
+          <div
+            id="filterInput"
+          >
+            <select
+              id="topics"
+              name="topics"
+            />
+            <div
+              id="buttons"
+            >
+              <input
+                onClick={[Function]}
+                type="submit"
+                value="Submit filters"
+              />
+              <input
+                onClick={[Function]}
+                type="submit"
+                value="Reset filters"
+              />
+            </div>
+          </div>
+        </div>
         <div
-          className="post-button"
-        />
+          id="sortForm"
+        >
+          Sort groups:
+          <div
+            id="filterInput"
+          >
+            <select
+              id="sorts"
+              name="sorts"
+            >
+              <option
+                name="Newest post"
+                value="new"
+              >
+                Newest post
+              </option>
+              <option
+                name="Number of posts"
+                value="posts"
+              >
+                Number of posts
+              </option>
+              <option
+                name="Number of members"
+                value="members"
+              >
+                Number of members
+              </option>
+            </select>
+            <div
+              id="buttons"
+            >
+              <input
+                onClick={[Function]}
+                type="submit"
+                value="Submit sort"
+              />
+              <input
+                onClick={[Function]}
+                type="submit"
+                value="Reset sort"
+              />
+            </div>
+          </div>
+        </div>
       </div>
       <div
-        className="post-area"
+        className="groups-area"
+        id="groups-area"
       >
-        Posts can be viewed here
-        <div
-          className="box-1"
-        >
-          <div
-            className="poster-picture"
-          />
-          <div
-            className="update-text"
-          />
-          <div
-            className="reply-button"
-          />
-        </div>
-        <div
-          className="box-2"
-        >
-          <div
-            className="poster-picture"
-          />
-          <div
-            className="update-text"
-          />
-          <div
-            className="reply-button"
-          />
-        </div>
+        No groups meet the criteria chosen!
       </div>
     </div>
     <div
-      className="message-updates"
+      className="side-navbar"
+      id="forMessages"
     >
-      Message updates
+      <button
+        className="messages"
+        onClick={[Function]}
+        type="submit"
+      >
+        Messages
+      </button>
     </div>
   </div>
 </div>

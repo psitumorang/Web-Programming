@@ -28,17 +28,17 @@ describe('Test LoginModule', () => {
   });
 
   test('verify user success', async () => {
-    database.sendPostRequest.mockResolvedValue({ profile: {user_id: 3} });
+    database.sendPostRequest.mockResolvedValue({ profile: [{ user_id: 3 }] });
     render(<Router><LoginForm changeState={changeState} /></Router>);
-    const response = await lib.verifyUser(changeState, 'mcleesm', 'abc');
+    const response = await lib.verifyUser(changeState, 'mcleesm', 'abc', (v)=>v, 0);
     expect(changeState).toBeCalled();
-    expect(changeState.mock.calls[0][0]).toStrictEqual({link: '/main', userId: 3});
+    expect(changeState.mock.calls[0][0]).toStrictEqual({link: '/main', userId: 3, username: 'mcleesm'});
   });
 
   test('verify user wrong username', async () => {
     database.sendPostRequest.mockResolvedValue({ err: 'user does not exist' });
     render(<Router><LoginForm changeState={changeState} /></Router>);
-    const response = await lib.verifyUser(changeState, 'mcleesm', 'abc');
+    const response = await lib.verifyUser(changeState, 'mcleesm', 'abc', (v)=>v, 0);
     expect(changeState).toBeCalled();
     expect(changeState.mock.calls[0][0]).toStrictEqual({link: '/error'});
   });
@@ -46,7 +46,7 @@ describe('Test LoginModule', () => {
   test('verify user wrong password', async () => {
     database.sendPostRequest.mockResolvedValue({ err: 'password incorrect' });
     render(<Router><LoginForm changeState={changeState} /></Router>);
-    const response = await lib.verifyUser(changeState, 'mcleesm', 'abc');
+    const response = await lib.verifyUser(changeState, 'mcleesm', 'abc', (v)=>v, 0);
     expect(changeState).toBeCalled();
     expect(changeState.mock.calls[0][0]).toStrictEqual({link: '/error'});
   });

@@ -1,0 +1,264 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Group Page UI Group page renders correctly 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="header"
+  >
+    <div
+      className="social-media-title"
+    >
+      Social Media
+    </div>
+    <div
+      className="profile-picture"
+    >
+      <div
+        className="img"
+      />
+    </div>
+    <div
+      className="username"
+    >
+      Hi, me!
+    </div>
+  </div>
+  <div
+    className="top-navbar"
+  >
+    <div
+      className="home-link"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      role="link"
+      tabIndex={0}
+    >
+      Home
+    </div>
+    <div
+      className="profile-link"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      role="link"
+      tabIndex={0}
+    >
+      Profile
+    </div>
+  </div>
+  <div
+    className="main-container"
+  >
+    <div
+      className="side-navbar"
+    >
+      <button
+        className="notifications"
+        onClick={[Function]}
+        type="submit"
+      >
+        Notifications
+      </button>
+      <button
+        className="analytics"
+        onClick={[Function]}
+        type="submit"
+      >
+        Analytics
+      </button>
+      <button
+        className="groups"
+        onClick={[Function]}
+        type="submit"
+      >
+        Groups
+      </button>
+      <button
+        className="invitations"
+        onClick={[Function]}
+        type="submit"
+      >
+        Group Invitations and Requests 
+      </button>
+      <button
+        className="photos"
+        type="submit"
+      >
+        Photos
+      </button>
+    </div>
+    <div
+      className="main-area"
+    >
+      <div
+        className="post-area"
+      >
+        <div
+          className="left-group-input"
+        >
+          <div
+            className="textDiv"
+            id="groupnameDiv"
+          >
+            <label
+              htmlFor="groupname"
+            >
+              Group Name:
+              <input
+                className="text"
+                id="groupname"
+                placeholder="group name"
+                type="text"
+              />
+            </label>
+          </div>
+          <div
+            className="textDiv"
+            id="groupdescriptionDiv"
+          >
+            <label
+              htmlFor="groupdescription"
+            >
+              Group Description:
+              <input
+                className="text"
+                id="groupdescription"
+                placeholder="group description"
+                type="text"
+              />
+            </label>
+          </div>
+          <div
+            className="textDiv"
+            id="ispublicDiv"
+          >
+            <label
+              htmlFor="ispublic"
+            >
+              Is Public?
+              <input
+                className="text"
+                id="ispublic"
+                placeholder="1 or 0"
+                type="text"
+              />
+            </label>
+          </div>
+        </div>
+        <div
+          className="right-group-input"
+        >
+          <div
+            className="textDiv"
+            id="topic1Div"
+          >
+            <label
+              htmlFor="topic1"
+            >
+              Topic 1:
+              <input
+                className="text"
+                id="topic1"
+                placeholder="group topic 1"
+                type="text"
+              />
+            </label>
+          </div>
+          <div
+            className="textDiv"
+            id="topic2Div"
+          >
+            <label
+              htmlFor="groupdescription"
+            >
+              Topic 2:
+              <input
+                className="text"
+                id="topic2"
+                placeholder="group topic 2"
+                type="text"
+              />
+            </label>
+          </div>
+          <div
+            className="textDiv"
+            id="topic-3-Div"
+          >
+            <label
+              htmlFor="ispublic"
+            >
+              Topic 3:
+              <input
+                className="text"
+                id="topic3"
+                placeholder="group topic 3"
+                type="text"
+              />
+            </label>
+          </div>
+        </div>
+        <button
+          className="createGroup"
+          onClick={[Function]}
+          type="submit"
+        >
+           Create A Group 
+        </button>
+      </div>
+      <div
+        className="heading-for-groups"
+        id="heading-for-groups"
+      >
+        Groups in which you're a member:
+      </div>
+      <div
+        className="groups-area"
+        id="groups-area"
+      >
+        There are no groups yet!
+      </div>
+      <div
+        className="groups-non-member-message"
+        id="groups-non-member-message"
+      >
+         
+      </div>
+      <div
+        className="heading-for-groups"
+        id="heading-for-groups-non-member"
+      >
+        Other public groups you can request to join:
+      </div>
+      <div
+        className="groups-area"
+        id="groups-area-non-member"
+      >
+        <p />
+      </div>
+      <div
+        className="heading-for-groups"
+        id="heading-for-suggested-group"
+      >
+        Here's a heavily personalised (not randomised at all) group recommendation:
+      </div>
+      <div
+        className="groups-area"
+        id="groups-area-suggestions"
+      />
+    </div>
+    <div
+      className="side-navbar"
+      id="forMessages"
+    >
+      <button
+        className="messages"
+        onClick={[Function]}
+        type="submit"
+      >
+        Messages
+      </button>
+    </div>
+  </div>
+</div>
+`;
