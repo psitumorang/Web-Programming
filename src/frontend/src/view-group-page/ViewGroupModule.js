@@ -227,6 +227,13 @@ const deleteReply = async (changeState, replyId) => {
   return response;
 };
 
+const editReply = async (replyId, setEditComment) => {
+  const response = await database.sendPostRequest(`http://localhost:8080/reply/${replyId}`, { caption: document.getElementById('edit-reply').value });
+  setEditComment(-1);
+
+  return response;
+};
+
 const createReply = async (postId, postGroup, postingUser, caption, changeState) => {
   const newReply = {
     post_id: postId,
@@ -317,7 +324,8 @@ const parsePosts = (posts) => {
     // eslint-disable-next-line prefer-template
     + `<button type="reply-button" id="reply-button-${postId}"> Reply </button>`
     + '</div>'
-    + '<div type="flag-and-delete">'
+    + '<div type="flag-and-delete-post">'
+    + '<p>Post options: </p>'
     + `<button type="flag" id="flag-post-${postId}"> Flag </button>`
     + `<button type="hide" id="hide-post-${postId}"> Hide </button>`
     + `<button type="delete" id="delete-post-${postId}"> Delete </button>`
@@ -335,7 +343,7 @@ const parsePosts = (posts) => {
   }
 };
 
-const parseReplies = (posts, replies) => {
+const parseReplies = (posts, replies, editComment, setEditComment) => {
   // iterate over all posts
   for (let i = 0; i < posts.length; i += 1) {
     const post = posts[i];
@@ -362,7 +370,7 @@ const parseReplies = (posts, replies) => {
 
       if (replyPostId === postId) {
         // eslint-disable-next-line prefer-template
-        const replyBlock = '<div class="reply-container">'
+        let replyBlock = '<div class="reply-container">'
         + '<div class="reply-info">'
         + '<ul>'
         + '<li id="reply-id" >Reply Id: '
@@ -370,28 +378,42 @@ const parseReplies = (posts, replies) => {
         + '</li>'
         + '<li id="replying-user">Replying User: '
         + replyUser
-        + '</li>'
-        + '<li id="caption">Caption: '
-        + caption
-        + '</li>'
-        + '</ul>'
-        + '</div>'
-        + '<div type="flag-and-delete">'
-        + `<button type="flag" id="flag-reply-${replyId}"> Flag </button>`
-        + `<button type="hide" id="hide-reply-${replyId}"> Hide </button>`
-        + `<button type="delete" id="delete-reply-${replyId}"> Delete </button>`
-        + '</div>'
-        + '</div>';
+        + '</li>';
+
+        if (editComment === -1) {
+          replyBlock += `<li id="caption">Caption: ${caption}`
+          + '</li>'
+          + '</ul>'
+          + '</div>'
+          + '<div type="flag-and-delete">'
+          + `<button type="flag" id="flag-reply-${replyId}"> Flag </button>`
+          + `<button type="hide" id="hide-reply-${replyId}"> Hide </button>`
+          + `<button type="edit" id="edit-reply-${replyId}"> Edit </button>`
+          + `<button type="delete" id="delete-reply-${replyId}"> Delete </button>`
+          + '</div>'
+          + '</div>';
+        } else {
+          replyBlock += '</ul>'
+            + '</div>'
+            + `<textarea class="reply-input" id="edit-reply" placeholder="reply to this post">${caption}</textarea>`
+            // eslint-disable-next-line prefer-template
+            + '<button type="edit-reply-submit-button" id="edit-reply-submit-button"> Reply </button>'
+            + '</div>'
+            + '</div>';
+        }
 
         const replyDiv = document.createElement('div');
         replyDiv.innerHTML = replyBlock;
         element.appendChild(replyDiv);
+        if (document.getElementById('edit-reply-submit-button') !== null) {
+          document.getElementById('edit-reply-submit-button').onclick = () => { editReply(replyId, setEditComment); };
+        }
       }
     }
   }
 };
 
-const parseOnclicks = (state, changeState, posts, replies) => {
+const parseOnclicks = (state, changeState, posts, replies, setEditComment) => {
   // eslint-disable-next-line no-console
   console.log('parsing on clicks');
   // iterate over all replies and those that belong to the current post will be appended
@@ -425,11 +447,13 @@ const parseOnclicks = (state, changeState, posts, replies) => {
     const flagReplyButton = document.getElementById(`flag-reply-${replyId}`);
     const hideReplyButton = document.getElementById(`hide-reply-${replyId}`);
     const deleteReplyButton = document.getElementById(`delete-reply-${replyId}`);
+    const editReplyButton = document.getElementById(`edit-reply-${replyId}`);
 
     if (flagReplyButton) {
       flagReplyButton.onclick = () => { flagReply(changeState, replyId); };
       hideReplyButton.onclick = () => { hideReply(changeState, replyId); };
       deleteReplyButton.onclick = () => { deleteReply(changeState, replyId); };
+      editReplyButton.onclick = () => { setEditComment(replyId); };
     }
   }
 };

@@ -92,6 +92,23 @@ const deleteReply = async (db, replyId) => {
   return null;
 };
 
+const editReply = async (db, replyId, caption) => {
+  const query = 'UPDATE reply_lst SET caption=? WHERE reply_id=?';
+
+  const params = [caption, replyId];
+
+  try {
+    await db.execute(query, params);
+    // eslint-disable-next-line no-console
+    console.log(`Updated reply with id: ${replyId}`);
+    return replyId;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
 // get all replies
 const getReplies = async (db, groupId) => {
   try {
@@ -107,6 +124,7 @@ const getReplies = async (db, groupId) => {
   }
   return null;
 };
+
 // get next available id
 const getNextId = async (db) => {
   try {
@@ -126,6 +144,7 @@ module.exports = {
   flagReply,
   hideReply,
   deleteReply,
+  editReply,
   getReplies,
   getNextId,
 };
