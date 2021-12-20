@@ -88,6 +88,101 @@ const addTopics = async (db, newTopics) => {
   }
 };
 
+// get all groups with same groupname
+const getTopics = async (db) => {
+  try {
+    const query = 'SELECT DISTINCT group_topic FROM group_topics';
+    const [rows] = await db.execute(query);
+    // eslint-disable-next-line no-console
+    console.log(`groups: ${JSON.stringify(rows)}`);
+
+    const topics = [];
+    for (let i = 0; i < rows.length; i += 1) {
+      topics.push(rows[i]['group_topic']);
+    }
+
+    return topics;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+// get all groups with same groupname
+const getTopicsByGroupId = async (db, id) => {
+  try {
+    const query = 'SELECT DISTINCT group_topic FROM group_topics where group_id=?';
+    const [rows] = await db.execute(query, [id]);
+    // eslint-disable-next-line no-console
+    console.log(`groups: ${JSON.stringify(rows)}`);
+
+    const topics = [];
+    for (let i = 0; i < rows.length; i += 1) {
+      topics.push(rows[i]['group_topic']);
+    }
+
+    return topics;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+// get all groups with same groupname
+const getGroupsWithTopic = async (db, topic) => {
+  console.log('get groups with topic');
+  try {
+    const query = 'SELECT * FROM group_topics WHERE group_topic=?';
+    const [rows] = await db.execute(query, [topic]);
+    // eslint-disable-next-line no-console
+    console.log(`groups: ${JSON.stringify(rows[0])}`);
+
+    let groups = [];
+    for (let i = 0; i < rows.length; i += 1) {
+      const g = await getGroupById(db, rows[i].group_id);
+      const topics = await getTopicsByGroupId(db, rows[i].group_id);
+
+      console.log(g);
+      if (g.is_public === 1) {
+        g.topics = topics;
+        groups.push(g);
+      }
+    }
+
+    return [groups];
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
+// get all groups
+const getPublicGroups = async (db) => {
+  try {
+    const query = 'SELECT * FROM group_lst WHERE is_public=1';
+    const [rows] = await db.execute(query);
+    // eslint-disable-next-line no-console
+    console.log(`Group: ${JSON.stringify(rows)}`);
+
+    const groups = [];
+    for (let i = 0; i < rows.length; i += 1) {
+      const g = await getTopicsByGroupId(db, rows[i].group_id);
+
+      console.log(g);
+      rows[i].topics = g;
+    }
+
+    return [rows];
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
 // get all groups
 const getGroups = async (db) => {
   try {
@@ -219,4 +314,7 @@ module.exports = {
   getNextId,
   getGroupById,
   getAnalyticsFacts,
+  getTopics,
+  getGroupsWithTopic,
+  getPublicGroups,
 };
