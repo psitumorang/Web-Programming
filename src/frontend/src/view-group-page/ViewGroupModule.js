@@ -1,3 +1,5 @@
+import sendUploadPostRequest from '../UploadModule';
+
 const database = require('../DatabaseModule');
 
 const getGroup = async (id) => {
@@ -69,16 +71,112 @@ const leaveGroup = async (userId, groupId, updateMessage) => {
   updateMessage('Membership deleted! You are no longer a member of the group');
 };
 
-const createPost = async (changeState, postGroup, postingUser, caption) => {
+const uploadMediaPost = async (
+  changeState,
+  postGroup,
+  postingUser,
+  caption,
+  selected,
+  updateState,
+  postingUsername,
+) => {
+  const file = document.getElementById('postContent').files[0];
+  console.log(file);
+  if (selected === 'image' && file.size > 10000000) {
+    updateState({ link: '/viewgroup/post/error' });
+    return null;
+  } if ((selected === 'audio' || selected === 'video') && file.size > 100000000) {
+    updateState({ link: '/viewgroup/post/error' });
+    return null;
+  }
+
+  const data = new FormData();
+  data.append('file', file);
+  data.append('upload_preset', ['yj7lgb8v']);
+  const res = sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
+    // TODO change this to be right
+    console.log('SENT MEDIA');
+    console.log(res, mediaUrl);
+    const newPost = {
+      post_group: postGroup,
+      posting_user: postingUser,
+      caption,
+      posting_username: postingUsername,
+    };
+
+    if (selected === 'image') {
+      newPost.photourl = mediaUrl.data.url;
+    } else if (selected === 'video') {
+      newPost.videoUrl = mediaUrl.data.url;
+    } else {
+      newPost.audioUrl = mediaUrl.data.url;
+    }
+
+    return database.sendPostRequest(`http://localhost:8080/post/${selected}`, newPost).then(() => {
+      changeState({ link: '/viewgroup' });
+    });
+  });
+  return null;
+};
+
+const createPost = async (
+  changeState,
+  postGroup,
+  postingUser,
+  caption,
+  selected,
+  updateState,
+  postingUsername,
+) => {
+  if (selected === 'audio') {
+    return uploadMediaPost(
+      changeState,
+      postGroup,
+      postingUser,
+      caption,
+      selected,
+      updateState,
+      postingUsername,
+    );
+  }
+  if (selected === 'video') {
+    return uploadMediaPost(
+      changeState,
+      postGroup,
+      postingUser,
+      caption,
+      selected,
+      updateState,
+      postingUsername,
+    );
+  }
+  if (selected === 'image') {
+    return uploadMediaPost(
+      changeState,
+      postGroup,
+      postingUser,
+      caption,
+      selected,
+      updateState,
+      postingUsername,
+    );
+  }
+
   const newPost = {
     post_group: postGroup,
     posting_user: postingUser,
-    // eslint-disable-next-line
-    caption: caption,
+    posting_username: postingUsername,
+    caption,
   };
 
-  // eslint-disable-next-line
-  const response = await database.sendPostRequest('http://localhost:8080/post', newPost);
+  // TODO check the length of post, if over 200 characters say too long
+  if (caption.length > 200) {
+    changeState({ link: '/viewgroup/post/error' });
+    return null;
+  }
+
+  const response = await database.sendPostRequest('http://localhost:8080/post/text', newPost);
+  return response;
 };
 
 const getPosts = async (changeState, groupId) => {
@@ -171,9 +269,28 @@ const parsePosts = (posts) => {
   for (let i = 0; i < posts.length; i += 1) {
     const post = posts[i];
     const postId = post.post_id;
-    const postingUser = post.posting_user;
+    const postingUser = post.posting_username;
     // eslint-disable-next-line prefer-destructuring
     const caption = post.caption;
+    console.log(posts[i]);
+    let content = '';
+    if (posts[i].photourl !== null) {
+      content += `<div class="content image">
+          <img src=${posts[i].photourl} class="image" alt="${posts[i].posting_username}'s image" />
+        </div>`;
+    } else if (posts[i].audioUrl !== null) {
+      content += `<div class="content audio">
+          <audio controls>
+            <source src=${posts[i].audioUrl}>
+          </audio>
+        </div>`;
+    } else if (posts[i].videoUrl !== null) {
+      content += `<div class="content video">
+          <video src=${posts[i].videoUrl} controls>
+            Something went wrong!
+          </video>
+        </div>`;
+    }
 
     // eslint-disable-next-line prefer-template
     const postBlock = `<div class="post-container" id=${postId}>`
@@ -187,6 +304,9 @@ const parsePosts = (posts) => {
     + '</li>'
     + '<li id="caption">Caption: '
     + caption
+    + '</li>'
+    + '<li id="content">'
+    + content
     + '</li>'
     + '</ul>'
     + '</div>'
@@ -314,7 +434,7 @@ const parseOnclicks = (state, changeState, posts, replies) => {
   }
 };
 
-module.exports = {
+export {
   getGroup,
   getAdmins,
   revokeAdmin,

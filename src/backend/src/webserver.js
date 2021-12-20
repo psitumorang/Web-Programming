@@ -637,7 +637,7 @@ webapp.delete('/admins', async (req, res) => {
   }
 });
 
-webapp.post('/post', async (req, res) => {
+webapp.post('/post/text', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('create a group post');
   try {
@@ -647,11 +647,102 @@ webapp.post('/post', async (req, res) => {
       post_group: req.body.post_group,
       posting_user: req.body.posting_user,
       caption: req.body.caption,
+      posting_username: req.body.posting_username,
+    };
+
+    console.log(`new post ${newPost.post_id}, ${newPost.post_group} , ${newPost.posting_user} , ${newPost.caption} , ${newPost.posting_username} `);
+
+    const result = await postLib.addTextPost(postDb, newPost);
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        post: newPost,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+webapp.post('/post/image', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('create a group post');
+  try {
+    const nextId = await postLib.getNextId(postDb);
+    const newPost = {
+      post_id: nextId + 1,
+      post_group: req.body.post_group,
+      posting_user: req.body.posting_user,
+      caption: req.body.caption,
+      photourl: req.body.photourl,
+      posting_username: req.body.posting_username,
     };
 
     console.log(`new post ${newPost.post_id}, ${newPost.post_group} , ${newPost.posting_user} , ${newPost.caption} `);
 
-    const result = await postLib.addPost(postDb, newPost);
+    const result = await postLib.addImagePost(postDb, newPost);
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        post: newPost,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+webapp.post('/post/audio', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('create a group post');
+  try {
+    const nextId = await postLib.getNextId(postDb);
+    const newPost = {
+      post_id: nextId + 1,
+      post_group: req.body.post_group,
+      posting_user: req.body.posting_user,
+      caption: req.body.caption,
+      audioUrl: req.body.audioUrl,
+      posting_username: req.body.posting_username,
+    };
+
+    console.log(`new post ${newPost.post_id}, ${newPost.post_group} , ${newPost.posting_user} , ${newPost.caption} , ${newPost.audioUrl} , ${newPost.posting_username} `);
+
+    const result = await postLib.addAudioPost(postDb, newPost);
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(201).json({
+        post: newPost,
+      });
+    }
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+webapp.post('/post/video', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('create a group post');
+  try {
+    const nextId = await postLib.getNextId(postDb);
+    const newPost = {
+      post_id: nextId + 1,
+      post_group: req.body.post_group,
+      posting_user: req.body.posting_user,
+      caption: req.body.caption,
+      videoUrl: req.body.videoUrl,
+      posting_username: req.body.posting_username,
+    };
+
+    console.log(`new post ${newPost.post_id}, ${newPost.post_group} , ${newPost.posting_user} , ${newPost.caption} `);
+
+    const result = await postLib.addVideoPost(postDb, newPost);
     if (result === null) {
       res.status(404).json({ err: err.message });
     } else {

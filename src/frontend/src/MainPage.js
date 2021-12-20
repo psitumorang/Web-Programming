@@ -62,7 +62,7 @@ function MainPage() {
     if (url.includes('/changepassword')) {
       return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);
     }
-    if (url.includes('/viewgroup') || url.includes('/viewgroup/error')) {
+    if (url.includes('/viewgroup') || url.includes('/viewgroup/error') || url.includes('/view-group-page/post/error')) {
       console.log('view group trying to error)');
       return (<ViewGroup changeState={changeState} state={state} />);
     }
