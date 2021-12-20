@@ -18,6 +18,7 @@ import DeactivateAccountPage from './profile-page/deactivate-account-page/Deacti
 import Messages from './messages-page/Messages';
 import Conversation from './conversation-page/Conversation';
 import AnalyticsPage from './analytics-page/AnalyticsPage';
+import FlaggedPosts from './flagged-posts/FlaggedPosts';
 
 function MainPage() {
   const [state, updateState] = useState(
@@ -73,7 +74,9 @@ function MainPage() {
     if (url.includes('/deactivate-account')) {
       return (<DeactivateAccountPage changeState={changeState} state={state} />);
     }
-
+    if (url.includes('/flaggedposts')) {
+      return (<FlaggedPosts changeState={changeState} state={state} />);
+    }
     if (url.includes('/analytics')) {
       return (<AnalyticsPage changeState={changeState} state={state} />);
     }

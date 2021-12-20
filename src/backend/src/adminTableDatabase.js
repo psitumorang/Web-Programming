@@ -49,6 +49,7 @@ const getAdmins = async (db, groupId) => {
     const [rows] = await db.execute(query, params);
     // eslint-disable-next-line no-console
     console.log(`Got admins for group: ${rows}`);
+    console.log(rows);
     return rows;
   } catch (err) {
     // eslint-disable-next-line no-console

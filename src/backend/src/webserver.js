@@ -246,7 +246,7 @@ webapp.post('/groups', async (req, res) => {
     await notifLib.addNotification(
       notifDb,
       userId[0].user_id,
-      { notification: { isRead: false, msg: `Congratulations! You are now the creator and admin of the group ${newGroup.group_name}` } },
+      { isRead: false, msg: `Congratulations! You are now the creator and admin of the group ${newGroup.group_name}` },
     );
 
     const resultsTopics = await groupLib.addTopics(groupDb, newTopics);
@@ -720,7 +720,7 @@ webapp.delete('/admins', async (req, res) => {
       return;
     }
 
-    await notifLib.addNotification(notifDb, admin[0].admin_id, { notification: { isRead: 0, msg: `You were removed as admin from ${req.query.groupName}. Too bad so sad :(` } });
+    await notifLib.addNotification(notifDb, admin[0].admin_id, { isRead: 0, msg: `You were removed as admin from ${req.query.groupName}. Too bad so sad :(` });
 
     res.status(200).json(admin);
   } catch (err) {
@@ -847,11 +847,84 @@ webapp.post('/post/video', async (req, res) => {
   return null;
 });
 
+webapp.get('/post/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get post by id');
+  const { id } = req.params;
+  try {
+    const post = await postLib.getPostById(postDb, id);
+
+    res.status(200).json({ post });
+    return;
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+webapp.get('/flag-post/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log(`get flagged posts for user with id ${req.params.id}`);
+  const id = parseInt(req.params.id);
+  try {
+    const getGroups = await groupMemberLib.getGroupsForUser(groupDb, id);
+
+    const adminFor = [];
+    for (let i = 0; i < getGroups.length; i += 1) {
+      const admin = await adminLib.getAdmins(groupDb, getGroups[i]);
+      for (let j = 0; j < admin.length; j += 1) {
+        if (admin[j].admin_id === id) {
+          adminFor.push(getGroups[i]);
+        }
+      }
+    }
+    console.log(adminFor);
+    const flaggedPosts = [];
+    for (let k = 0; k < adminFor.length; k += 1) {
+      const posts = await postLib.getPosts(postDb, adminFor[k]);
+      console.log(posts);
+      for (let m = 0; m < posts[0].length; m++) {
+        const flags = await postLib.isFlagged(postDb, posts[0][m].post_id);
+        console.log(posts[0][m].post_id, flags);
+        if (flags.length !== 0) {
+          const group = await groupLib.getGroupById(groupDb, adminFor[k]);
+          const user = await userLib.getUserById(userDb, flags[0].flagging_user);
+          console.log(group, user);
+          posts[0][m].flagger = flags[0].flagging_user;
+          posts[0][m].flaggerName = user[0].user_name;
+          posts[0][m].groupName = group.group_name;
+          flaggedPosts.push(posts[0][m]);
+        }
+      }
+    }
+
+    res.status(200).json({ flaggedPosts });
+    return;
+  } catch (err) {
+    res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
 webapp.put('/flag-post/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log(`flag a group post with id ${JSON.stringify(req.params.id)}`);
+
+  const { flaggerId, flaggerName, groupId, groupName } = req.body;
+  console.log(flaggerId, flaggerName, groupId, groupName);
   try {
-    const result = await postLib.flagPost(postDb, req.params.id);
+    const result = await postLib.flagPost(postDb, req.params.id, flaggerId);
+
+    const admins = await adminLib.getAdmins(adminDb, groupId);
+    console.log('ADMINS');
+    for (let i = 0; i < admins.length; i += 1) {
+      console.log(admins[i].admin_id);
+      await notifLib.addNotification(
+        notifDb,
+        admins[i].admin_id,
+        { isRead: false, msg: `A post has been flagged in your group, ${groupName}, by ${flaggerName}. Please view the flagged posts page to resolve.` },
+      );
+    }
 
     if (result === null) {
       res.status(404).json({ err: err.message });
@@ -862,6 +935,56 @@ webapp.put('/flag-post/:id', async (req, res) => {
     }
   } catch (err) {
     res.status(404).json({ err: err.message });
+  }
+  return null;
+});
+
+webapp.delete('/flag-post/:id', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log(`flag a group post with id ${JSON.stringify(req.params.id)}`);
+
+  const { flaggerId, flaggerName, groupId, deleted, author } = req.body;
+  try {
+    const result = await postLib.removePostFlag(postDb, req.params.id);
+    const id = await postLib.getPostById(postDb, req.params.id);
+    console.log(result, id, deleted);
+    if (deleted === 1) {
+      //they wanted to delete the post
+      console.log('DELETE');
+      //TODO: delete comments before delte post
+      const result = await postLib.deletePost(postDb, req.params.id);
+
+      //notify the author and flagger
+      await notifLib.addNotification(
+        notifDb,
+        flaggerId,
+        { isRead: false, msg: 'Congrats! A post YOU flagged was deleted by an admin. Great work.' } ,
+      );
+      await notifLib.addNotification(
+        notifDb,
+        id[0].posting_user,
+        { isRead: false, msg: 'Oh no, a post you made was flagged by a user and deleted by an admin. Maybe watch what you are posting...' },
+      );
+    } else {
+      //kept the post
+      //notify the flagger
+      console.log('KEEP');
+      await notifLib.addNotification(
+        notifDb,
+        flaggerId,
+        { isRead: false, msg: 'Sorry, a post YOU flagged was NOT deleted by the admin. Guess it was not thaaaaat bad...' },
+      );
+    }
+
+    if (result === null) {
+      res.status(404).json({ err: err.message });
+    } else {
+      res.status(200).json({
+        result,
+      });
+    }
+  } catch (err) {
+    console.log(err);
   }
   return null;
 });
