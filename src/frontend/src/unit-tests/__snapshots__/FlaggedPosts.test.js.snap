@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Flagged Posts Page UI FlaggedPosts page renders correctly 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="header"
+  >
+    <div
+      className="social-media-title"
+    >
+      Social Media
+    </div>
+    <div
+      className="profile-picture"
+    >
+      <div
+        className="img"
+      />
+    </div>
+    <div
+      className="username"
+    >
+      Hi, me!
+    </div>
+  </div>
+  <div
+    className="top-navbar"
+  >
+    <div
+      className="home-link"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      role="link"
+      tabIndex={0}
+    >
+      Home
+    </div>
+    <div
+      className="profile-link"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      role="link"
+      tabIndex={0}
+    >
+      Profile
+    </div>
+  </div>
+  <div
+    className="main-container"
+  >
+    <div
+      className="side-navbar"
+    >
+      <button
+        className="notifications"
+        onClick={[Function]}
+        type="submit"
+      >
+        Notifications
+      </button>
+      <button
+        className="events"
+        onClick={[Function]}
+        type="submit"
+      >
+        Analytics
+      </button>
+      <button
+        className="groups"
+        onClick={[Function]}
+        type="submit"
+      >
+        Groups
+      </button>
+      <button
+        className="invitations"
+        onClick={[Function]}
+        type="submit"
+      >
+        Group Invitations and Requests 
+      </button>
+      <button
+        className="photos"
+        type="submit"
+      >
+        Photos
+      </button>
+    </div>
+    <div
+      className="main-area"
+    >
+      <div
+        className="post-flag-area"
+        id="post-create-area"
+      >
+        No posts have been flagged! You are off the hook :D
+      </div>
+    </div>
+    <div
+      className="side-navbar"
+      id="forMessages"
+    >
+      <button
+        className="messages"
+        onClick={[Function]}
+        type="submit"
+      >
+        Messages
+      </button>
+    </div>
+  </div>
+</div>
+`;

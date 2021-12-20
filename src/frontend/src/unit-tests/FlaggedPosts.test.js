@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
 import { BrowserRouter as Router } from 'react-router-dom';
-import ProfilePage from '../profile-page/ProfilePage';
+import FlaggedPosts from '../flagged-posts/FlaggedPosts';
 
 /**
  * @jest-environment jsdom
@@ -10,9 +10,9 @@ import ProfilePage from '../profile-page/ProfilePage';
 
 const changeLink = jest.fn();
 
-describe('Test Profile Page UI', () => {
-  test('Profile page renders correctly', () => {
-    const component = renderer.create(<ProfilePage state={{username: 'me'}} />);
+describe('Test Flagged Posts Page UI', () => {
+  test('FlaggedPosts page renders correctly', () => {
+    const component = renderer.create(<FlaggedPosts changeState={changeLink} state={{username: 'me'}} />);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });

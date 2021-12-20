@@ -29,12 +29,12 @@ describe('tests RegistrationModule', () => {
   });
 
   test('validatePassword match', async () => {
-    const res = lib.validatePassword(changeState, 'password', 'password');
+    const res = lib.validatePassword(changeState, 'password', 'password', '/registration/invalid');
     expect(res).toBe(true);
   });
 
   test('validatePassword not match', () => {
-    const res = lib.validatePassword(changeState, 'password', 'no match');
+    const res = lib.validatePassword(changeState, 'password', 'no match', '/registration/invalid');
     expect(res).toBe(false);
     expect(changeState.mock.calls.length).toBe(1);
     expect(changeState.mock.calls[0][0]).toStrictEqual({link: '/registration/invalid'});

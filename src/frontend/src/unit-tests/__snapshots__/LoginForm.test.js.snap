@@ -49,6 +49,16 @@ exports[`Test Login Form UI Login page renders correctly 1`] = `
        Create an account. 
     </a>
   </p>
+  <p>
+    Forgot your password?
+    <a
+      href="/loginchangepassword"
+      id="passwordLink"
+      onClick={[Function]}
+    >
+       Create a new password. 
+    </a>
+  </p>
   <a
     href="/main"
     onClick={[Function]}

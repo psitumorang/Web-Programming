@@ -83,7 +83,7 @@ function Messages(props) {
           <button type="submit" className="events" onClick={() => changeState({ link: '/analytics' })}>Analytics</button>
           <button type="submit" className="groups" onClick={() => changeState({ link: '/groups' })}>Groups</button>
           <button type="submit" className="invitations" onClick={() => changeState({ link: '/invitations' })}>Group Invitations and Requests </button>
-          <button type="submit" className="photos">Photos</button>
+          <button type="submit" className="photos" onClick={() => changeState({ link: '/flaggedposts' })}>Flagged posts</button>
         </div>
 
         <div className="main-area">
@@ -123,6 +123,7 @@ function Messages(props) {
 
         <div className="side-navbar" id="forMessages">
           <button type="submit" className="messages" onClick={() => changeState({ link: '/messages' })}>Messages</button>
+          <button type="submit" className="logout" onClick={() => changeState({ link: '/' })}>Log out</button>
         </div>
 
       </div>

@@ -12,14 +12,14 @@ const changeState = jest.fn();
 
 describe('Test Home Page UI', () => {
   test('change link called when notification button clicked', async () => {
-    render(<Router><Home changeState={changeState} /></Router>);
+    render(<Router><Home changeState={changeState} state={{username: 'me'}} /></Router>);
     document.getElementsByClassName('notifications')[0].click();
     expect(changeState).toBeCalled();
     expect(changeState.mock.calls[0][0]).toStrictEqual({link: '/notifications'});
   });
 
   test('Home page renders correctly', () => {
-    const component = renderer.create(<Home changeState={changeState} />);
+    const component = renderer.create(<Home changeState={changeState} state={{username: 'me'}} />);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });

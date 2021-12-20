@@ -89,6 +89,7 @@ function Home(props) {
 
         <div className="side-navbar" id="forMessages">
           <button type="submit" className="messages" onClick={() => changeState({ link: '/messages' })}>Messages</button>
+          <button type="submit" className="logout" onClick={() => changeState({ link: '/' })}>Log out</button>
         </div>
 
       </div>
