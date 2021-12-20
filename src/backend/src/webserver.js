@@ -289,14 +289,15 @@ webapp.get('/groups', async (req, res) => {
   }
 });
 
-webapp.get('/topics/:topic', async (req, res) => {
+webapp.get('/topics/:topic/:sort', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('get all groups with topic');
 
   const { topic } = req.params;
+  const { sort } = req.params;
   try {
     if (topic === 'all') {
-      const groups = await groupLib.getPublicGroups(groupDb);
+      const groups = await groupLib.getPublicGroups(groupDb, sort);
       res.status(200).json({ groups: groups });
       return;
     }

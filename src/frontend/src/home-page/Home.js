@@ -11,16 +11,17 @@ const clickProfile = (props) => {
 function Home(props) {
   const { changeState, state } = props;
   const [filters, setFilters] = useState([]);
-  const [selected, updateSelected] = useState('');
+  const [selectedFilter, updateSelectedFilter] = useState('');
+  const [selectedSort, updateSelectedSort] = useState('none');
 
   const update = async () => {
     console.log('UPDATE');
     await lib.getFilterOptions(setFilters);
-    const groups = await lib.getFilteredGroups(selected);
-    lib.parseFilteredGroups(groups, changeState, selected);
+    const groups = await lib.getFilteredGroups(selectedFilter, selectedSort);
+    lib.parseFilteredGroups(groups, changeState, selectedFilter);
   };
-  console.log(filters, selected);
-  useEffect(() => { update(); }, [selected]);
+  console.log(filters, selectedFilter, selectedSort);
+  useEffect(() => { update(); }, [selectedFilter, selectedSort]);
 
   return (
     <div className="container">
@@ -51,17 +52,38 @@ function Home(props) {
         <div className="main-area">
 
           <div className="post-create-area">
-            Filter group list by topic:
-            <select id="topics" name="topics">
-              {filters.map((filter) => (
-                <option value={filter} name={filter}>{filter}</option>
-              ))}
-            </select>
-            <input type="submit" onClick={() => lib.changeSelected(updateSelected)} value="Submit filters" />
+            <div id="filterForm">
+              Filter group list by topic:
+              <div id="filterInput">
+                <select id="topics" name="topics">
+                  {filters.map((filter) => (
+                    <option value={filter} name={filter}>{filter}</option>
+                  ))}
+                </select>
+                <div id="buttons">
+                  <input type="submit" onClick={() => lib.changeSelectedFilter(updateSelectedFilter)} value="Submit filters" />
+                  <input type="submit" onClick={() => lib.resetSelected(updateSelectedFilter)} value="Reset filters" />
+                </div>
+              </div>
+            </div>
+            <div id="sortForm">
+              Sort groups:
+              <div id="filterInput">
+                <select id="sorts" name="sorts">
+                  <option value="new" name="Newest post">Newest post</option>
+                  <option value="posts" name="Number of posts">Number of posts</option>
+                  <option value="members" name="Number of members">Number of members</option>
+                </select>
+                <div id="buttons">
+                  <input type="submit" onClick={() => lib.changeSelectedSort(updateSelectedSort)} value="Submit sort" />
+                  <input type="submit" onClick={() => lib.resetSelectedSort(updateSelectedSort)} value="Reset sort" />
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="groups-area" id="groups-area">
-            Choose a filter to see groups!
+            No groups meet the criteria chosen!
           </div>
         </div>
 

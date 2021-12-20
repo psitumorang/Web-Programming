@@ -37,6 +37,17 @@ const getUserPosts = async (db, id) => {
   }
 };
 
+const updateGroupPost = async (db, id) => {
+  const updateGroup = 'UPDATE group_lst SET last_post=NOW(), post_number=IFNULL(post_number, 0)+1 WHERE group_id=?';
+  try {
+    await db.execute(updateGroup, [id]);
+
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+}
+
 // add a post to a group page
 const addTextPost = async (db, newPost) => {
   const query = 'INSERT INTO post_lst (post_id, post_group, posting_user, caption, posting_username) VALUES(?, ?, ?, ?, ?)';
@@ -47,6 +58,9 @@ const addTextPost = async (db, newPost) => {
     await db.execute(query, params);
     // eslint-disable-next-line no-console
     console.log(`Created post with id: ${newPost.post_id}`);
+
+    await updateGroupPost(db, newPost.post_group);
+
     return newPost.post_id;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -64,6 +78,9 @@ const addImagePost = async (db, newPost) => {
     await db.execute(query, params);
     // eslint-disable-next-line no-console
     console.log(`Created post with id: ${newPost.post_id}`);
+
+    await updateGroupPost(db, newPost.post_group);
+
     return newPost.post_id;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -81,6 +98,9 @@ const addAudioPost = async (db, newPost) => {
     await db.execute(query, params);
     // eslint-disable-next-line no-console
     console.log(`Created post with id: ${newPost.post_id}`);
+
+    await updateGroupPost(db, newPost.post_group);
+
     return newPost.post_id;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -98,6 +118,9 @@ const addVideoPost = async (db, newPost) => {
     await db.execute(query, params);
     // eslint-disable-next-line no-console
     console.log(`Created post with id: ${newPost.post_id}`);
+
+    await updateGroupPost(db, newPost.post_group);
+
     return newPost.post_id;
   } catch (err) {
     // eslint-disable-next-line no-console

@@ -23,6 +23,10 @@ const addGroupMember = async (db, groupId, userId) => {
   const query = 'INSERT INTO group_members VALUES (?, ?)';
   try {
     const [verifyRow] = await db.execute(query, [groupId, userId]);
+
+    const addMember = 'UPDATE group_lst SET member_number=IFNULL(member_number, 0) + 1 WHERE group_id=?';
+    await db.execute(addMember, [groupId]);
+
     return verifyRow;
   } catch (err) {
     // eslint-disable-next-line no-console
