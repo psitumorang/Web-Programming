@@ -289,6 +289,38 @@ webapp.get('/groups', async (req, res) => {
   }
 });
 
+webapp.get('/topics/:topic', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get all groups with topic');
+
+  const { topic } = req.params;
+  try {
+    if (topic === 'all') {
+      const groups = await groupLib.getPublicGroups(groupDb);
+      res.status(200).json({ groups: groups });
+      return;
+    }
+    const groups = await groupLib.getGroupsWithTopic(groupDb, topic);
+    
+    res.status(200).json({ groups: groups });
+  } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/topics', async (req, res) => {
+  // eslint-disable-next-line no-console
+  console.log('get all unique topics');
+
+  try {
+    const groups = await groupLib.getTopics(groupDb);
+    console.log(groups);
+    res.status(200).json({ topics: groups });
+  } catch (err) {
+    res.status(404).json({ err: `error is ${err.message}` });
+  }
+});
+
 webapp.get('/user/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('retrieve user information for supplied id, with id of: ', req.params.id);

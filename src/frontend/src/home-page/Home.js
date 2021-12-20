@@ -1,6 +1,7 @@
-import React from 'react';
-// import { Link } from 'react-router-dom';
+import { React, useState, useEffect } from 'react';
 import './Home.css';
+
+const lib = require('./HomeModule');
 
 const clickProfile = (props) => {
   const url = '/profile';
@@ -9,6 +10,17 @@ const clickProfile = (props) => {
 
 function Home(props) {
   const { changeState, state } = props;
+  const [filters, setFilters] = useState([]);
+  const [selected, updateSelected] = useState('');
+
+  const update = async () => {
+    console.log('UPDATE');
+    await lib.getFilterOptions(setFilters);
+    const groups = await lib.getFilteredGroups(selected);
+    lib.parseFilteredGroups(groups, changeState, selected);
+  };
+  console.log(filters, selected);
+  useEffect(() => { update(); }, [selected]);
 
   return (
     <div className="container">
@@ -39,24 +51,17 @@ function Home(props) {
         <div className="main-area">
 
           <div className="post-create-area">
-            User can create post here
-            <div className="text-area" />
-            <div className="post-button" />
+            Filter group list by topic:
+            <select id="topics" name="topics">
+              {filters.map((filter) => (
+                <option value={filter} name={filter}>{filter}</option>
+              ))}
+            </select>
+            <input type="submit" onClick={() => lib.changeSelected(updateSelected)} value="Submit filters" />
           </div>
 
-          <div className="post-area">
-            Posts can be viewed here
-            <div className="box-1">
-              <div className="poster-picture" />
-              <div className="update-text" />
-              <div className="reply-button" />
-            </div>
-
-            <div className="box-2">
-              <div className="poster-picture" />
-              <div className="update-text" />
-              <div className="reply-button" />
-            </div>
+          <div className="groups-area" id="groups-area">
+            Choose a filter to see groups!
           </div>
         </div>
 
