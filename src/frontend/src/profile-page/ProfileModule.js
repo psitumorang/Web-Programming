@@ -18,6 +18,7 @@ const getPostsComments = async (posts) => {
   }
   // return the array of posts which now each have the additional 'comments' property
   // comments property is itself an array of comment objects
+  console.log('postsArray is: ', postsArray);
   return postsArray;
 };
 
@@ -123,4 +124,6 @@ module.exports = {
   getProfile,
   sendReply,
   getRegistrationDate,
+  getPostsComments,
+  getNamesFromDB,
 };
