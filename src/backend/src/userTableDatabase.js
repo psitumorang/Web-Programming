@@ -127,6 +127,7 @@ const updateUser = async (db, userId, paramToUpdate, updateValue) => {
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(`error: ${err.message}`);
+    return { err: 'username' };
   }
   return null;
 };
@@ -144,6 +145,35 @@ const getNextId = async (db) => {
   return null;
 };
 
+const lockoutUser = async (db, id) => {
+  console.log('lockout user');
+  const query = 'UPDATE user_lst SET locked_out=NOW() WHERE user_id=?';
+  const params = [id];
+  try {
+    const [row] = await db.execute(query, params);
+    console.log(row);
+    return row;
+  } catch (err) {
+    console.log(err);
+    return { err: 'unable to lockout' };
+  }
+  return null;
+};
+
+const unlockUser = async (db, id) => {
+  const query = 'UPDATE user_lst SET locked_out=null WHERE user_id=?';
+  const params = [id];
+  try {
+    const [row] = await db.execute(query, params);
+    console.log(row);
+    return row;
+  } catch (err) {
+    console.log(err);
+    return { err: 'unable to unlock' };
+  }
+  return null;
+};
+
 module.exports = {
   connect,
   addUser,
@@ -153,4 +183,6 @@ module.exports = {
   deleteUser,
   updateUser,
   getNextId,
+  lockoutUser,
+  unlockUser,
 };
