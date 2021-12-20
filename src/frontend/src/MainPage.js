@@ -17,6 +17,7 @@ import InvitationPage from './invitations-page/InvitationPage';
 import DeactivateAccountPage from './profile-page/deactivate-account-page/DeactivateAccountPage';
 import Messages from './messages-page/Messages';
 import Conversation from './conversation-page/Conversation';
+import AnalyticsPage from './analytics-page/AnalyticsPage';
 
 function MainPage() {
   const [state, updateState] = useState(
@@ -71,6 +72,10 @@ function MainPage() {
     }
     if (url.includes('/deactivate-account')) {
       return (<DeactivateAccountPage changeState={changeState} state={state} />);
+    }
+
+    if (url.includes('/analytics')) {
+      return (<AnalyticsPage changeState={changeState} state={state} />);
     }
     const last = url.split('/').pop();
     const first = url.split('/')[3];

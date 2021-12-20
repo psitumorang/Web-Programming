@@ -80,7 +80,7 @@ function Messages(props) {
 
         <div className="side-navbar">
           <button type="submit" className="notifications" onClick={() => changeState({ link: '/notifications' })}>Notifications</button>
-          <button type="submit" className="events">Events</button>
+          <button type="submit" className="events" onClick={() => changeState({ link: '/analytics' })}>Analytics</button>
           <button type="submit" className="groups" onClick={() => changeState({ link: '/groups' })}>Groups</button>
           <button type="submit" className="invitations" onClick={() => changeState({ link: '/invitations' })}>Group Invitations and Requests </button>
           <button type="submit" className="photos">Photos</button>

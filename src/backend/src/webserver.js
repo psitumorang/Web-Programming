@@ -1110,6 +1110,26 @@ webapp.get('/convo/:id', async (req, res) => {
   }
 });
 
+webapp.get('/analytics-groups', async (req, res) => {
+  try {
+    const groupAnalyticsFacts = await groupLib.getAnalyticsFacts(groupDb);
+    res.status(200).json(groupAnalyticsFacts);
+  } catch (err) {
+    console.log('error message is :', err.message);
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+});
+
+webapp.get('/analytics-posts', async (req, res) => {
+  try {
+    const postAnalyticsFacts = await postLib.getPostAnalyticsFacts(postDb);
+    res.status(200).json(postAnalyticsFacts);
+  } catch (err) {
+    console.log('error message is :', err.message);
+    res.status(400).json({ err: `error is ${err.message}` });
+  }
+})
+
 webapp.use((req, res) => {
   // eslint-disable-next-line no-console
   console.log('testing to see if control gets to webapp.use, req is: ', req);

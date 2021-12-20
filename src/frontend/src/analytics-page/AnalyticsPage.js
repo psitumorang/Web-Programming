@@ -1,23 +1,24 @@
 import { useState, useEffect, React } from 'react';
-import './NotificationPage.css';
+import './AnalyticsPage.css';
 
-const lib = require('./NotificationModule');
+const lib = require('./AnalyticsModule');
 
-function NotificationPage(props) {
+const updateFacts = async (setGroupFacts, setPostFacts) => {
+  const newGroupFacts = await lib.getGroupAnalyticsFacts();
+  setGroupFacts(newGroupFacts);
+
+  const newPostFacts = await lib.getPostAnalyticsFacts();
+  setPostFacts(newPostFacts);
+};
+
+function AnalyticsPage(props) {
   const { changeState, state } = props;
+  const [groupFacts, setGroupFacts] = useState([]);
+  const [postFacts, setPostFacts] = useState([]);
 
-  const [notifs, setNotifs] = useState([]);
-
-  const updateNotifs = async () => {
-    const n = await lib.getNotifications(state.userId);
-
-    setNotifs(n);
-  };
-
-  // eslint-disable-next-line
-  console.log(notifs);
-
-  useEffect(() => { updateNotifs(); }, []);
+  useEffect(() => {
+    updateFacts(setGroupFacts, setPostFacts);
+  }, []);
 
   return (
     <div className="container">
@@ -46,17 +47,21 @@ function NotificationPage(props) {
         </div>
 
         <div className="main-area">
-          {notifs.map((n) => (
-            <div className="notification" key={n.id}>
-              <div className="title">
-                {
-                  `Notification! ${new Date(Date.parse(n.date)).getMonth()}-${new Date(Date.parse(n.date)).getDate()}-${new Date(Date.parse(n.date)).getFullYear()} at ${new Date(Date.parse(n.date)).getHours()}:${new Date(Date.parse(n.date)).getMinutes()}`
-                }
-              </div>
-              <div className="info">
-                <div className={`mark-as-read-dot ${n.is_read === 1 ? 'read' : 'unread'}`} />
-                <div className="message">{n.msg}</div>
-              </div>
+          <div>
+            Super advanced group analytics:
+          </div>
+          {groupFacts.map((fact) => (
+            <div>
+              {`${fact[0]}: ${fact[1]}`}
+            </div>
+          ))}
+          <p />
+          <div>
+            Equally advanced post analytics:
+          </div>
+          {postFacts.map((fact) => (
+            <div>
+              {`${fact[0]}: ${fact[1]}`}
             </div>
           ))}
         </div>
@@ -70,4 +75,4 @@ function NotificationPage(props) {
   );
 }
 
-export default NotificationPage;
+export default AnalyticsPage;

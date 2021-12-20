@@ -177,6 +177,37 @@ const getNextId = async (db) => {
   return null;
 };
 
+const getAnalyticsFacts = async (db) => {
+  const analyticsFactsData = [];
+  
+  // total groups
+  const totalGroupsQuery = "SELECT COUNT(*) as total_groups FROM group_lst";
+  const [[totalGroupsResult]] = await db.execute(totalGroupsQuery);
+  analyticsFactsData.push(['Total groups', totalGroupsResult.total_groups]);
+
+  // total members
+  const totalMembersQuery = "SELECT COUNT(*) as total_memberships FROM group_members";
+  const [[totalMembersResult]] = await db.execute(totalMembersQuery);
+  analyticsFactsData.push(['Total memberships', totalMembersResult.total_memberships]);
+
+  // average members per group
+  const averageMembers = totalMembersResult.total_memberships / totalGroupsResult.total_groups;
+  analyticsFactsData.push(['Average members per group', averageMembers]);
+
+  // outstanding invitations
+  const totalInvitesQuery = "SELECT COUNT(*) as total_invites FROM invitations";
+  const [[totalInvitesResult]] = await db.execute(totalInvitesQuery);
+  analyticsFactsData.push(['Total invitations', totalInvitesResult.total_invites]);
+
+  // number of admins
+  const totalAdminsQuery = "SELECT COUNT(*) as total_admins FROM admin_lst";
+  const [[totalAdminsResult]] = await db.execute(totalAdminsQuery);
+  analyticsFactsData.push(['Total admin roles', totalAdminsResult.total_admins]);
+
+  // return the Array of factname:value pairs
+  return analyticsFactsData;
+};
+
 module.exports = {
   connect,
   addGroup,
@@ -187,4 +218,5 @@ module.exports = {
   updateGroup,
   getNextId,
   getGroupById,
+  getAnalyticsFacts,
 };
