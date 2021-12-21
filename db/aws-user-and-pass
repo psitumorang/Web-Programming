@@ -1,6 +1,0 @@
-To access database, download MySQL Workbench and create a connection the following credentials:
-
-hostname: database-1.cqgwv4rlupdn.us-east-2.rds.amazonaws.com
-port: 3306
-username: admin
-password: staceyshapiro
