@@ -83,9 +83,10 @@ exports[`Test Messages Page UI Messages page av error renders correctly 1`] = `
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -184,6 +185,13 @@ exports[`Test Messages Page UI Messages page av error renders correctly 1`] = `
         type="submit"
       >
         Messages
+      </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
       </button>
     </div>
   </div>
@@ -273,9 +281,10 @@ exports[`Test Messages Page UI Messages page error renders correctly 1`] = `
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -374,6 +383,13 @@ exports[`Test Messages Page UI Messages page error renders correctly 1`] = `
         type="submit"
       >
         Messages
+      </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
       </button>
     </div>
   </div>
@@ -463,9 +479,10 @@ exports[`Test Messages Page UI Messages page group error renders correctly 1`] =
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -564,6 +581,13 @@ exports[`Test Messages Page UI Messages page group error renders correctly 1`] =
         type="submit"
       >
         Messages
+      </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
       </button>
     </div>
   </div>
@@ -653,9 +677,10 @@ exports[`Test Messages Page UI Messages page img error renders correctly 1`] = `
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -754,6 +779,13 @@ exports[`Test Messages Page UI Messages page img error renders correctly 1`] = `
         type="submit"
       >
         Messages
+      </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
       </button>
     </div>
   </div>
@@ -843,9 +875,10 @@ exports[`Test Messages Page UI Messages page renders correctly 1`] = `
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -944,6 +977,13 @@ exports[`Test Messages Page UI Messages page renders correctly 1`] = `
         type="submit"
       >
         Messages
+      </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
       </button>
     </div>
   </div>
@@ -1033,9 +1073,10 @@ exports[`Test Messages Page UI Messages page user error renders correctly 1`] = 
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -1134,6 +1175,13 @@ exports[`Test Messages Page UI Messages page user error renders correctly 1`] = 
         type="submit"
       >
         Messages
+      </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
       </button>
     </div>
   </div>

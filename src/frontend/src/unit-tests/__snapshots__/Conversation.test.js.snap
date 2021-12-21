@@ -62,9 +62,10 @@ exports[`Test Conversation Page UI Conversation page av error renders correctly 
       </button>
       <button
         className="events"
+        onClick={[Function]}
         type="submit"
       >
-        Events
+        Analytics
       </button>
       <button
         className="groups"
@@ -82,9 +83,10 @@ exports[`Test Conversation Page UI Conversation page av error renders correctly 
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -173,6 +175,13 @@ exports[`Test Conversation Page UI Conversation page av error renders correctly 
         type="submit"
       >
         Messages
+      </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
       </button>
     </div>
   </div>
@@ -241,9 +250,10 @@ exports[`Test Conversation Page UI Conversation page img error renders correctly
       </button>
       <button
         className="events"
+        onClick={[Function]}
         type="submit"
       >
-        Events
+        Analytics
       </button>
       <button
         className="groups"
@@ -261,9 +271,10 @@ exports[`Test Conversation Page UI Conversation page img error renders correctly
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -352,6 +363,13 @@ exports[`Test Conversation Page UI Conversation page img error renders correctly
         type="submit"
       >
         Messages
+      </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
       </button>
     </div>
   </div>
@@ -420,9 +438,10 @@ exports[`Test Conversation Page UI Conversation page renders correctly 1`] = `
       </button>
       <button
         className="events"
+        onClick={[Function]}
         type="submit"
       >
-        Events
+        Analytics
       </button>
       <button
         className="groups"
@@ -440,9 +459,10 @@ exports[`Test Conversation Page UI Conversation page renders correctly 1`] = `
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -531,6 +551,13 @@ exports[`Test Conversation Page UI Conversation page renders correctly 1`] = `
         type="submit"
       >
         Messages
+      </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
       </button>
     </div>
   </div>

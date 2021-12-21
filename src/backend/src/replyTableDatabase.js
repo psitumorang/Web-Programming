@@ -29,7 +29,7 @@ const addReply = async (db, newReply) => {
   const postId = newReply.post_id;
   const group = newReply.post_group;
   const userId = newReply.posting_user;
-  const { caption } = newReply.caption;
+  const { caption } = newReply;
 
   const params = [replyId, postId, group, userId, caption];
 
