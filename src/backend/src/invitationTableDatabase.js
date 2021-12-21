@@ -20,23 +20,6 @@ const connect = async () => {
   }
 };
 
-// add an invitation
-/** NEED TO UPDATE THIS TO INCLUDE INVITER AND GROUP params const addInvitation = async (db, id, invitation) => {
-  const query = 'INSERT INTO invitations (user_id, is_read, msg, date) VALUES(?, ?, ?, NOW())';
-
-  const params = [id, notification.isRead, notification.msg];
-  try {
-    const [rows] = await db.execute(query, params);
-    // eslint-disable-next-line no-console
-    console.log(`Created notif with id: ${notification.id}`, rows);
-    return notification;
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(`error: ${err.message}`);
-  }
-  return null;
-}; */
-
 // gets all invitations for user
 const getPendingInvitations = async (db, id) => {
   const query = 'SELECT * FROM invitations WHERE to_user_id=? AND invitation_status=\'pending\' ORDER BY invitation_status DESC';

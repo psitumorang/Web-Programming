@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.24% </span>
+                <span class="strong">65.51% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/29</span>
+                <span class='fraction'>19/29</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.24% </span>
+                <span class="strong">65.51% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/29</span>
+                <span class='fraction'>19/29</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -153,15 +153,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -171,18 +171,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -218,16 +218,16 @@ const connect = <span class="fstat-no" title="function not covered" >as</span>yn
 };
 &nbsp;
 // add a notification
-const addNotification = <span class="fstat-no" title="function not covered" >as</span>ync (db, id, notification) =&gt; {
-<span class="cstat-no" title="statement not covered" >  console.log(notification.isRead, id, notification.msg);</span>
-  const query = <span class="cstat-no" title="statement not covered" >'INSERT INTO notification_lst (user_id, is_read, msg, date) VALUES(?, ?, ?, NOW())';</span>
+const addNotification = async (db, id, notification) =&gt; {
+  console.log(notification.isRead, id, notification.msg);
+  const query = 'INSERT INTO notification_lst (user_id, is_read, msg, date) VALUES(?, ?, ?, NOW())';
 &nbsp;
-  const params = <span class="cstat-no" title="statement not covered" >[id, notification.isRead, notification.msg];</span>
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const [rows] = <span class="cstat-no" title="statement not covered" >await db.execute(query, params);</span>
+  const params = [id, notification.isRead, notification.msg];
+  try {
+    const [rows] = await db.execute(query, params);
     // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >    console.log(`Created notif with id: ${notification.id}`, rows);</span>
-<span class="cstat-no" title="statement not covered" >    return notification;</span>
+    console.log(`Created notif with id: ${notification.id}`, rows);
+    return notification;
   } catch (err) {
     // eslint-disable-next-line no-console
 <span class="cstat-no" title="statement not covered" >    console.log(`error: ${err.message}`);</span>
@@ -236,19 +236,19 @@ const addNotification = <span class="fstat-no" title="function not covered" >as<
 };
 &nbsp;
 // gets all notifications for user
-const getNotifications = <span class="fstat-no" title="function not covered" >as</span>ync (db, id) =&gt; {
-  const query = <span class="cstat-no" title="statement not covered" >'SELECT * FROM notification_lst WHERE user_id=? ORDER BY date DESC';</span>
+const getNotifications = async (db, id) =&gt; {
+  const query = 'SELECT * FROM notification_lst WHERE user_id=? ORDER BY date DESC';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const [rows] = <span class="cstat-no" title="statement not covered" >await db.execute(query, [id]);</span>
+  try {
+    const [rows] = await db.execute(query, [id]);
 &nbsp;
     // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >    console.log(`Fetched notifs: ${rows}`);</span>
+    console.log(`Fetched notifs: ${rows}`);
     // change the rows we just fetched to be read now!
-    const readQuery = <span class="cstat-no" title="statement not covered" >'UPDATE notification_lst SET is_read=true WHERE is_read=false';</span>
-<span class="cstat-no" title="statement not covered" >    await db.execute(readQuery);</span>
+    const readQuery = 'UPDATE notification_lst SET is_read=true WHERE is_read=false';
+    await db.execute(readQuery);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return rows;</span>
+    return rows;
   } catch (err) {
     // eslint-disable-next-line no-console
 <span class="cstat-no" title="statement not covered" >    console.log(`error: ${err.message}`);</span>
@@ -268,7 +268,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Mon Dec 20 2021 20:32:39 GMT-0500 (Eastern Standard Time)
+                at Tue Dec 21 2021 01:33:12 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>
