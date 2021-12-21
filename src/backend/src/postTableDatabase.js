@@ -50,13 +50,13 @@ const updateGroupPost = async (db, id) => {
 
 // add a post to a group page
 const addTextPost = async (db, newPost) => {
-  const query = 'INSERT INTO post_lst ' +
-  '(post_id, post_group, posting_user, caption, posting_username) VALUES(?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO post_lst '
+  + '(post_id, post_group, posting_user, caption, posting_username) VALUES(?, ?, ?, ?, ?)';
 
   const postId = newPost.post_id;
   const group = newPost.post_group;
   const userId = newPost.posting_user;
-  const caption = newPost.caption;
+  const { caption } = newPost;
   const username = newPost.posting_username;
   const params = [postId, group, userId, caption, username];
   try {
@@ -75,14 +75,14 @@ const addTextPost = async (db, newPost) => {
 };
 
 const addImagePost = async (db, newPost) => {
-  const query = 'INSERT INTO post_lst ' +
-  '(post_id, post_group, posting_user, caption, photourl, posting_username) ' +
-  'VALUES(?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO post_lst '
+  + '(post_id, post_group, posting_user, caption, photourl, posting_username) '
+  + 'VALUES(?, ?, ?, ?, ?, ?)';
 
   const postId = newPost.post_id;
   const group = newPost.post_group;
   const userId = newPost.posting_user;
-  const caption = newPost.caption;
+  const { caption } = newPost;
   const photoURL = newPost.photourl;
   const username = newPost.posting_username;
   const params = [postId, group, userId, caption, photoURL, username];
@@ -102,13 +102,13 @@ const addImagePost = async (db, newPost) => {
 };
 
 const addAudioPost = async (db, newPost) => {
-  const query = 'INSERT INTO post_lst ' +
-  '(post_id, post_group, posting_user, caption, audioUrl, posting_username) '+
-  'VALUES(?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO post_lst '
+  + '(post_id, post_group, posting_user, caption, audioUrl, posting_username) '
+  + 'VALUES(?, ?, ?, ?, ?, ?)';
   const postId = newPost.post_id;
   const group = newPost.post_group;
   const userId = newPost.posting_user;
-  const caption = newPost.caption;
+  const { caption } = newPost;
   const audioURL = newPost.audioUrl;
   const username = newPost.posting_username;
   const params = [postId, group, userId, caption, audioURL, username];
@@ -128,13 +128,13 @@ const addAudioPost = async (db, newPost) => {
 };
 
 const addVideoPost = async (db, newPost) => {
-  const query = 'INSERT INTO post_lst ' +
-  '(post_id, post_group, posting_user, caption, videoUrl, posting_username) ' +
-  'VALUES(?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO post_lst '
+  + '(post_id, post_group, posting_user, caption, videoUrl, posting_username) '
+  + 'VALUES(?, ?, ?, ?, ?, ?)';
   const postId = newPost.post_id;
   const group = newPost.post_group;
   const userId = newPost.posting_user;
-  const caption = newPost.caption;
+  const { caption } = newPost;
   const videoURL = newPost.videoUrl;
   const username = newPost.posting_username;
   const params = [postId, group, userId, caption, videoURL, username];

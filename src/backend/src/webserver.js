@@ -61,9 +61,7 @@ webapp.listen(port, async () => {
 
 webapp.post('/registration', async (req, res) => {
   try {
-    console.log(req.body);
     const nextId = await userLib.getNextId(userDb);
-    console.log(nextId);
     const newUser = {
       user_id: nextId + 1,
       user_name: req.body.user_name,
@@ -297,7 +295,7 @@ webapp.get('/topics/:topic/:sort', async (req, res) => {
       return;
     }
     const groups = await groupLib.getGroupsWithTopic(groupDb, topic);
-  
+
     res.status(200).json({ groups });
   } catch (err) {
     res.status(404).json({ err: `error is ${err.message}` });
@@ -886,7 +884,7 @@ webapp.put('/flag-post/:id', async (req, res) => {
     flaggerId,
     flaggerName,
     groupId,
-    groupName
+    groupName,
   } = req.body;
   try {
     const result = await postLib.flagPost(postDb, req.params.id, flaggerId);
@@ -928,7 +926,7 @@ webapp.delete('/flag-post/:id', async (req, res) => {
       await notifLib.addNotification(
         notifDb,
         flaggerId,
-        { isRead: false, msg: 'Congrats! A post YOU flagged was deleted by an admin. Great work.' } ,
+        { isRead: false, msg: 'Congrats! A post YOU flagged was deleted by an admin. Great work.' },
       );
       await notifLib.addNotification(
         notifDb,
@@ -1145,14 +1143,12 @@ const msgPreprocessing = async (req) => {
   // eslint-disable-next-line no-console
   console.log('POST message, ', id, msg);
   try {
-    console.log(msg.fromId);
     if (msg.toId === msg.fromId) {
       return { err: 'self' };
     }
 
     const myGroups = await groupMemberLib.getGroupsForUser(groupMemberDb, id);
     const theirGroups = await groupMemberLib.getGroupsForUser(groupMemberDb, msg.fromId);
-    console.log(myGroups, theirGroups);
     let same = false;
     for (let i = 0; i < myGroups.length; i += 1) {
       if (theirGroups.includes(myGroups[i])) {
@@ -1198,7 +1194,6 @@ webapp.post('/message/text/:id', async (req, res) => {
     return;
   } catch (err) {
     res.status(400).json({ err: `error is ${err.message}` });
-    return null;
   }
 });
 
@@ -1311,6 +1306,5 @@ webapp.use((req, res) => {
   res.status(404).json({ err: 'link does not exist' });
 });
 
-//for testing
+// for testing
 module.exports = webapp;
-

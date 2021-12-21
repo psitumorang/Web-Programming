@@ -130,7 +130,6 @@ const getTopicsByGroupId = async (db, id) => {
   return null;
 };
 
-
 // get group by its id
 const getGroupById = async (db, id) => {
   try {
@@ -178,7 +177,6 @@ const getPublicGroups = async (db, sort) => {
     if (sort === 'newest') {
       query = 'SELECT * FROM group_lst WHERE is_public=1 ORDER BY last_post DESC';
     } else if (sort === 'posts') {
-      console.log('POSTS SORTING');
       query = 'SELECT * FROM group_lst WHERE is_public=1 ORDER BY post_number DESC';
     } else if (sort === 'members') {
       query = 'SELECT * FROM group_lst WHERE is_public=1 ORDER BY member_number DESC';
@@ -217,7 +215,6 @@ const getGroups = async (db) => {
   }
   return null;
 };
-
 
 // get all groups with same groupname
 const getGroupsWithName = async (db, name) => {

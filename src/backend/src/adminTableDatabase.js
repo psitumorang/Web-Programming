@@ -127,7 +127,7 @@ const deleteAdmins = async (db, userId) => {
     return result;
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.log('error: from db execute step for deleteAdmins')
+    console.log('error: from db execute step for deleteAdmins');
     return 0;
   }
 };

@@ -22,9 +22,16 @@ const connect = async () => {
 
 // add a post to a group page
 const addReply = async (db, newReply) => {
-  const query = 'INSERT INTO reply_lst (reply_id, post_id, post_group, posting_user, caption) VALUES(?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO reply_lst (reply_id, post_id, post_group, posting_user, caption) '
+  + 'VALUES(?, ?, ?, ?, ?)';
 
-  const params = [newReply.reply_id, newReply.post_id, newReply.post_group, newReply.posting_user, newReply.caption];
+  const replyId = newReply.reply_id;
+  const postId = newReply.post_id;
+  const group = newReply.post_group;
+  const userId = newReply.posting_user;
+  const { caption } = newReply.caption;
+
+  const params = [replyId, postId, group, userId, caption];
 
   try {
     await db.execute(query, params);
