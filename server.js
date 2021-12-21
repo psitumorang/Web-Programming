@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
 
 const cors = require('cors');
@@ -18,10 +17,7 @@ const groupMemberLib = require('./groupMemberTableDatabase');
 const msgLib = require('./messageTableDatabase');
 const convoLib = require('./convoTableDatabase');
 
-const port = 8080;
-
-webapp.use(bodyParser.urlencoded());
-webapp.use(bodyParser.json());
+const port = process.env.PORT || 8080;
 
 webapp.use(express.urlencoded({
   extended: true,
