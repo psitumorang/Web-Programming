@@ -101,21 +101,21 @@ webapp.post('/login', async (req, res) => {
 
     // checks to make sure we don't have to get locked out
     if (req.body.attempt >= 2) {
-      const response = await userLib.lockoutUser(userDb, resultsUser[0].user_id);
-      res.status(404).json( {err: 'jail'} );
+      await userLib.lockoutUser(userDb, resultsUser[0].user_id);
+      res.status(404).json({ err: 'jail' });
       return;
     }
 
     // check if we are locked out
     if (resultsUser.length !== 0 && resultsUser[0].locked_out !== null) {
-      //we do be locked out
+      // we do be locked out
 
       const locked = new Date(resultsUser[0].locked_out);
       const now = new Date();
       if (now - locked >= 1800000) {
         // yay 30 minutes has passed
         userLib.unlockUser(userDb, resultsUser[0].user_id);
-        //we can login as usual
+        // we can login as usual
       } else {
         res.status(404).json({ err: 'locked' });
         return;
@@ -126,8 +126,6 @@ webapp.post('/login', async (req, res) => {
       res.status(404).json({ err: 'User does not exist' });
     } else if (req.body.user_password.includes(resultsUser[0].user_password)) {
       const profile = await profileLib.getProfileById(profileDb, resultsUser[0].user_id);
-
-      console.log(`profile is: ${profile.user_id}`);
       res.status(200).json({
         profile: profile[0],
       });
@@ -194,7 +192,6 @@ webapp.get('/profile/:id', async (req, res) => {
 webapp.delete('/profile/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    console.log('in delete profile id with id of ', id);
     // assign to res.status
     const numDeletedProfiles = await profileLib.deleteProfile2(profileDb, id);
     res.status(200).json(numDeletedProfiles);
@@ -296,12 +293,12 @@ webapp.get('/topics/:topic/:sort', async (req, res) => {
   try {
     if (topic === 'all') {
       const groups = await groupLib.getPublicGroups(groupDb, sort);
-      res.status(200).json({ groups: groups });
+      res.status(200).json({ groups });
       return;
     }
     const groups = await groupLib.getGroupsWithTopic(groupDb, topic);
-    
-    res.status(200).json({ groups: groups });
+  
+    res.status(200).json({ groups });
   } catch (err) {
     res.status(404).json({ err: `error is ${err.message}` });
   }
@@ -313,7 +310,6 @@ webapp.get('/topics', async (req, res) => {
 
   try {
     const groups = await groupLib.getTopics(groupDb);
-    console.log(groups);
     res.status(200).json({ topics: groups });
   } catch (err) {
     res.status(404).json({ err: `error is ${err.message}` });
@@ -363,9 +359,6 @@ webapp.get('/user-by-name/:name', async (req, res) => {
 });
 
 webapp.put('/user/:id', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('make it to webserver/webapp.put/user/id with params: ', req.params);
-  console.log('make it to webserver/webapp.put/user/id with body: ', req.body);
   try {
     const { id } = req.params;
     const userPassword = req.body.user_password;
@@ -395,13 +388,13 @@ webapp.delete('/user/:id', async (req, res) => {
   }
 });
 
-// this one only updates the bio. I originally tried to make it a dynamic variable update, but had issues.
+// this one only updates the bio.
+// I originally tried to make it a dynamic variable update, but had issues.
 webapp.put('/profile/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('make it to webserver/webapp.put/profile/id with params: ', req.params);
   try {
     const { id } = req.params;
-    console.log('biography to be set: ', req.body);
     const { biography } = req.body;
     // get password from body not params!
     const userInfo = await profileLib.updateProfile(profileDb, id, biography);
@@ -417,7 +410,6 @@ webapp.put('/profile-pic/:id', async (req, res) => {
   console.log('make it to webserver/webapp.put/profile-pic/id with params: ', req.params);
   try {
     const { id } = req.params;
-    console.log('profilePictureURL to be set: ', req.body);
     const { profilePictureURL } = req.body;
     // get password from body not params!
     const userInfo = await profileLib.updateProfilePic(profileDb, id, profilePictureURL);
@@ -469,7 +461,6 @@ webapp.get('/invitations/:id', async (req, res) => {
     // console.log('got invitations: ', invitations);
     res.status(200).json(invitations);
   } catch (err) {
-    console.log('error at webserver.js. in catch, with err of ', err);
     res.status(400).json({ err: `error is ${err.message}` });
   }
 });
@@ -483,7 +474,6 @@ webapp.get('/invitations-open/:id', async (req, res) => {
     const openInvites = await inviteLib.getOpenInvitesByGroupId(inviteDb, id);
     res.status(200).json(openInvites);
   } catch (err) {
-    console.log('error at webserver.js/invitations-open. in catch, with err of ', err);
     res.status(400).json({ err: `error is ${err.message}` });
   }
 });
@@ -502,7 +492,7 @@ webapp.post('/invitations/', async (req, res) => {
     invitationStatus,
   };
   try {
-    const invitation = await inviteLib.addInvitation(inviteDb, invitationObject);
+    await inviteLib.addInvitation(inviteDb, invitationObject);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log('error! ', err);
@@ -516,14 +506,12 @@ webapp.put('/invitations/:id', async (req, res) => {
   const { id } = req.params;
   const { newStatus } = req.body;
   try {
-    console.log('before updateCount execution, in webserver, req.params is: ', req.params);
     const updateCount = await inviteLib.updateInvitationStatus(inviteDb, id, newStatus);
 
     // eslint-disable-next-line no-console
     console.log('updated ', updateCount, 'invitations.');
     res.status(200).json(updateCount);
   } catch (err) {
-    console.log('error at webserver.js. in catch, with err of ', err);
     res.status(400).json({ err: `error is ${err.message}` });
   }
 });
@@ -533,11 +521,9 @@ webapp.delete('/invitations/:id', async (req, res) => {
   console.log('deleting invitations');
   const { id } = req.params;
   try {
-    console.log('before executing server module for delete Invitations, id is ', id, 'and req params is ', req.params);
     const numDeletedInvites = await inviteLib.deletePendingInvites(inviteDb, id);
     res.status(200).json(numDeletedInvites);
   } catch (err) {
-    console.log('error at webserver.js delete invitations. in catch, with err of ', err);
     res.status(400).json({ err: `error is ${err.message}` });
   }
 });
@@ -567,7 +553,9 @@ webapp.get('/membership/:id', async (req, res) => {
 
 webapp.get('/membership-of-user/:id', async (req, res) => {
   try {
-    const membershipList = await groupMemberLib.getGroupMembershipsByUserId(groupMemberDb, req.params.id);
+    const sDB = groupMemberDb;
+    const usId = req.params.id;
+    const membershipList = await groupMemberLib.getGroupMembershipsByUserId(sDB, usId);
     res.status(200).json(membershipList);
   } catch (err) {
     res.status(400).json({ err: `error is ${err.message}` });
@@ -581,7 +569,7 @@ webapp.delete('/membership/:id', async (req, res) => {
   try {
     const result = await groupMemberLib.deleteUserMemberships(groupMemberDb, req.params.id);
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         result,
@@ -602,7 +590,7 @@ webapp.delete('/leave-group/:id', async (req, res) => {
   try {
     const result = await groupMemberLib.deleteSingleMembership(groupMemberDb, groupId, userId);
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         result,
@@ -630,7 +618,7 @@ webapp.post('/admins', async (req, res) => {
       }
     }
     if (!seen) {
-      //user is not member of group yet
+      // user is not member of group yet
       res.status(400).json({ err: 'user is not member of group' });
       return;
     }
@@ -739,11 +727,9 @@ webapp.post('/post/text', async (req, res) => {
       posting_username: req.body.posting_username,
     };
 
-    console.log(`new post ${newPost.post_id}, ${newPost.post_group} , ${newPost.posting_user} , ${newPost.caption} , ${newPost.posting_username} `);
-
     const result = await postLib.addTextPost(postDb, newPost);
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         post: newPost,
@@ -769,11 +755,9 @@ webapp.post('/post/image', async (req, res) => {
       posting_username: req.body.posting_username,
     };
 
-    console.log(`new post ${newPost.post_id}, ${newPost.post_group} , ${newPost.posting_user} , ${newPost.caption} `);
-
     const result = await postLib.addImagePost(postDb, newPost);
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         post: newPost,
@@ -799,11 +783,9 @@ webapp.post('/post/audio', async (req, res) => {
       posting_username: req.body.posting_username,
     };
 
-    console.log(`new post ${newPost.post_id}, ${newPost.post_group} , ${newPost.posting_user} , ${newPost.caption} , ${newPost.audioUrl} , ${newPost.posting_username} `);
-
     const result = await postLib.addAudioPost(postDb, newPost);
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         post: newPost,
@@ -829,11 +811,9 @@ webapp.post('/post/video', async (req, res) => {
       posting_username: req.body.posting_username,
     };
 
-    console.log(`new post ${newPost.post_id}, ${newPost.post_group} , ${newPost.posting_user} , ${newPost.caption} `);
-
     const result = await postLib.addVideoPost(postDb, newPost);
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         post: newPost,
@@ -853,7 +833,6 @@ webapp.get('/post/:id', async (req, res) => {
     const post = await postLib.getPostById(postDb, id);
 
     res.status(200).json({ post });
-    return;
   } catch (err) {
     res.status(404).json({ err: err.message });
   }
@@ -863,7 +842,7 @@ webapp.get('/post/:id', async (req, res) => {
 webapp.get('/flag-post/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log(`get flagged posts for user with id ${req.params.id}`);
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id, 10);
   try {
     const getGroups = await groupMemberLib.getGroupsForUser(groupDb, id);
 
@@ -876,18 +855,14 @@ webapp.get('/flag-post/:id', async (req, res) => {
         }
       }
     }
-    console.log(adminFor);
     const flaggedPosts = [];
     for (let k = 0; k < adminFor.length; k += 1) {
       const posts = await postLib.getPosts(postDb, adminFor[k]);
-      console.log(posts);
-      for (let m = 0; m < posts[0].length; m++) {
+      for (let m = 0; m < posts[0].length; m += 1) {
         const flags = await postLib.isFlagged(postDb, posts[0][m].post_id);
-        console.log(posts[0][m].post_id, flags);
         if (flags.length !== 0) {
           const group = await groupLib.getGroupById(groupDb, adminFor[k]);
           const user = await userLib.getUserById(userDb, flags[0].flagging_user);
-          console.log(group, user);
           posts[0][m].flagger = flags[0].flagging_user;
           posts[0][m].flaggerName = user[0].user_name;
           posts[0][m].groupName = group.group_name;
@@ -897,7 +872,6 @@ webapp.get('/flag-post/:id', async (req, res) => {
     }
 
     res.status(200).json({ flaggedPosts });
-    return;
   } catch (err) {
     res.status(404).json({ err: err.message });
   }
@@ -908,15 +882,17 @@ webapp.put('/flag-post/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log(`flag a group post with id ${JSON.stringify(req.params.id)}`);
 
-  const { flaggerId, flaggerName, groupId, groupName } = req.body;
-  console.log(flaggerId, flaggerName, groupId, groupName);
+  const {
+    flaggerId,
+    flaggerName,
+    groupId,
+    groupName
+  } = req.body;
   try {
     const result = await postLib.flagPost(postDb, req.params.id, flaggerId);
 
     const admins = await adminLib.getAdmins(adminDb, groupId);
-    console.log('ADMINS');
     for (let i = 0; i < admins.length; i += 1) {
-      console.log(admins[i].admin_id);
       await notifLib.addNotification(
         notifDb,
         admins[i].admin_id,
@@ -925,7 +901,7 @@ webapp.put('/flag-post/:id', async (req, res) => {
     }
 
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         result,
@@ -941,18 +917,14 @@ webapp.delete('/flag-post/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log(`flag a group post with id ${JSON.stringify(req.params.id)}`);
 
-  const { flaggerId, flaggerName, groupId, deleted, author } = req.body;
+  const { flaggerId, deleted } = req.body;
   try {
     const result = await postLib.removePostFlag(postDb, req.params.id);
     const id = await postLib.getPostById(postDb, req.params.id);
-    console.log(result, id, deleted);
     if (deleted === 1) {
-      //they wanted to delete the post
-      console.log('DELETE');
-      //TODO: delete comments before delte post
-      const result = await postLib.deletePost(postDb, req.params.id);
+      await postLib.deletePost(postDb, req.params.id);
 
-      //notify the author and flagger
+      // notify the author and flagger
       await notifLib.addNotification(
         notifDb,
         flaggerId,
@@ -964,9 +936,8 @@ webapp.delete('/flag-post/:id', async (req, res) => {
         { isRead: false, msg: 'Oh no, a post you made was flagged by a user and deleted by an admin. Maybe watch what you are posting...' },
       );
     } else {
-      //kept the post
-      //notify the flagger
-      console.log('KEEP');
+      // kept the post
+      // notify the flagger
       await notifLib.addNotification(
         notifDb,
         flaggerId,
@@ -975,13 +946,14 @@ webapp.delete('/flag-post/:id', async (req, res) => {
     }
 
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(200).json({
         result,
       });
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
   }
   return null;
@@ -994,7 +966,7 @@ webapp.put('/hide-post/:id', async (req, res) => {
     const result = await postLib.hidePost(postDb, req.params.id);
 
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         result,
@@ -1013,7 +985,7 @@ webapp.delete('/post/:id', async (req, res) => {
     const result = await postLib.deletePost(postDb, req.params.id);
 
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         result,
@@ -1032,7 +1004,7 @@ webapp.get('/posts/:id', async (req, res) => {
   try {
     const posts = await postLib.getPosts(postDb, req.params.id);
     if (posts === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(200).json({ result: posts });
     }
@@ -1044,12 +1016,10 @@ webapp.get('/posts/:id', async (req, res) => {
 webapp.post('/reply/:id', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('edit reply');
-  console.log(req.params);
-  console.log(req.body);
   const { id } = req.params;
   const { caption } = req.body;
   try {
-    const result = await replyLib.editReply(replyDb, id, caption);
+    await replyLib.editReply(replyDb, id, caption);
     res.status(200).json({});
   } catch (err) {
     res.status(404).json({ err: err.message });
@@ -1070,11 +1040,9 @@ webapp.post('/reply', async (req, res) => {
       caption: req.body.caption,
     };
 
-    console.log(`new reply ${newReply.reply_id}, ${newReply.post_id} , ${newReply.posting_user} , ${newReply.caption} `);
-
     const result = await replyLib.addReply(replyDb, newReply);
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         reply: newReply,
@@ -1093,7 +1061,7 @@ webapp.get('/replies/:id', async (req, res) => {
   try {
     const replies = await replyLib.getReplies(replyDb, req.params.id);
     if (replies === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(200).json({ result: replies });
     }
@@ -1121,7 +1089,7 @@ webapp.put('/flag-reply/:id', async (req, res) => {
     const result = await replyLib.flagReply(replyDb, req.params.id);
 
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         result,
@@ -1140,7 +1108,7 @@ webapp.put('/hide-reply/:id', async (req, res) => {
     const result = await replyLib.hideReply(replyDb, req.params.id);
 
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         result,
@@ -1159,7 +1127,7 @@ webapp.delete('/reply/:id', async (req, res) => {
     const result = await replyLib.deleteReply(replyDb, req.params.id);
 
     if (result === null) {
-      res.status(404).json({ err: err.message });
+      res.status(404).json({ err: 'err.message' });
     } else {
       res.status(201).json({
         result,
@@ -1171,7 +1139,7 @@ webapp.delete('/reply/:id', async (req, res) => {
   return null;
 });
 
-const msgPreprocessing = async (req, res) => {
+const msgPreprocessing = async (req) => {
   const { msg } = req.body;
   const { id } = req.params;
   // eslint-disable-next-line no-console
@@ -1209,19 +1177,19 @@ const msgPreprocessing = async (req, res) => {
   } catch (err) {
     return { err: err.message };
   }
-  return { err: 'unfinished' };
 };
 
 webapp.post('/message/text/:id', async (req, res) => {
-  console.log('PROCESSING FOR TXT');
-  const ret = await msgPreprocessing(req, res);
+  const ret = await msgPreprocessing(req);
   if (typeof ret.err !== 'undefined') {
     res.status(404).json(ret);
     return;
   }
   const { msg, convoId, id } = ret;
   try {
-    const value = await msgLib.addTextMessage(msgDb, msg.txt, msg.fromId, id, msg.senderName, convoId);
+    // renaming senderName for line length - think it was killing the max len
+    const sndr = msg.senderName;
+    const value = await msgLib.addTextMessage(msgDb, msg.txt, msg.fromId, id, sndr, convoId);
 
     // eslint-disable-next-line no-console
     console.log('created text msg: ', value);
@@ -1235,17 +1203,15 @@ webapp.post('/message/text/:id', async (req, res) => {
 });
 
 webapp.post('/message/image/:id', async (req, res) => {
-  console.log('PROCESSING FOR IMG');
-  const ret = await msgPreprocessing(req, res);
-  console.log(ret);
+  const ret = await msgPreprocessing(req);
   if (typeof ret.err !== 'undefined') {
     res.status(404).json(ret);
     return;
   }
   const { msg, convoId, id } = ret;
   try {
-    console.log('sending the value now ', typeof ret.err);
-    const value = await msgLib.addImageMessage(msgDb, msg.img, msg.fromId, id, msg.senderName, convoId);
+    const sndr = msg.senderName;
+    const value = await msgLib.addImageMessage(msgDb, msg.img, msg.fromId, id, sndr, convoId);
 
     // eslint-disable-next-line no-console
     console.log('created img msg: ', value);
@@ -1257,15 +1223,15 @@ webapp.post('/message/image/:id', async (req, res) => {
 });
 
 webapp.post('/message/audio/:id', async (req, res) => {
-  console.log('PROCESSING FOR AUDIO');
-  const ret = await msgPreprocessing(req, res);
+  const ret = await msgPreprocessing(req);
   if (typeof ret.err !== 'undefined') {
     res.status(404).json(ret);
     return;
   }
   const { msg, convoId, id } = ret;
   try {
-    const value = await msgLib.addAudioMessage(msgDb, msg.audio, msg.fromId, id, msg.senderName, convoId);
+    const sndr = msg.senderName;
+    const value = await msgLib.addAudioMessage(msgDb, msg.audio, msg.fromId, id, sndr, convoId);
 
     // eslint-disable-next-line no-console
     console.log('created audio msg: ', value);
@@ -1277,15 +1243,15 @@ webapp.post('/message/audio/:id', async (req, res) => {
 });
 
 webapp.post('/message/video/:id', async (req, res) => {
-  console.log('PROCESSING FOR VIDEO');
-  const ret = await msgPreprocessing(req, res);
+  const ret = await msgPreprocessing(req);
   if (typeof ret.err !== 'undefined') {
     res.status(404).json(ret);
     return;
   }
   const { msg, convoId, id } = ret;
   try {
-    const value = await msgLib.addVideoMessage(msgDb, msg.video, msg.fromId, id, msg.senderName, convoId);
+    const sndr = msg.senderName;
+    const value = await msgLib.addVideoMessage(msgDb, msg.video, msg.fromId, id, sndr, convoId);
 
     // eslint-disable-next-line no-console
     console.log('created video msg: ', value);
@@ -1327,7 +1293,6 @@ webapp.get('/analytics-groups', async (req, res) => {
     const groupAnalyticsFacts = await groupLib.getAnalyticsFacts(groupDb);
     res.status(200).json(groupAnalyticsFacts);
   } catch (err) {
-    console.log('error message is :', err.message);
     res.status(400).json({ err: `error is ${err.message}` });
   }
 });
@@ -1337,10 +1302,9 @@ webapp.get('/analytics-posts', async (req, res) => {
     const postAnalyticsFacts = await postLib.getPostAnalyticsFacts(postDb);
     res.status(200).json(postAnalyticsFacts);
   } catch (err) {
-    console.log('error message is :', err.message);
     res.status(400).json({ err: `error is ${err.message}` });
   }
-})
+});
 
 webapp.use((req, res) => {
   // eslint-disable-next-line no-console

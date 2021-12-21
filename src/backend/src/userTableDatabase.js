@@ -129,7 +129,6 @@ const updateUser = async (db, userId, paramToUpdate, updateValue) => {
     console.log(`error: ${err.message}`);
     return { err: 'username' };
   }
-  return null;
 };
 
 // get next available id
@@ -146,18 +145,14 @@ const getNextId = async (db) => {
 };
 
 const lockoutUser = async (db, id) => {
-  console.log('lockout user');
   const query = 'UPDATE user_lst SET locked_out=NOW() WHERE user_id=?';
   const params = [id];
   try {
     const [row] = await db.execute(query, params);
-    console.log(row);
     return row;
   } catch (err) {
-    console.log(err);
     return { err: 'unable to lockout' };
   }
-  return null;
 };
 
 const unlockUser = async (db, id) => {
@@ -165,13 +160,10 @@ const unlockUser = async (db, id) => {
   const params = [id];
   try {
     const [row] = await db.execute(query, params);
-    console.log(row);
     return row;
   } catch (err) {
-    console.log(err);
     return { err: 'unable to unlock' };
   }
-  return null;
 };
 
 module.exports = {

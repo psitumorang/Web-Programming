@@ -49,7 +49,6 @@ const getAdmins = async (db, groupId) => {
     const [rows] = await db.execute(query, params);
     // eslint-disable-next-line no-console
     console.log(`Got admins for group: ${rows}`);
-    console.log(rows);
     return rows;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -91,10 +90,9 @@ const getAdministeredGroups = async (db, userId) => {
   const query = 'SELECT group_id FROM admin_lst WHERE admin_id = ?';
   try {
     const [result] = await db.execute(query, [userId]);
-    console.log('in adminTable DB, result sending back, unpacked, from getAdministeredGroups is ', result);
     return result;
   } catch (err) {
-    console.log('error in getAdministeredGroups, with err of: ', err);
+    return err;
   }
 };
 
@@ -124,12 +122,13 @@ const revokeAdmin = async (db, groupId, adminUser) => {
 
 const deleteAdmins = async (db, userId) => {
   try {
-    query = 'DELETE FROM admin_lst WHERE admin_id = ?';
+    const query = 'DELETE FROM admin_lst WHERE admin_id = ?';
     const [result] = await db.execute(query, [userId]);
     return result;
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.log('error: from db execute step for deleteAdmins');
+    console.log('error: from db execute step for deleteAdmins')
+    return 0;
   }
 };
 

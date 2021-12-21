@@ -49,7 +49,6 @@ const addConvo = async (db, user1, user2, user1Name, user2Name) => {
     console.log(`Created convo: ${row}`);
     return row.insertId;
   } catch (err) {
-    console.log(err);
     // eslint-disable-next-line no-console
     console.log('error: convo already exists');
   }
@@ -82,7 +81,6 @@ const getConvosForUser = async (db, id) => {
 
   try {
     const [rows] = await db.execute(query, params);
-    console.log(rows);
     // eslint-disable-next-line no-console
     console.log(`Got convos: ${rows}`);
     return rows;

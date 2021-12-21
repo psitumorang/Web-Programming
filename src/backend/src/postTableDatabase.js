@@ -41,19 +41,24 @@ const updateGroupPost = async (db, id) => {
   const updateGroup = 'UPDATE group_lst SET last_post=NOW(), post_number=IFNULL(post_number, 0)+1 WHERE group_id=?';
   try {
     await db.execute(updateGroup, [id]);
-
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
   }
   return null;
-}
+};
 
 // add a post to a group page
 const addTextPost = async (db, newPost) => {
-  const query = 'INSERT INTO post_lst (post_id, post_group, posting_user, caption, posting_username) VALUES(?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO post_lst ' +
+  '(post_id, post_group, posting_user, caption, posting_username) VALUES(?, ?, ?, ?, ?)';
 
-  const params = [newPost.post_id, newPost.post_group, newPost.posting_user, newPost.caption, newPost.posting_username];
-
+  const postId = newPost.post_id;
+  const group = newPost.post_group;
+  const userId = newPost.posting_user;
+  const caption = newPost.caption;
+  const username = newPost.posting_username;
+  const params = [postId, group, userId, caption, username];
   try {
     await db.execute(query, params);
     // eslint-disable-next-line no-console
@@ -70,10 +75,17 @@ const addTextPost = async (db, newPost) => {
 };
 
 const addImagePost = async (db, newPost) => {
-  const query = 'INSERT INTO post_lst (post_id, post_group, posting_user, caption, photourl, posting_username) VALUES(?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO post_lst ' +
+  '(post_id, post_group, posting_user, caption, photourl, posting_username) ' +
+  'VALUES(?, ?, ?, ?, ?, ?)';
 
-  const params = [newPost.post_id, newPost.post_group, newPost.posting_user, newPost.caption, newPost.photourl, newPost.posting_username];
-
+  const postId = newPost.post_id;
+  const group = newPost.post_group;
+  const userId = newPost.posting_user;
+  const caption = newPost.caption;
+  const photoURL = newPost.photourl;
+  const username = newPost.posting_username;
+  const params = [postId, group, userId, caption, photoURL, username];
   try {
     await db.execute(query, params);
     // eslint-disable-next-line no-console
@@ -90,10 +102,16 @@ const addImagePost = async (db, newPost) => {
 };
 
 const addAudioPost = async (db, newPost) => {
-  const query = 'INSERT INTO post_lst (post_id, post_group, posting_user, caption, audioUrl, posting_username) VALUES(?, ?, ?, ?, ?, ?)';
-  console.log(newPost);
-  const params = [newPost.post_id, newPost.post_group, newPost.posting_user, newPost.caption, newPost.audioUrl, newPost.posting_username];
-
+  const query = 'INSERT INTO post_lst ' +
+  '(post_id, post_group, posting_user, caption, audioUrl, posting_username) '+
+  'VALUES(?, ?, ?, ?, ?, ?)';
+  const postId = newPost.post_id;
+  const group = newPost.post_group;
+  const userId = newPost.posting_user;
+  const caption = newPost.caption;
+  const audioURL = newPost.audioUrl;
+  const username = newPost.posting_username;
+  const params = [postId, group, userId, caption, audioURL, username];
   try {
     await db.execute(query, params);
     // eslint-disable-next-line no-console
@@ -110,9 +128,16 @@ const addAudioPost = async (db, newPost) => {
 };
 
 const addVideoPost = async (db, newPost) => {
-  const query = 'INSERT INTO post_lst (post_id, post_group, posting_user, caption, videoUrl, posting_username) VALUES(?, ?, ?, ?, ?, ?)';
-
-  const params = [newPost.post_id, newPost.post_group, newPost.posting_user, newPost.caption, newPost.videoUrl, newPost.posting_username];
+  const query = 'INSERT INTO post_lst ' +
+  '(post_id, post_group, posting_user, caption, videoUrl, posting_username) ' +
+  'VALUES(?, ?, ?, ?, ?, ?)';
+  const postId = newPost.post_id;
+  const group = newPost.post_group;
+  const userId = newPost.posting_user;
+  const caption = newPost.caption;
+  const videoURL = newPost.videoUrl;
+  const username = newPost.posting_username;
+  const params = [postId, group, userId, caption, videoURL, username];
 
   try {
     await db.execute(query, params);
@@ -159,7 +184,6 @@ const isFlagged = async (db, postId) => {
 
   try {
     const [rows] = await db.execute(query, params);
-    console.log('FLAGS ', rows);
     return rows;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -184,7 +208,7 @@ const removePostFlag = async (db, postId) => {
     console.log(`error: ${err.message}`);
   }
   return null;
-}
+};
 
 // add a post to a group page
 const hidePost = async (db, postId) => {
@@ -269,24 +293,24 @@ const getNextId = async (db) => {
 
 const getPostAnalyticsFacts = async (db) => {
   const analyticsFactsData = [];
-  
+
   // total posts
-  const totalPostsQuery = "SELECT COUNT(*) as total_posts FROM post_lst";
+  const totalPostsQuery = 'SELECT COUNT(*) as total_posts FROM post_lst';
   const [[totalPostsResult]] = await db.execute(totalPostsQuery);
   analyticsFactsData.push(['Total posts', totalPostsResult.total_posts]);
 
   // total hidden posts
-  const hiddenPostsQuery = "SELECT COUNT(*) as hidden_posts FROM post_lst WHERE is_hidden = 1";
+  const hiddenPostsQuery = 'SELECT COUNT(*) as hidden_posts FROM post_lst WHERE is_hidden = 1';
   const [[hiddenPostsResult]] = await db.execute(hiddenPostsQuery);
   analyticsFactsData.push(['Hidden posts', hiddenPostsResult.hidden_posts]);
 
   // total distinct posters
-  const numUniquePostersQuery = "SELECT COUNT(DISTINCT posting_user) as unique_posters FROM post_lst";
+  const numUniquePostersQuery = 'SELECT COUNT(DISTINCT posting_user) as unique_posters FROM post_lst';
   const [[numUniquePostersResult]] = await db.execute(numUniquePostersQuery);
   analyticsFactsData.push(['Unique posters', numUniquePostersResult.unique_posters]);
 
   // total comments (in groups)
-  const totalCommentsQuery = "SELECT COUNT(*) as total_comments FROM reply_lst";
+  const totalCommentsQuery = 'SELECT COUNT(*) as total_comments FROM reply_lst';
   const [[totalCommentsResult]] = await db.execute(totalCommentsQuery);
   analyticsFactsData.push(['Total comments', totalCommentsResult.total_comments]);
 
