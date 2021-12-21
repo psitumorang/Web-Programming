@@ -83,7 +83,8 @@ const deleteProfile = async (db, userId) => {
 };
 
 // delete user by id.
-// Building a second function because the other one's syntax seems wrong but I don't want to delete others' work
+// Building a second function because the other one's syntfax seems wrong
+// but I don't want to delete others' work
 const deleteProfile2 = async (db, userId) => {
   try {
     const query = 'DELETE FROM profile_lst WHERE user_id=?';
