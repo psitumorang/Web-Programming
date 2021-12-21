@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">13.05% </span>
+                <span class="strong">14.2% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>91/697</span>
+                <span class='fraction'>99/697</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">3.03% </span>
+                <span class="strong">4.54% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/66</span>
+                <span class='fraction'>3/66</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">13.18% </span>
+                <span class="strong">14.34% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>91/690</span>
+                <span class='fraction'>99/690</span>
             </div>
         
             
@@ -1462,7 +1462,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1477,23 +1477,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2814,7 +2814,7 @@ let convoDb;
 webapp.listen(port, async () =&gt; {
   userDb = await userLib.connect();
   profileDb = await profileLib.connect();
-<span class="cstat-no" title="statement not covered" >  postDb = await postLib.connect();</span>
+  postDb = await postLib.connect();
 <span class="cstat-no" title="statement not covered" >  postCommentDb = await postCommentLib.connect();</span>
 <span class="cstat-no" title="statement not covered" >  groupDb = await groupLib.connect();</span>
 <span class="cstat-no" title="statement not covered" >  notifDb = await notifLib.connect();</span>
@@ -2828,24 +2828,24 @@ webapp.listen(port, async () =&gt; {
 <span class="cstat-no" title="statement not covered" >  console.log('listening');</span>
 });
 &nbsp;
-webapp.post('/registration', <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    console.log(req.body);</span>
-    const nextId = <span class="cstat-no" title="statement not covered" >await userLib.getNextId(userDb);</span>
-<span class="cstat-no" title="statement not covered" >    console.log(nextId);</span>
-    const newUser = <span class="cstat-no" title="statement not covered" >{</span>
+webapp.post('/registration', async (req, res) =&gt; {
+  try {
+    console.log(req.body);
+    const nextId = await userLib.getNextId(userDb);
+    console.log(nextId);
+    const newUser = {
       user_id: nextId + 1,
       user_name: req.body.user_name,
       user_password: req.body.user_password,
     };
-    const newProfile = <span class="cstat-no" title="statement not covered" >{</span>
+    const newProfile = {
       user_id: nextId + 1,
       first_name: '',
       last_name: '',
       biography: '',
       profile_picture_url: '',
     };
-    const resultsUser = <span class="cstat-no" title="statement not covered" >await userLib.addUser(userDb, newUser);</span>
+    const resultsUser = await userLib.addUser(userDb, newUser);
 <span class="cstat-no" title="statement not covered" >    if (resultsUser === null) {</span>
 <span class="cstat-no" title="statement not covered" >      res.status(400).json({ err: 'username already taken' });</span>
     } else {
@@ -4126,7 +4126,7 @@ module.exports = webapp;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Mon Dec 20 2021 17:10:51 GMT-0500 (Eastern Standard Time)
+                at Mon Dec 20 2021 20:32:39 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

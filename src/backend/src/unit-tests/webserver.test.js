@@ -63,7 +63,7 @@ describe('Test webapp endpoints and integration tests', () => {
 	   });
 	 });
 
-	test('status code and response unsuccessful registration endpoint', () => {
+	test('status code and response unsuccessful registration endpoint', async () => {
 	  request(webapp).post('/registration')
 	    .send(testUser)
 	    .expect(201)
@@ -72,7 +72,7 @@ describe('Test webapp endpoints and integration tests', () => {
 	      request(webapp).post('/registration')
 	        .send(testUser)
 	        .expect(400)
-	        .then(async (responst) => {
+	        .then(async (response) => {
 	        	const ret = JSON.parse(response.text);
 	        	expect(ret.err).toBe('username already taken');
 	        	console.log('JUST ABOUT TO DELETE THIS GUY');
@@ -83,7 +83,7 @@ describe('Test webapp endpoints and integration tests', () => {
 	   });
 	});
 
-	test('status code and response successful login', () => {
+	test('status code and response successful login', async () => {
 	  console.log('start login test');
 	  request(webapp).post('/registration')
 	    .send(testUser)
@@ -102,17 +102,21 @@ describe('Test webapp endpoints and integration tests', () => {
 	    });
 	});
 
-	test('status code and response unsuccessful login - user does not exist', () => {
+	test('status code and response unsuccessful login - user does not exist', async () => {
     	const body = {
-  	      ...testUser,
+  	      user_name: 'me',
+  	      user_password: 'thisisapassword',
   	      attempt: 0,
   		};
   		const user = await knex.select('*').from('user_lst').where('user_name', '=', testUser.user_name);
-  		const response = await request(webapp).post('/login')
+  		request(webapp).post('/login')
    		  .send(body)
-    	  .expect(404).then(() => {});
-  		await deleteProfile(user[0].user_id);
-  		await deleteUser(user[0].user_id);
+    	  .expect(404)
+    	  .then(async (response) => {
+    	    await deleteProfile(user[0].user_id);
+  				await deleteUser(user[0].user_id);
+    	  });
+  		
 	});
 
 });

@@ -91,8 +91,8 @@ const getAdministeredGroups = async (db, userId) => {
   const query = 'SELECT group_id FROM admin_lst WHERE admin_id = ?';
   try {
     const [result] = await db.execute(query, [userId]);
-    console.log('in adminTable DB, result sending back, unpacked, from getAdministeredGroups is ', result[0]);
-    return result[0];
+    console.log('in adminTable DB, result sending back, unpacked, from getAdministeredGroups is ', result);
+    return result;
   } catch (err) {
     console.log('error in getAdministeredGroups, with err of: ', err);
   }
