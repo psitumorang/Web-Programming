@@ -39,7 +39,7 @@ function Groups(props) {
     // eslint-disable-next-line
     const res = await lib.createGroup(changeState,
       document.getElementById('groupname').value,
-      1,
+      state.userId,
       document.getElementById('groupdescription').value,
       document.getElementById('ispublic').value,
       document.getElementById('topic1').value,
