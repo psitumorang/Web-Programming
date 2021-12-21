@@ -19,9 +19,12 @@ const convoLib = require('./convoTableDatabase');
 
 const port = process.env.PORT || 8080;
 
-webapp.use(express.urlencoded({
-  extended: true,
-}));
+webapp.use(express.json());
+webapp.use(
+  express.urlencoded({
+    extended: true,
+  }),
+);
 webapp.use(cors());
 webapp.use(express.static(path.join(__dirname, './client/build')));
 
