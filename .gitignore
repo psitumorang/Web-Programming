@@ -8,7 +8,7 @@ node_modules
 
 # testing
 client/coverage
-coveage
+coverage
 
 # production
 client/build

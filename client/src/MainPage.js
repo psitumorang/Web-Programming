@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import LoginPage from './login-page/LoginPage';
 import Home from './home-page/Home';
 import ProfilePage from './profile-page/ProfilePage';
@@ -83,7 +84,9 @@ function MainPage() {
   };
 
   return (
-    conditionallyRender(window.location.href)
+    <Router>
+      {conditionallyRender(window.location.href)}
+    </Router>
   );
 }
 

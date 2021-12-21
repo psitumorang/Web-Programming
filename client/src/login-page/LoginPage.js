@@ -1,5 +1,4 @@
 import { React, useState } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import './LoginPage.css';
 import LoginForm from './LoginForm';
 import RegistrationForm from '../registration-page/RegistrationForm';
@@ -23,21 +22,19 @@ function LoginPage(props) {
   };
 
   return (
-    <Router>
-      <div className="LoginPage">
-        <div id="artSide">
-          <div className="rectWrapper">
-            <div className="rect" id="rect1" />
-            <div className="rect" id="rect2" />
-            <div className="rect" id="rect3" />
-            <div className="rect" id="rect4" />
-          </div>
-        </div>
-        <div id="loginFormContainer">
-          {conditionalRender()}
+    <div className="LoginPage">
+      <div id="artSide">
+        <div className="rectWrapper">
+          <div className="rect" id="rect1" />
+          <div className="rect" id="rect2" />
+          <div className="rect" id="rect3" />
+          <div className="rect" id="rect4" />
         </div>
       </div>
-    </Router>
+      <div id="loginFormContainer">
+        {conditionalRender()}
+      </div>
+    </div>
   );
 }
 
