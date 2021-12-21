@@ -177,11 +177,10 @@ const getPublicGroups = async (db, sort) => {
     let query = '';
     if (sort === 'newest') {
       query = 'SELECT * FROM group_lst WHERE is_public=1 ORDER BY last_post DESC';
-    }
-    if (sort === 'posts') {
+    } else if (sort === 'posts') {
+      console.log('POSTS SORTING');
       query = 'SELECT * FROM group_lst WHERE is_public=1 ORDER BY post_number DESC';
-    }
-    if (sort === 'members') {
+    } else if (sort === 'members') {
       query = 'SELECT * FROM group_lst WHERE is_public=1 ORDER BY member_number DESC';
     } else {
       query = 'SELECT * FROM group_lst WHERE is_public=1';
@@ -238,7 +237,7 @@ const getGroupsWithName = async (db, name) => {
 // delete group by name
 const deleteGroup = async (db, name) => {
   try {
-    const query = 'DELETE FROM group_lst.group_name WHERE group_name=?';
+    const query = 'DELETE FROM group_lst WHERE group_name=?';
     const [row] = await db.execute(query, [name]);
     // eslint-disable-next-line no-console
     console.log(`Deleted ${JSON.stringify(row.affectedRows)} group(s)`);
@@ -253,8 +252,8 @@ const deleteGroup = async (db, name) => {
 // update a group
 const updateGroup = async (db, groupId, paramToUpdate, updateValue) => {
   try {
-    const query = 'UPDATE group_lst SET ?=? WHERE group_id=?';
-    const params = [paramToUpdate, updateValue, groupId];
+    const query = `UPDATE group_lst SET ${paramToUpdate}=? WHERE group_id=?`;
+    const params = [updateValue, groupId];
     const [row] = await db.execute(query, params);
     // eslint-disable-next-line no-console
     console.log(`Updated ${JSON.stringify(row.affectedRows)} player`);
@@ -316,6 +315,7 @@ module.exports = {
   addTopics,
   getGroups,
   getGroupsWithName,
+  getTopicsByGroupId,
   deleteGroup,
   updateGroup,
   getNextId,

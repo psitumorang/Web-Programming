@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.24% </span>
+                <span class="strong">65.51% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/29</span>
+                <span class='fraction'>19/29</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.24% </span>
+                <span class="strong">65.51% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/29</span>
+                <span class='fraction'>19/29</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -151,13 +151,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -167,20 +167,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -215,14 +215,14 @@ const connect = <span class="fstat-no" title="function not covered" >as</span>yn
   }
 };
 &nbsp;
-const getPostComments = <span class="fstat-no" title="function not covered" >as</span>ync (db, id) =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
+const getPostComments = async (db, id) =&gt; {
+  try {
     // assign query using id as param
-    const query = <span class="cstat-no" title="statement not covered" >'SELECT * FROM post_comments WHERE post_id = ?';</span>
+    const query = 'SELECT * FROM post_comments WHERE post_id = ?';
 &nbsp;
     // execute query on db
-    const postComments = <span class="cstat-no" title="statement not covered" >await db.execute(query, [id]);</span>
-<span class="cstat-no" title="statement not covered" >    return postComments[0];</span>
+    const postComments = await db.execute(query, [id]);
+    return postComments[0];
   } catch (err) {
     // eslint-disable-next-line no-console
 <span class="cstat-no" title="statement not covered" >    console.error("error trying to retrieve the user's posts");</span>
@@ -230,22 +230,22 @@ const getPostComments = <span class="fstat-no" title="function not covered" >as<
   }
 };
 &nbsp;
-const makeNewComment = <span class="fstat-no" title="function not covered" >as</span>ync (db, comment) =&gt; {
+const makeNewComment = async (db, comment) =&gt; {
   // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >  console.log('in postcommentsTableDatabase with comment of ', comment);</span>
-<span class="cstat-no" title="statement not covered" >  try {</span>
+  console.log('in postcommentsTableDatabase with comment of ', comment);
+  try {
     // get the comment_id to insert (e.g. max in table then increment)
-    const maxQuery = <span class="cstat-no" title="statement not covered" >'SELECT MAX(comment_id) as max_id FROM post_comments';</span>
-    const maxID = <span class="cstat-no" title="statement not covered" >await db.execute(maxQuery);</span>
-    const newCommentID = <span class="cstat-no" title="statement not covered" >maxID[0][0].max_id + 1;</span>
+    const maxQuery = 'SELECT MAX(comment_id) as max_id FROM post_comments';
+    const maxID = await db.execute(maxQuery);
+    const newCommentID = maxID[0][0].max_id + 1;
     // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >    console.log('newCommentID is: ', newCommentID);</span>
+    console.log('newCommentID is: ', newCommentID);
 &nbsp;
     // assign query using comment in body
-    const query = <span class="cstat-no" title="statement not covered" >'INSERT INTO post_comments VALUES (?, ?, ?, ?)';</span>
-    const queryParams = <span class="cstat-no" title="statement not covered" >[newCommentID, comment.post_id, comment.user_id, comment.comment_txt];</span>
-    const insertion = <span class="cstat-no" title="statement not covered" >await db.execute(query, queryParams);</span>
-<span class="cstat-no" title="statement not covered" >    return insertion;</span>
+    const query = 'INSERT INTO post_comments VALUES (?, ?, ?, ?)';
+    const queryParams = [newCommentID, comment.post_id, comment.user_id, comment.comment_txt];
+    const insertion = await db.execute(query, queryParams);
+    return insertion;
   } catch (err) {
     // eslint-disable-next-line no-console
 <span class="cstat-no" title="statement not covered" >    console.error('error trying to make new comment! ', err);</span>
@@ -265,7 +265,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Mon Dec 20 2021 20:32:39 GMT-0500 (Eastern Standard Time)
+                at Tue Dec 21 2021 01:33:12 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>
