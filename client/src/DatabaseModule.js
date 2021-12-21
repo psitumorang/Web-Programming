@@ -2,7 +2,6 @@ const sendPostRequest = async function sendPostRequest(url, body) {
   try {
     const res = await fetch(url, {
       method: 'POST',
-      mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     })
@@ -20,7 +19,6 @@ const sendUploadPostRequest = async function sendUploadPostRequest(url, body) {
   try {
     const res = await fetch(url, {
       method: 'POST',
-      mode: 'no-cors',
       headers: { 'Content-Type': 'multipart/form-data' },
       body,
     })
@@ -39,7 +37,6 @@ const sendPutRequest = async function sendPutRequest(url, body) {
   try {
     const res = await fetch(url, {
       method: 'PUT',
-      mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     })
@@ -59,7 +56,6 @@ const sendGetRequest = async function sendGetRequest(url, params) {
     const fullURL = url + (typeof params !== 'undefined' ? JSON.stringify(params.id) : '');
     const res = await fetch(fullURL, {
       method: 'GET',
-      mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(body),
     })
@@ -79,7 +75,6 @@ const sendDeleteRequest = async function sendDeleteRequest(url) {
   try {
     const res = await fetch(url, {
       method: 'DELETE',
-      mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
     })
       .then((response) => response.json())
@@ -98,7 +93,6 @@ const sendBodiedDeleteRequest = async function sendBodiedDeleteRequest(url, body
   try {
     const res = await fetch(url, {
       method: 'DELETE',
-      mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     })
