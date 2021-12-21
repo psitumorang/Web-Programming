@@ -118,7 +118,7 @@ const getRegistrationDate = async (userId) => {
   return registrationDate;
 };
 
-module.exports = {
+export {
   getUserPosts,
   getProfile,
   sendReply,

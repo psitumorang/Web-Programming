@@ -25,7 +25,7 @@ const createAccount = async (changeState, username, password1, password2) => {
   }
 };
 
-module.exports = {
+export {
   validatePassword,
   createAccount,
 };

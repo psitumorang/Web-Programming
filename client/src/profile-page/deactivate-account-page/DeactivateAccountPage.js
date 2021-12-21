@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const { deactivateAccount } = require('./DeactivateModule');
+import deactivateAccount from './DeactivateModule';
 
 const DeactivateAccountPage = (props) => {
   const { state, changeState } = props;

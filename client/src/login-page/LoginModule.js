@@ -37,4 +37,4 @@ const changePassword = async (changeState, username, password1, password2) => {
   }
 };
 
-module.exports = { verifyUser, changePassword };
+export { verifyUser, changePassword };

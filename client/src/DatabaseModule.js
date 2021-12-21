@@ -125,7 +125,7 @@ const sendGetGroupsRequest = async function sendGetGroupsRequest(url) {
   }
 };
 
-module.exports = {
+export {
   sendPostRequest,
   sendGetRequest,
   sendPutRequest,
