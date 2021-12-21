@@ -35,7 +35,6 @@ function ProfilePage(props) {
   const updateUserPosts = async () => {
     // extract id from props
     const { userId } = state;
-    console.log('state is: ', state);
 
     // const dummyId = 9;
 

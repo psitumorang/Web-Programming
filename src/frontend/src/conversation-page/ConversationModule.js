@@ -72,10 +72,7 @@ const uploadMediaConvo = async (selected, state, updateMessages, updateState) =>
   const data = new FormData();
   data.append('file', file);
   data.append('upload_preset', ['yj7lgb8v']);
-  const res = sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
-    // TODO change this to be right
-    console.log('SENT MEDIA');
-    console.log(res, mediaUrl, state);
+  sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
     // creates conversation in database
 
     const msg = {

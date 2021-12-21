@@ -18,7 +18,6 @@ const resetSelected = (updateSelected) => {
 
 const getFilterOptions = async (setFilters) => {
   const topics = await database.sendGetRequest('http://localhost:8080/topics');
-  console.log(topics);
   setFilters(topics.topics);
 };
 
@@ -37,8 +36,6 @@ const getFilteredGroups = async (filter, sort) => {
   } else {
     groups = await database.sendGetRequest(`http://localhost:8080/topics/${filter}/none`);
   }
-  console.log(groups);
-  console.log(groups.groups);
   return groups.groups;
 };
 
@@ -51,8 +48,6 @@ const parseFilteredGroups = (groups, changeState, selected) => {
       element.removeChild(element.firstChild);
     }
   }
-
-  console.log('original groups is: ', groups[0], groups.length);
 
   // then add all the groups
   for (let i = 0; i < groups[0].length; i += 1) {

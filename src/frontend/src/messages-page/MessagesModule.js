@@ -5,7 +5,6 @@ const database = require('../DatabaseModule');
 const getConvos = async (id) => {
   const response = await database.sendGetRequest(`http://localhost:8080/convo/${id}`);
   const convoInfo = [];
-  console.log(response);
   for (let i = 0; i < response.length; i += 1) {
     let otherId = -1;
     let otherName = '';
@@ -63,14 +62,11 @@ const uploadMediaConvo = async (selected, state, updateMessages, updateState) =>
   const data = new FormData();
   data.append('file', file);
   data.append('upload_preset', ['yj7lgb8v']);
-  console.log(data.get('upload_preset'));
-  const res = sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
-    // TODO change this to be right
+  sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
+    // eslint-disable-next-line no-console
     console.log('SENT MEDIA');
-    console.log(res, mediaUrl, state);
     // creates conversation in database
     return database.sendGetRequest(`http://localhost:8080/user-by-name/${document.getElementById('otherName').value}`).then((resp) => {
-      console.log(resp);
       if (resp.length === 0) {
         // MAYBE MAKE THIS THE ERROR PAGE DUDE?!?!?!?!?!
         updateState({ link: '/messages/user' });
@@ -124,7 +120,6 @@ const startConvo = async (selected, state, updateMessages, updateState) => {
 
   // creates conversation in database
   const res = await database.sendGetRequest(`http://localhost:8080/user-by-name/${document.getElementById('otherName').value}`);
-  console.log(res);
   if (res.length === 0) {
     updateState({ link: '/messages/user' });
     return null;

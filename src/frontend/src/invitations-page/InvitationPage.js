@@ -18,7 +18,6 @@ function InvitationPage(props) {
   };
 
   const updateInvitationsToReview = async () => {
-    console.log('sending invitation to review from invpage with userid of: ', state.userId);
     const fetchedInvitationsToReview = await lib.getInvitationsToReview(state.userId);
     setInvitationsToReview(fetchedInvitationsToReview);
   };

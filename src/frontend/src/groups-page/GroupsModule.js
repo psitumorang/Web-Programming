@@ -72,9 +72,6 @@ const parseGroups = (changeState, groups, admins, groupMemberships) => {
     }
   }
 
-  console.log('filteredGroupMemberships is: ', filteredGroups);
-  console.log('original groups is: ', groups);
-
   // then add all the groups
   for (let i = 0; i < filteredGroups.length; i += 1) {
     const group = filteredGroups[i];
@@ -131,11 +128,6 @@ const requestJoinGroup = async (userId, groupId, updateMessage) => {
   const groupInvitations = await database.sendGetRequest(`http://localhost:8080/invitations-open/${groupId}`);
   const groupAdmins = await database.sendGetRequest(`http://localhost:8080/admins/${groupId}`);
 
-  // console log testing
-  console.log('group members:', groupMembers);
-  console.log('groupInvitations: ', groupInvitations);
-  console.log('groupAdmins: ', groupAdmins);
-
   // check if in group already
   for (let i = 0; i < groupMembers.length; i += 1) {
     if (groupMembers[i].member_id === userId) {
@@ -188,8 +180,6 @@ const getNonMemberPublicGroups = async (groupMemberships, groups) => {
     }
   }
 
-  console.log('in groupsmodulechecking nonmember section, final array is: ', publicGroupsUserNotIn);
-
   // return Array
   return publicGroupsUserNotIn;
 };
@@ -218,10 +208,8 @@ const getRandomNum = (num) => {
 // Note - returns an ARRAY, not a single group object
 const suggestGroup = async (groupMemberships, groups) => {
   const potentialSuggestions = await getNonMemberPublicGroups(groupMemberships, groups);
-  console.log('back in suggestgroup with potential suggestions of ', potentialSuggestions);
   const numPotentialSuggestions = potentialSuggestions.length;
   const choice = getRandomNum(numPotentialSuggestions);
-  console.log('choice num is ', choice);
   const suggestedGroup = potentialSuggestions[choice];
 
   return [suggestedGroup];

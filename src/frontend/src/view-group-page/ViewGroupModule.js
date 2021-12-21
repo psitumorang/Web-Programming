@@ -49,7 +49,6 @@ const addAdmin = async (groupAndAdmins, setGroupAndAdmins, changeState) => {
 const inviteNonAdmin = async (groupAndAdmins, state, setGroupAndAdmins) => {
   const url = 'http://localhost:8080/invitations/';
   const toUserName = document.getElementById('addNonAdmin').value;
-  console.log('in viewgroupmodule/invitenonadmin, about to sendGet request with tousername of', toUserName);
 
   // get the userid using the username.
   // I've just used one argument because the concatenation method in DatabaseModule
@@ -86,7 +85,6 @@ const uploadMediaPost = async (
   postingUsername,
 ) => {
   const file = document.getElementById('postContent').files[0];
-  console.log(file);
   if (selected === 'image' && file.size > 10000000) {
     updateState({ link: '/viewgroup/post/error' });
     return null;
@@ -98,10 +96,7 @@ const uploadMediaPost = async (
   const data = new FormData();
   data.append('file', file);
   data.append('upload_preset', ['yj7lgb8v']);
-  const res = sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
-    // TODO change this to be right
-    console.log('SENT MEDIA');
-    console.log(res, mediaUrl);
+  sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
     const newPost = {
       post_group: postGroup,
       posting_user: postingUser,
@@ -284,7 +279,6 @@ const parsePosts = (posts) => {
     const postingUser = post.posting_username;
     // eslint-disable-next-line prefer-destructuring
     const caption = post.caption;
-    console.log(posts[i]);
     let content = '';
     if (posts[i].photourl !== null) {
       content += `<div class="content image">
