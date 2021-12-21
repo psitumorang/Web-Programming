@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 
 const {
   getProfile,
-  getUserPosts,
+  // getUserPosts,
   sendReply,
   getRegistrationDate,
 } = require('./ProfileModule');
@@ -39,7 +39,7 @@ function ProfilePage(props) {
     // const dummyId = 9;
 
     // call backend for content linked to userId
-    const postsToSet = await getUserPosts(userId);
+    // const postsToSet = await getUserPosts(userId);
     const profileToSet = await getProfile(userId);
 
     // just for testing
@@ -48,7 +48,8 @@ function ProfilePage(props) {
     console.log('user registration date is: ', regoDate);
 
     // update state
-    setUserPosts(postsToSet);
+    // setUserPosts(postsToSet);
+    setUserPosts([]);
     // don't know why I need to index it at all let alone double, gets the right data structure
     setUserProfile(profileToSet[0][0]);
     setRegoDate(regoDate);
@@ -73,9 +74,9 @@ function ProfilePage(props) {
       </div>
       <div id="nav_button_container">
         <div className="nav_button" onClick={() => changeState({ link: '/main' })} onKeyDown={() => changeState({ link: '/main' })} role="link" tabIndex={0}>Home</div>
-        <div className="nav_button" onClick={() => changeState({ link: '/home' })} onKeyDown={() => changeState({ link: '/home' })} role="link" tabIndex={0}>Groups [active link] </div>
-        <div className="nav_button">Update bio</div>
-        <div className="nav_button" onClick={() => changeState({ link: '/changepassword', userId: userProfile.user_id })} onKeyDown={() => changeState({ link: '/changepassword', userId: userProfile.user_id })} role="link" tabIndex={0}>Change password or bio</div>
+        <div className="nav_button" onClick={() => changeState({ link: '/home' })} onKeyDown={() => changeState({ link: '/home' })} role="link" tabIndex={0}>Groups</div>
+        <div className="nav_button" onClick={() => changeState({ link: '/changepassword', userId: userProfile.user_id })} onKeyDown={() => changeState({ link: '/changepassword', userId: userProfile.user_id })} role="link" tabIndex={0}>Set bio or profile pic</div>
+        <div className="nav_button" onClick={() => changeState({ link: '/changepassword', userId: userProfile.user_id })} onKeyDown={() => changeState({ link: '/changepassword', userId: userProfile.user_id })} role="link" tabIndex={0}>Change password</div>
         <div className="nav_button" id="deactivateButton" onClick={() => changeState({ link: '/deactivate-account' })} onKeyDown={() => changeState({ link: '/deactivate-account' })} role="link" tabIndex={0}>Deactivate account</div>
       </div>
       <div id="main_content_container">
