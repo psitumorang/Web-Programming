@@ -71,4 +71,4 @@ const deactivateAccount = async (userId, updateMessage, changeState) => {
   changeState({ link: '/' });
 };
 
-module.exports = { deactivateAccount };
+export default deactivateAccount;

@@ -1,7 +1,6 @@
 import { useState, useEffect, React } from 'react';
+import getNotifications from './NotificationModule';
 import './NotificationPage.css';
-
-const lib = require('./NotificationModule');
 
 function NotificationPage(props) {
   const { changeState, state } = props;
@@ -9,7 +8,7 @@ function NotificationPage(props) {
   const [notifs, setNotifs] = useState([]);
 
   const updateNotifs = async () => {
-    const n = await lib.getNotifications(state.userId);
+    const n = await getNotifications(state.userId);
 
     setNotifs(n);
   };

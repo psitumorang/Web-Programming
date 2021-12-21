@@ -10,6 +10,4 @@ const getNotifications = async (id) => {
   return null;
 };
 
-module.exports = {
-  getNotifications,
-};
+export default getNotifications;

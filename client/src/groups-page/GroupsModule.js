@@ -217,7 +217,7 @@ const suggestGroup = async (groupMemberships, groups) => {
   return [suggestedGroup];
 };
 
-module.exports = {
+export {
   createGroup,
   getGroups,
   parseGroups,

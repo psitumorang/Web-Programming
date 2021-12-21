@@ -137,7 +137,7 @@ const notApproveInvite = async (invReview, updateInvitationsToReview, updateMess
   return resultInv;
 };
 
-module.exports = {
+export {
   getPendingInvitations,
   getGroupNames,
   declineInvite,

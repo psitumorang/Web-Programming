@@ -94,7 +94,7 @@ const parseFlaggedPosts = (flagged, changeState) => {
   }
 };
 
-module.exports = {
+export {
   getFlaggedPostsForReview,
   parseFlaggedPosts,
 };

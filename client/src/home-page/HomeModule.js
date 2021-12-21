@@ -101,7 +101,7 @@ const parseFilteredGroups = (groups, changeState, selected) => {
   }
 };
 
-module.exports = {
+export {
   changeSelectedFilter,
   resetSelectedSort,
   changeSelectedSort,

@@ -10,7 +10,7 @@ const getPostAnalyticsFacts = async () => {
   return postAnalyticsFacts;
 };
 
-module.exports = {
+export {
   getGroupAnalyticsFacts,
   getPostAnalyticsFacts,
 };
