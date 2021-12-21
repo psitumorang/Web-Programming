@@ -228,8 +228,19 @@ const deletePost = async (state, changeState, postId, postingUser) => {
   }
 
   if (adminNames.includes(state.username)) {
+    // delete the message
     const response = await database.sendDeleteRequest(`http://localhost:8080/post/${postId}`);
+
+    // get user info
+    const user = await database.sendGetRequest(`http://localhost:8080/user/${postingUser}`);
+    const userName = user[0].user_name;
+
+    alert(`You have deleted ${userName}'s post. A notification has been sent to ${userName} regarding this deletion.`);
     changeState({ link: '/viewgroup' });
+
+    // post notification
+    const notifBody = { notification: { isRead: false, msg: `Group admin ${state.username} deleted your post with id ${postId}` } };
+    await database.sendPostRequest(`http://localhost:8080/notifications/${postingUser}`, notifBody);
 
     return response;
   }
