@@ -10,7 +10,6 @@ function Messages(props) {
 
   const updateMessages = async () => {
     const convos = await getConvos(state.userId);
-    console.log(convos.length, convos);
     updateMsgs(convos);
     parseConvos(changeState, convos);
   };
@@ -19,7 +18,6 @@ function Messages(props) {
 
   const conditionalRender = () => {
     if (selected === 'text') {
-      console.log('text');
       return (
         <div id="form">
           <input type="text" id="otherName" placeholder="your friend's username" />
@@ -29,7 +27,6 @@ function Messages(props) {
       );
     }
     if (selected === 'audio') {
-      console.log('audio');
       return (
         <div id="form">
           <input type="text" id="otherName" placeholder="your friend's username" />
@@ -39,7 +36,6 @@ function Messages(props) {
       );
     }
     if (selected === 'video') {
-      console.log('video');
       return (
         <div id="form">
           <input type="text" id="otherName" placeholder="your friend's username" />
@@ -49,7 +45,6 @@ function Messages(props) {
       );
     }
     if (selected === 'image') {
-      console.log('image');
       return (
         <div id="form">
           <input type="text" id="otherName" placeholder="your friend's username" />

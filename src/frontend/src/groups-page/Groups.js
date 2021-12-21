@@ -22,12 +22,9 @@ function Groups(props) {
     lib.parseGroups(changeState, groups.result[0], admins, groupMemberships);
     const groups2 = groups.result[0];
     const nonMemberGroupsResolved = await lib.nonMemberPublicGroups(groupMemberships, groups2);
-    console.log('about to go into new suggested group with groupMemberships of ', groupMemberships);
-    console.log('about to go into new suggested group with groups2 of ', groups);
     let newSuggestedGroup = await lib.suggestGroup(groupMemberships, groups2);
 
     setNonMemberGroups(nonMemberGroupsResolved);
-    console.log('about to go into setsuggestedgroup with newsuggestedgroup of ', newSuggestedGroup);
     if (typeof newSuggestedGroup[0] === 'undefined') {
       newSuggestedGroup = [];
     }

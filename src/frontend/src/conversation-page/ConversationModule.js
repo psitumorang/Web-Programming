@@ -4,7 +4,6 @@ const database = require('../DatabaseModule');
 
 const getMessages = async (convoId, user) => {
   const response = await database.sendGetRequest(`http://localhost:8080/message/${convoId}/${user}`);
-  console.log(response);
   return response;
 };
 
@@ -21,7 +20,6 @@ const parseMessages = (msgs, id) => {
   }
 
   for (let i = 0; i < msgs.length; i += 1) {
-    console.log(msgs[i]);
     let msg = `${msgs[i].senderName}`;
     if (msgs[i].txt !== null) {
       msg += `<div class="content txt">
@@ -59,7 +57,6 @@ const parseMessages = (msgs, id) => {
 };
 
 const uploadMediaConvo = async (selected, state, updateMessages, updateState) => {
-  console.log(updateMessages);
   const file = document.getElementById('firstMsg').files[0];
 
   // check if the file is too large (defined as > 10MB)
@@ -75,11 +72,7 @@ const uploadMediaConvo = async (selected, state, updateMessages, updateState) =>
   const data = new FormData();
   data.append('file', file);
   data.append('upload_preset', ['yj7lgb8v']);
-  console.log(data.get('upload_preset'));
-  const res = sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
-    // TODO change this to be right
-    console.log('SENT MEDIA');
-    console.log(res, mediaUrl, state);
+  sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
     // creates conversation in database
 
     const msg = {

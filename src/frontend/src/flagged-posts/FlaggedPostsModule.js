@@ -35,7 +35,6 @@ const parseFlaggedPosts = (flagged, changeState) => {
       const postingUser = post.posting_username;
       // eslint-disable-next-line prefer-destructuring
       const caption = post.caption;
-      console.log(flagged[i]);
       let content = '';
       if (flagged[i].photourl !== null) {
         content += `<div class="content image">

@@ -15,12 +15,10 @@ function Home(props) {
   const [selectedSort, updateSelectedSort] = useState('none');
 
   const update = async () => {
-    console.log('UPDATE');
     await lib.getFilterOptions(setFilters);
     const groups = await lib.getFilteredGroups(selectedFilter, selectedSort);
     lib.parseFilteredGroups(groups, changeState, selectedFilter);
   };
-  console.log(filters, selectedFilter, selectedSort);
   useEffect(() => { update(); }, [selectedFilter, selectedSort]);
 
   return (

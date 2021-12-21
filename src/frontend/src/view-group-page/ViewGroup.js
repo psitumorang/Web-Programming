@@ -91,7 +91,6 @@ function ViewGroup(props) {
     const replies = await getReplies(changeState, state.viewingGroup);
 
     setAllReplies(replies.result);
-    console.log(editComment);
     if (replies.result) {
       parseReplies(posts.result[0], replies.result[0], editComment, setEditComment);
       parseOnclicks(state, changeState, posts.result[0], replies.result[0], setEditComment);
@@ -100,7 +99,6 @@ function ViewGroup(props) {
 
   const conditionalRender = () => {
     if (selected === 'text') {
-      console.log('text');
       return (
         <div id="form">
           <textarea id="postCaption" placeholder="Post message to group" />
@@ -108,7 +106,6 @@ function ViewGroup(props) {
       );
     }
     if (selected === 'audio') {
-      console.log('audio');
       return (
         <div id="form">
           <textarea id="postCaption" placeholder="Write a caption" />
@@ -117,7 +114,6 @@ function ViewGroup(props) {
       );
     }
     if (selected === 'video') {
-      console.log('video');
       return (
         <div id="form">
           <textarea id="postCaption" placeholder="Write a caption" />
@@ -126,7 +122,6 @@ function ViewGroup(props) {
       );
     }
     if (selected === 'image') {
-      console.log('image');
       return (
         <div id="form">
           <textarea id="postCaption" placeholder="Write a caption" />
