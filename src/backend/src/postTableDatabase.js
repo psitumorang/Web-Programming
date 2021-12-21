@@ -171,6 +171,7 @@ const flagPost = async (db, postId, flagger) => {
     return postId;
   } catch (err) {
     // eslint-disable-next-line no-console
+    console.log(err);
     console.log(`error: ${err.message}`);
   }
   return null;

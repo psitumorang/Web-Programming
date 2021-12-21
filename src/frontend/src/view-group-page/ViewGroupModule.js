@@ -49,7 +49,6 @@ const addAdmin = async (groupAndAdmins, setGroupAndAdmins, changeState) => {
 const inviteNonAdmin = async (groupAndAdmins, state, setGroupAndAdmins) => {
   const url = 'http://localhost:8080/invitations/';
   const toUserName = document.getElementById('addNonAdmin').value;
-  console.log('in viewgroupmodule/invitenonadmin, about to sendGet request with tousername of', toUserName);
 
   // get the userid using the username.
   // I've just used one argument because the concatenation method in DatabaseModule
@@ -86,7 +85,6 @@ const uploadMediaPost = async (
   postingUsername,
 ) => {
   const file = document.getElementById('postContent').files[0];
-  console.log(file);
   if (selected === 'image' && file.size > 10000000) {
     updateState({ link: '/viewgroup/post/error' });
     return null;
@@ -98,10 +96,7 @@ const uploadMediaPost = async (
   const data = new FormData();
   data.append('file', file);
   data.append('upload_preset', ['yj7lgb8v']);
-  const res = sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
-    // TODO change this to be right
-    console.log('SENT MEDIA');
-    console.log(res, mediaUrl);
+  sendUploadPostRequest(`https://api.cloudinary.com/v1_1/cis557-project-group-18/${selected === 'image' ? 'image' : 'video'}/upload`, data).then((mediaUrl) => {
     const newPost = {
       post_group: postGroup,
       posting_user: postingUser,
@@ -214,12 +209,6 @@ const deletePost = async (state, changeState, postId, postingUser) => {
     adminNames.push(admins[i].user_name);
   }
 
-  // eslint-disable-next-line no-console
-  console.log(JSON.stringify(adminNames));
-
-  console.log(JSON.stringify(state.userName));
-  console.log(JSON.stringify(adminNames.includes(state.username)));
-
   if (postingUser === state.userId) {
     const response = await database.sendDeleteRequest(`http://localhost:8080/post/${postId}`);
     changeState({ link: '/viewgroup' });
@@ -235,6 +224,7 @@ const deletePost = async (state, changeState, postId, postingUser) => {
     const user = await database.sendGetRequest(`http://localhost:8080/user/${postingUser}`);
     const userName = user[0].user_name;
 
+    // eslint-disable-next-line
     alert(`You have deleted ${userName}'s post. A notification has been sent to ${userName} regarding this deletion.`);
     changeState({ link: '/viewgroup' });
 
@@ -245,6 +235,7 @@ const deletePost = async (state, changeState, postId, postingUser) => {
     return response;
   }
 
+  // eslint-disable-next-line
   alert('You cannot delete this post because you are neither the author or admin of this group.');
   return null;
 };
@@ -322,7 +313,6 @@ const parsePosts = (posts) => {
     const postingUser = post.posting_username;
     // eslint-disable-next-line prefer-destructuring
     const caption = post.caption;
-    console.log(posts[i]);
     let content = '';
     if (posts[i].photourl !== null) {
       content += `<div class="content image">
@@ -381,8 +371,6 @@ const parsePosts = (posts) => {
     postDiv.innerHTML = postBlock;
 
     document.getElementById('posts-area').appendChild(postDiv);
-    // eslint-disable-next-line no-console
-    console.log(document.getElementById(postId));
   }
 };
 
@@ -392,15 +380,7 @@ const parseReplies = (posts, replies, editComment, setEditComment) => {
     const post = posts[i];
     const postId = post.post_id;
 
-    // eslint-disable-next-line no-console
-    console.log(post);
-
-    // eslint-disable-next-line no-console
-    console.log(postId);
-
     const element = document.getElementById(`comments-${postId}`);
-    // eslint-disable-next-line no-console
-    console.log(element);
 
     // iterate over all replies and those that belong to the current post will be appended
     for (let j = 0; j < replies.length; j += 1) {
@@ -457,21 +437,13 @@ const parseReplies = (posts, replies, editComment, setEditComment) => {
 };
 
 const parseOnclicks = (state, changeState, posts, replies, setEditComment) => {
-  // eslint-disable-next-line no-console
-  console.log('parsing on clicks');
   // iterate over all replies and those that belong to the current post will be appended
   for (let i = 0; i < posts.length; i += 1) {
     const post = posts[i];
     const postId = post.post_id;
     const postingUser = post.posting_user;
 
-    console.log(JSON.stringify(post));
-
-    // eslint-disable-next-line no-console
-    console.log(`reply-button-${postId}`);
     const replyButton = document.getElementById(`reply-button-${postId}`);
-    // eslint-disable-next-line no-console
-    console.log(`Reply Button: ${JSON.stringify(replyButton)}`);
     const flagPostButton = document.getElementById(`flag-post-${postId}`);
     const hidePostButton = document.getElementById(`hide-post-${postId}`);
     const deletePostButton = document.getElementById(`delete-post-${postId}`);
@@ -481,9 +453,6 @@ const parseOnclicks = (state, changeState, posts, replies, setEditComment) => {
     flagPostButton.onclick = () => { flagPost(changeState, postId); };
     hidePostButton.onclick = () => { hidePost(changeState, postId); };
     deletePostButton.onclick = () => { deletePost(state, changeState, postId, postingUser); };
-
-    // eslint-disable-next-line no-console
-    console.log(`Reply Button: ${JSON.stringify(replyButton)}`);
   }
 
   for (let j = 0; j < replies.length; j += 1) {
