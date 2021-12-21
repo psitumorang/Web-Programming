@@ -19,5 +19,8 @@
     "start": "node src/webserver.js",
     "test": "jest --coverage --forceExit",
     "lint": "eslint src/ --ext .js,.ts,.jsx,.tsx --ignore-pattern *.test.jsx --ignore-pattern *.text.tsx --ignore-pattern *.test.js"
+  },
+  "jest": {
+    "testTimeout": 50000
   }
 }
