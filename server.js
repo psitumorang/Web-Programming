@@ -1274,10 +1274,5 @@ webapp.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/build/index.html'));
 });
 
-webapp.use((req, res) => {
-  // eslint-disable-next-line no-console
-  res.status(404).json({ err: 'link does not exist' });
-});
-
 // for testing
 module.exports = webapp;
