@@ -20,25 +20,21 @@ function Conversation(props) {
 
   const conditionalRender = () => {
     if (selected === 'text') {
-      console.log('text');
       return (
         <textarea id="firstMsg" placeholder="type in a message!" />
       );
     }
     if (selected === 'audio') {
-      console.log('audio');
       return (
         <input type="file" id="firstMsg" multiple accept="audio/*" />
       );
     }
     if (selected === 'video') {
-      console.log('video');
       return (
         <input type="file" id="firstMsg" multiple accept="video/*" />
       );
     }
     if (selected === 'image') {
-      console.log('image');
       return (
         <input type="file" id="firstMsg" multiple accept="image/*" />
       );
