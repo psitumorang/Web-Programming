@@ -20,7 +20,7 @@ const connect = async () => {
 };
 
 const addGroupMember = async (db, groupId, userId) => {
-  const query = 'INSERT INTO group_members VALUES (?, ?)';
+  const query = 'INSERT INTO group_members (group_id, member_id) VALUES (?, ?)';
   try {
     const [verifyRow] = await db.execute(query, [groupId, userId]);
 
