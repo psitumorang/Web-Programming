@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.64% </span>
+                <span class="strong">67.27% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>39/56</span>
+                <span class='fraction'>37/55</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.64% </span>
+                <span class="strong">67.27% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>39/56</span>
+                <span class='fraction'>37/55</span>
             </div>
         
             
@@ -195,13 +195,7 @@
 <a name='L130'></a><a href='#L130'>130</a>
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L133'></a><a href='#L133'>133</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -246,8 +240,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -302,8 +294,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -319,15 +309,13 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -363,7 +351,7 @@ const connect = async () =&gt; {
 &nbsp;
 // gets all invitations for user
 const getPendingInvitations = async (db, id) =&gt; {
-  const query = 'SELECT * FROM invitations WHERE to_user_id=? AND invitation_status=\'pending\' ORDER BY invitation_status DESC';
+  const query = 'SELECT * FROM invitations WHERE to_user_id=? AND invitation_status="pending" ORDER BY invitation_status DESC';
 &nbsp;
   try {
     const [rows] = await db.execute(query, [id]);
@@ -383,9 +371,7 @@ const updateInvitationStatus = async (db, invitationId, newStatus) =&gt; {
   const query = 'UPDATE invitations SET invitation_status=? WHERE invitation_id=?';
 &nbsp;
   try {
-    console.log('about to execute updateInvitation status sql with newStatus of ', newStatus, ' and invitationId of ', invitationId);
     const [rows] = await db.execute(query, [newStatus, invitationId]);
-&nbsp;
     // change the rows we just fetched to be read now!
 &nbsp;
     return rows;
@@ -398,13 +384,13 @@ const updateInvitationStatus = async (db, invitationId, newStatus) =&gt; {
 &nbsp;
 // get accepted invitations for review by admin
 const getInvitationsToReview = <span class="fstat-no" title="function not covered" >as</span>ync (db, adminId) =&gt; {
-<span class="cstat-no" title="statement not covered" >  query = ' \</span>
-  SELECT invitation_id, admin_id, group_lst.group_id, group_lst.group_name, to_user_id, from_user_id, user_lst.user_name \
-  FROM invitations \
-  LEFT JOIN group_lst on invitations.group_id = group_lst.group_id \
-  LEFT JOIN user_lst on user_lst.user_id = invitations.to_user_id \
-  LEFT JOIN admin_lst on invitations.group_id = admin_lst.group_id \
-  WHERE admin_id = ? AND invitation_status = \'accepted\'';
+  const query = <span class="cstat-no" title="statement not covered" >'SELECT invitation_id, admin_id, group_lst.group_id, '</span>
+  + 'group_lst.group_name, to_user_id, from_user_id, user_lst.user_name '
+  + 'FROM invitations '
+  + 'LEFT JOIN group_lst on invitations.group_id = group_lst.group_id '
+  + 'LEFT JOIN user_lst on user_lst.user_id = invitations.to_user_id '
+  + 'LEFT JOIN admin_lst on invitations.group_id = admin_lst.group_id '
+  + 'WHERE admin_id = ? AND invitation_status = "accepted"';
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const [invitations] = <span class="cstat-no" title="statement not covered" >await db.execute(query, [adminId]);</span>
 <span class="cstat-no" title="statement not covered" >    return invitations;</span>
@@ -439,9 +425,7 @@ const addInvitation = async (db, invitationObject) =&gt; {
 };
 &nbsp;
 const deletePendingInvites = async (db, userId) =&gt; {
-  const query = "DELETE FROM invitations \
-  WHERE invitation_status = 'pending' \
-  AND (to_user_id = ? OR from_user_id = ?)";
+  const query = 'DELETE FROM invitations WHERE (invitation_status="pending") AND (to_user_id=? OR from_user_id=?)';
   const params = [userId, userId];
 &nbsp;
   try {
@@ -456,16 +440,14 @@ const deletePendingInvites = async (db, userId) =&gt; {
 &nbsp;
 const getOpenInvitesByGroupId = async (db, groupId) =&gt; {
   try {
-    const query = "SELECT * FROM invitations \
-    WHERE invitation_status IN ('pending', 'accepted') \
-    AND group_id = ?";
+    const query = 'SELECT * FROM invitations WHERE (invitation_status="pending" OR invitation_status="accepted") AND (group_id = ?)';
     const [invites] = await db.execute(query, [groupId]);
-    console.log('in getopeninvitesbygroupid in invitetabledb with invites of: ', invites);
     return invites;
   } catch (err) {
     // eslint-disable-next-line no-console
 <span class="cstat-no" title="statement not covered" >    console.log(`error: ${err.message}`);</span>
   }
+<span class="cstat-no" title="statement not covered" >  return null;</span>
 };
 &nbsp;
 module.exports = {
@@ -484,7 +466,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Dec 21 2021 05:11:01 GMT-0500 (Eastern Standard Time)
+                at Tue Dec 21 2021 10:16:35 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

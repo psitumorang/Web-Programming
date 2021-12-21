@@ -187,6 +187,13 @@ exports[`Test Home Page UI Home page renders correctly 1`] = `
       >
         Messages
       </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
+      </button>
     </div>
   </div>
 </div>

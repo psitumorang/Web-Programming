@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.94% </span>
+                <span class="strong">80.55% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>60/76</span>
+                <span class='fraction'>58/72</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.94% </span>
+                <span class="strong">80.55% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>60/76</span>
+                <span class='fraction'>58/72</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -218,12 +218,7 @@
 <a name='L153'></a><a href='#L153'>153</a>
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a>
-<a name='L159'></a><a href='#L159'>159</a>
-<a name='L160'></a><a href='#L160'>160</a>
-<a name='L161'></a><a href='#L161'>161</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L156'></a><a href='#L156'>156</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -250,8 +245,6 @@
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
@@ -263,7 +256,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -285,14 +277,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -411,8 +401,6 @@ const getNextOrderNumber = async (db, fromId, toId) =&gt; {
 &nbsp;
   try {
     const [row] = await db.execute(query, params);
-&nbsp;
-    console.log(row);
     // eslint-disable-next-line no-console
     console.log(`Got max id: ${row[0]['MAX(orderNumber)']}`);
     // TODO: handle the case where this is the first message
@@ -422,7 +410,6 @@ const getNextOrderNumber = async (db, fromId, toId) =&gt; {
     return row[0]['MAX(orderNumber)'] + 1;
   } catch (err) {
     // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >    console.log('error: msg already exists');</span>
 <span class="cstat-no" title="statement not covered" >    console.log(err);</span>
   }
 <span class="cstat-no" title="statement not covered" >  return null;</span>
@@ -444,7 +431,6 @@ const addTextMessage = async (db, txt, fromId, toId, senderName, convoId) =&gt; 
     return row;
   } catch (err) {
     // eslint-disable-next-line no-console
-<span class="cstat-no" title="statement not covered" >    console.log('error: msg already exists');</span>
 <span class="cstat-no" title="statement not covered" >    console.log(err);</span>
   }
 <span class="cstat-no" title="statement not covered" >  return null;</span>
@@ -452,7 +438,6 @@ const addTextMessage = async (db, txt, fromId, toId, senderName, convoId) =&gt; 
 &nbsp;
 const addImageMessage = async (db, img, fromId, toId, senderName, convoId) =&gt; {
   // need to get the order number
-  console.log('uploading image message');
   const orderNumber = await getNextOrderNumber(db, fromId, toId);
   const query = 'INSERT INTO msg_lst (img, fromId, toId, orderNumber, senderName, convoId, isDelivered) VALUES(?, ?, ?, ?, ?, ?, NOW())';
   const params = [img, fromId, toId, orderNumber, senderName, convoId];
@@ -513,13 +498,13 @@ const addVideoMessage = async (db, video, fromId, toId, senderName, convoId) =&g
 // get admins for group
 const getConversation = async (db, convoId, id) =&gt; {
   try {
-    //TODO this has to change to where the messages with the 
-    //from id equal this id that we are getting for (like the user we are getting for)
+    // TODO this has to change to where the messages with the
+    // from id equal this id that we are getting for (like the user we are getting for)
     const readQuery = 'UPDATE msg_lst SET isRead=NOW() WHERE convoId=? AND toId=?';
     const readParams = [convoId, id];
-    
+&nbsp;
     await db.execute(readQuery, readParams);
-    
+&nbsp;
     const query = 'SELECT * FROM msg_lst WHERE convoId=? ORDER BY orderNumber ASC';
     const params = [convoId];
 &nbsp;
@@ -550,7 +535,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Dec 21 2021 05:11:01 GMT-0500 (Eastern Standard Time)
+                at Tue Dec 21 2021 10:16:35 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

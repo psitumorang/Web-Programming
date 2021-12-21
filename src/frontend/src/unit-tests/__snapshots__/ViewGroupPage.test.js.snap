@@ -83,9 +83,10 @@ exports[`Test View Group Page UI View group page admin renders correctly 1`] = `
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -303,6 +304,13 @@ exports[`Test View Group Page UI View group page admin renders correctly 1`] = `
       >
         Messages
       </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
+      </button>
     </div>
   </div>
 </div>
@@ -391,9 +399,10 @@ exports[`Test View Group Page UI View group page error renders correctly 1`] = `
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -611,6 +620,13 @@ exports[`Test View Group Page UI View group page error renders correctly 1`] = `
       >
         Messages
       </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
+      </button>
     </div>
   </div>
 </div>
@@ -699,9 +715,10 @@ exports[`Test View Group Page UI View group page post error renders correctly 1`
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -919,6 +936,13 @@ exports[`Test View Group Page UI View group page post error renders correctly 1`
       >
         Messages
       </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
+      </button>
     </div>
   </div>
 </div>
@@ -1007,9 +1031,10 @@ exports[`Test View Group Page UI View group page renders correctly 1`] = `
       </button>
       <button
         className="photos"
+        onClick={[Function]}
         type="submit"
       >
-        Photos
+        Flagged posts
       </button>
     </div>
     <div
@@ -1223,6 +1248,13 @@ exports[`Test View Group Page UI View group page renders correctly 1`] = `
         type="submit"
       >
         Messages
+      </button>
+      <button
+        className="logout"
+        onClick={[Function]}
+        type="submit"
+      >
+        Log out
       </button>
     </div>
   </div>

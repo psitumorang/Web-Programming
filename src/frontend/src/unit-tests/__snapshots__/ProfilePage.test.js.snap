@@ -56,6 +56,7 @@ exports[`Test Profile Page UI Profile page renders correctly 1`] = `
     </div>
     <div
       className="nav_button"
+      id="deactivateButton"
       onClick={[Function]}
       onKeyDown={[Function]}
       role="link"

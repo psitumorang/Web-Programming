@@ -22,7 +22,7 @@ const connect = async () => {
 
 // gets all invitations for user
 const getPendingInvitations = async (db, id) => {
-  const query = 'SELECT * FROM invitations WHERE to_user_id=? AND invitation_status=\'pending\' ORDER BY invitation_status DESC';
+  const query = 'SELECT * FROM invitations WHERE to_user_id=? AND invitation_status="pending" ORDER BY invitation_status DESC';
 
   try {
     const [rows] = await db.execute(query, [id]);
@@ -55,13 +55,30 @@ const updateInvitationStatus = async (db, invitationId, newStatus) => {
 
 // get accepted invitations for review by admin
 const getInvitationsToReview = async (db, adminId) => {
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+  const query = 'SELECT invitation_id, admin_id, group_lst.group_id, ' +
+  'group_lst.group_name, to_user_id, from_user_id, user_lst.user_name ' +
+  'FROM invitations ' +
+  'LEFT JOIN group_lst on invitations.group_id = group_lst.group_id ' +
+  'LEFT JOIN user_lst on user_lst.user_id = invitations.to_user_id ' +
+  'LEFT JOIN admin_lst on invitations.group_id = admin_lst.group_id ' +
+  'WHERE admin_id = ? AND invitation_status = \'accepted\'';
+=======
+>>>>>>> merging stash and branch
   const query = 'SELECT invitation_id, admin_id, group_lst.group_id, '
   + 'group_lst.group_name, to_user_id, from_user_id, user_lst.user_name '
   + 'FROM invitations '
   + 'LEFT JOIN group_lst on invitations.group_id = group_lst.group_id '
   + 'LEFT JOIN user_lst on user_lst.user_id = invitations.to_user_id '
   + 'LEFT JOIN admin_lst on invitations.group_id = admin_lst.group_id '
+<<<<<<< HEAD
   + 'WHERE admin_id = ? AND invitation_status = \'accepted\'';
+=======
+  + 'WHERE admin_id = ? AND invitation_status = "accepted"';
+>>>>>>> Stashed changes
+>>>>>>> merging stash and branch
   try {
     const [invitations] = await db.execute(query, [adminId]);
     return invitations;
@@ -96,9 +113,7 @@ const addInvitation = async (db, invitationObject) => {
 };
 
 const deletePendingInvites = async (db, userId) => {
-  const query = 'DELETE FROM invitations'
-  + 'WHERE invitation_status = \'pending\''
-  + 'AND (to_user_id = ? OR from_user_id = ?)';
+  const query = 'DELETE FROM invitations WHERE (invitation_status="pending") AND (to_user_id=? OR from_user_id=?)';
   const params = [userId, userId];
 
   try {
@@ -113,9 +128,7 @@ const deletePendingInvites = async (db, userId) => {
 
 const getOpenInvitesByGroupId = async (db, groupId) => {
   try {
-    const query = 'SELECT * FROM invitations'
-    + 'WHERE invitation_status IN (\'pending\', \'accepted\')'
-    + 'AND group_id = ?';
+    const query = 'SELECT * FROM invitations WHERE (invitation_status="pending" OR invitation_status="accepted") AND (group_id = ?)';
     const [invites] = await db.execute(query, [groupId]);
     return invites;
   } catch (err) {
