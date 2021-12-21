@@ -26,8 +26,6 @@ const getNextOrderNumber = async (db, fromId, toId) => {
 
   try {
     const [row] = await db.execute(query, params);
-
-    console.log(row);
     // eslint-disable-next-line no-console
     console.log(`Got max id: ${row[0]['MAX(orderNumber)']}`);
     // TODO: handle the case where this is the first message
@@ -37,7 +35,6 @@ const getNextOrderNumber = async (db, fromId, toId) => {
     return row[0]['MAX(orderNumber)'] + 1;
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.log('error: msg already exists');
     console.log(err);
   }
   return null;
@@ -59,7 +56,6 @@ const addTextMessage = async (db, txt, fromId, toId, senderName, convoId) => {
     return row;
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.log('error: msg already exists');
     console.log(err);
   }
   return null;
@@ -67,7 +63,6 @@ const addTextMessage = async (db, txt, fromId, toId, senderName, convoId) => {
 
 const addImageMessage = async (db, img, fromId, toId, senderName, convoId) => {
   // need to get the order number
-  console.log('uploading image message');
   const orderNumber = await getNextOrderNumber(db, fromId, toId);
   const query = 'INSERT INTO msg_lst (img, fromId, toId, orderNumber, senderName, convoId, isDelivered) VALUES(?, ?, ?, ?, ?, ?, NOW())';
   const params = [img, fromId, toId, orderNumber, senderName, convoId];
@@ -128,13 +123,13 @@ const addVideoMessage = async (db, video, fromId, toId, senderName, convoId) => 
 // get admins for group
 const getConversation = async (db, convoId, id) => {
   try {
-    //TODO this has to change to where the messages with the 
-    //from id equal this id that we are getting for (like the user we are getting for)
+    // TODO this has to change to where the messages with the
+    // from id equal this id that we are getting for (like the user we are getting for)
     const readQuery = 'UPDATE msg_lst SET isRead=NOW() WHERE convoId=? AND toId=?';
     const readParams = [convoId, id];
-    
+
     await db.execute(readQuery, readParams);
-    
+
     const query = 'SELECT * FROM msg_lst WHERE convoId=? ORDER BY orderNumber ASC';
     const params = [convoId];
 

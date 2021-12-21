@@ -22,7 +22,6 @@ const connect = async () => {
 
 // add a notification
 const addNotification = async (db, id, notification) => {
-  console.log(notification.isRead, id, notification.msg);
   const query = 'INSERT INTO notification_lst (user_id, is_read, msg, date) VALUES(?, ?, ?, NOW())';
 
   const params = [id, notification.isRead, notification.msg];
