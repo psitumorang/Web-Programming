@@ -10,7 +10,6 @@ webapp.use(cors());
 const userLib = require('./userTableDatabase');
 const profileLib = require('./profileTableDatabase');
 const postLib = require('./postTableDatabase');
-const postCommentLib = require('./postCommentsTableDatabase');
 const groupLib = require('./groupTableDatabase');
 const notifLib = require('./notificationTableDatabase');
 const adminLib = require('./adminTableDatabase');
@@ -32,7 +31,6 @@ webapp.use(express.urlencoded({
 let userDb;
 let profileDb;
 let postDb;
-let postCommentDb;
 let groupDb;
 let notifDb;
 let adminDb;
@@ -46,7 +44,6 @@ webapp.listen(port, async () => {
   userDb = await userLib.connect();
   profileDb = await profileLib.connect();
   postDb = await postLib.connect();
-  postCommentDb = await postCommentLib.connect();
   groupDb = await groupLib.connect();
   notifDb = await notifLib.connect();
   adminDb = await adminLib.connect();
@@ -88,6 +85,7 @@ webapp.post('/registration', async (req, res) => {
       });
     }
   } catch (err) {
+    console.log(err);
     res.status(400).json({ err: 'error in registration' });
   }
 });
@@ -151,32 +149,6 @@ webapp.get('/post/:id', async (req, res) => {
   }
 });
 
-webapp.get('/comment/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    // assign to res.status
-    const commentList = await postCommentLib.getPostComments(postCommentDb, id);
-    res.status(200).json(commentList);
-  } catch (err) {
-    res.status(404).json({ err: err.message });
-  }
-});
-
-webapp.post('/comment', async (req, res) => {
-  try {
-    const commentObj = {
-      post_id: req.body.post_id,
-      user_id: req.body.user_id,
-      comment_txt: req.body.comment_txt,
-    };
-    const commentInsert = await postCommentLib.makeNewComment(postCommentDb, commentObj);
-    res.status(200).json(commentInsert);
-  } catch (err) {
-    res.status(404).json({ err: err.message });
-  }
-});
-
 webapp.get('/profile/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -223,20 +195,17 @@ webapp.post('/groups', async (req, res) => {
     const resultsGroup = await groupLib.addGroup(groupDb, newGroup);
     if (resultsGroup === null) {
       res.status(404).json({ err: 'groupname already taken' });
-    } else {
-      res.status(201).json({
-        group: newGroup,
-      });
+      return;
     }
 
-    const userId = await userLib.getUsersWithName(userDb, newGroup.group_creator);
+    const userId = await userLib.getUserById(userDb, newGroup.group_creator);
     await groupMemberLib.addGroupMember(groupMemberDb, newGroup.group_id, newGroup.group_creator);
     await adminLib.addAdminForGroup(
       adminDb,
       newGroup.group_id,
       userId[0].user_id,
       1,
-      newGroup.group_creator,
+      userId[0].user_name,
     );
     await notifLib.addNotification(
       notifDb,
@@ -245,8 +214,13 @@ webapp.post('/groups', async (req, res) => {
     );
 
     const resultsTopics = await groupLib.addTopics(groupDb, newTopics);
+    
+    res.status(201).json({
+        group: newGroup,
+      });
     return resultsTopics;
   } catch (err) {
+    console.log(err);
     res.status(404).json({ err: err.message });
   }
   return null;
@@ -609,10 +583,11 @@ webapp.post('/admins', async (req, res) => {
     const userId = await userLib.getUsersWithName(userDb, req.body.admin.adminUser);
 
     const memberIds = await groupMemberLib.getMemberIds(groupMemberDb, req.body.admin.groupId);
-
+    console.log(userId, memberIds);
     let seen = false;
-    for (let i = 0; i < memberIds; i += 1) {
-      if (memberIds[i].member_id === userId) {
+    for (let i = 0; i < memberIds.length; i += 1) {
+      console.log(typeof memberIds[i].member_id, typeof userId[0].user_id);
+      if (memberIds[i].member_id === userId[0].user_id) {
         seen = true;
         break;
       }
@@ -636,6 +611,7 @@ webapp.post('/admins', async (req, res) => {
     console.log('got admin: ', admin);
     res.status(201).json(admin);
   } catch (err) {
+    console.log(err);
     res.status(400).json({ err: `error is ${err.message}` });
   }
 });
@@ -901,13 +877,14 @@ webapp.put('/flag-post/:id', async (req, res) => {
     }
 
     if (result === null) {
-      res.status(404).json({ err: 'err.message' });
+      res.status(404).json({ err: 'oh no! something went wrong' });
     } else {
       res.status(201).json({
         result,
       });
     }
   } catch (err) {
+    console.log(err);
     res.status(404).json({ err: err.message });
   }
   return null;
@@ -932,9 +909,17 @@ webapp.delete('/flag-post/:id', async (req, res) => {
       );
       await notifLib.addNotification(
         notifDb,
-        id[0].posting_user,
+        id[0][0].posting_user,
         { isRead: false, msg: 'Oh no, a post you made was flagged by a user and deleted by an admin. Maybe watch what you are posting...' },
       );
+
+      if (result === null) {
+        res.status(404).json({ err: 'oh no! something went wrong' });
+      } else {
+        res.status(200).json({
+         result,
+        });
+      }
     } else {
       // kept the post
       // notify the flagger
@@ -943,18 +928,9 @@ webapp.delete('/flag-post/:id', async (req, res) => {
         flaggerId,
         { isRead: false, msg: 'Sorry, a post YOU flagged was NOT deleted by the admin. Guess it was not thaaaaat bad...' },
       );
-    }
-
-    if (result === null) {
-      res.status(404).json({ err: 'err.message' });
-    } else {
-      res.status(200).json({
-        result,
-      });
+      res.status(200).json({});
     }
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
   }
   return null;
 });

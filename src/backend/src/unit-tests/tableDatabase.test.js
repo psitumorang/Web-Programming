@@ -17,7 +17,6 @@ const groupMemberLib = require('../groupMemberTableDatabase');
 const inviteLib = require('../invitationTableDatabase');
 const msgLib = require('../messageTableDatabase');
 const notifLib = require('../notificationTableDatabase');
-const commentsLib = require('../postCommentsTableDatabase');
 const postLib = require('../postTableDatabase');
 const profileLib = require('../profileTableDatabase');
 const replyLib = require('../replyTableDatabase');
@@ -38,10 +37,6 @@ const clearDbInvite = async (id) => {
 
 const clearDbMsg = async (id) => {
 	await knex('msg_lst').where('convoId', id).del();
-};
-
-const clearDbComments = async (id) => {
-	await knex('post_comments').where('post_id', id).del();
 };
 
 const clearDbNotif = async (id) => {
@@ -475,39 +470,6 @@ describe('admin database operations tests', () => {
 		expect(notif[0].is_read).toBe(0);
 		expect(notif[0].msg).toBe('hi');
 		await clearDbNotif(-1);
-	});
-
-	test('make new comment', async () => {
-		await knex('user_lst').insert({user_id: -30, user_name: 'me', user_password: 'password'});
-		await knex('group_lst').insert({group_id: -30, group_name: 'group', group_creator: -30, group_description: 'description', is_public: 1});
-		await knex('post_lst').insert({post_id: -30, post_group: -30, posting_user: -30, caption: 'waddup'});
-		const comment = await commentsLib.makeNewComment(db, {post_id: -30, user_id: -30, comment_txt: 'hi'});
-		const ret = await knex.select('*').from('post_comments').where('post_id', -30);
-
-		expect(ret[0].post_id).toBe(-30);
-		expect(ret[0].user_id).toBe(-30);
-		expect(ret[0].comment_txt).toBe('hi');
-		await clearDbComments(-30);
-		await knex('post_lst').where('post_id', -30).del();
-		await knex('group_lst').where('group_id', -30).del();
-		await knex('user_lst').where('user_id', -30).del();
-	});
-
-	test('get post comments', async () => {
-		await knex('user_lst').insert({user_id: -31, user_name: 'me', user_password: 'password'});
-		await knex('group_lst').insert({group_id: -31, group_name: 'group', group_creator: -31, group_description: 'description', is_public: 1});
-		await knex('post_lst').insert({post_id: -31, post_group: -31, posting_user: -31, caption: 'waddup'});
-		await commentsLib.makeNewComment(db, {post_id: -31, user_id: -31, comment_txt: 'hi'});
-		const comment = await commentsLib.getPostComments(db, -31);
-
-		expect(comment[0].post_id).toBe(-31);
-		expect(comment[0].user_id).toBe(-31);
-		expect(comment[0].comment_txt).toBe('hi');
-
-		await clearDbComments(-31);
-		await knex('post_lst').where('post_id', -31).del();
-		await knex('group_lst').where('group_id', -31).del();
-		await knex('user_lst').where('user_id', -31).del();
 	});
 
 	test('add group no error', async () => {
