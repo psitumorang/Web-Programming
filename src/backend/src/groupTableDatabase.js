@@ -98,7 +98,7 @@ const getTopics = async (db) => {
 
     const topics = [];
     for (let i = 0; i < rows.length; i += 1) {
-      topics.push(rows[i]['group_topic']);
+      topics.push(rows[i].group_topic);
     }
 
     return topics;
@@ -119,7 +119,7 @@ const getTopicsByGroupId = async (db, id) => {
 
     const topics = [];
     for (let i = 0; i < rows.length; i += 1) {
-      topics.push(rows[i]['group_topic']);
+      topics.push(rows[i].group_topic);
     }
 
     return topics;
@@ -130,21 +130,33 @@ const getTopicsByGroupId = async (db, id) => {
   return null;
 };
 
+
+// get group by its id
+const getGroupById = async (db, id) => {
+  try {
+    const query = 'SELECT * FROM group_lst WHERE group_id=?';
+    const [rows] = await db.execute(query, [id]);
+    // eslint-disable-next-line no-console
+    // console.log(`Group: ${JSON.stringify(rows)}`);
+    return rows[0];
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${err.message}`);
+  }
+  return null;
+};
+
 // get all groups with same groupname
 const getGroupsWithTopic = async (db, topic) => {
-  console.log('get groups with topic');
   try {
     const query = 'SELECT * FROM group_topics WHERE group_topic=?';
     const [rows] = await db.execute(query, [topic]);
-    // eslint-disable-next-line no-console
-    console.log(`groups: ${JSON.stringify(rows[0])}`);
 
-    let groups = [];
+    const groups = [];
     for (let i = 0; i < rows.length; i += 1) {
       const g = await getGroupById(db, rows[i].group_id);
       const topics = await getTopicsByGroupId(db, rows[i].group_id);
 
-      console.log(g);
       if (g.is_public === 1) {
         g.topics = topics;
         groups.push(g);
@@ -175,14 +187,12 @@ const getPublicGroups = async (db, sort) => {
       query = 'SELECT * FROM group_lst WHERE is_public=1';
     }
     const [rows] = await db.execute(query);
-    // eslint-disable-next-line no-console
-    console.log(`Group: ${JSON.stringify(rows)}`);
 
-    const groups = [];
+    // MR comment: linting error said groups was assigned but not used, so commented out
+    // const groups = [];
     for (let i = 0; i < rows.length; i += 1) {
       const g = await getTopicsByGroupId(db, rows[i].group_id);
 
-      console.log(g);
       rows[i].topics = g;
     }
 
@@ -209,20 +219,6 @@ const getGroups = async (db) => {
   return null;
 };
 
-// get group by its id
-const getGroupById = async (db, id) => {
-  try {
-    const query = 'SELECT * FROM group_lst WHERE group_id=?';
-    const [rows] = await db.execute(query, [id]);
-    // eslint-disable-next-line no-console
-    // console.log(`Group: ${JSON.stringify(rows)}`);
-    return rows[0];
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(`error: ${err.message}`);
-  }
-  return null;
-};
 
 // get all groups with same groupname
 const getGroupsWithName = async (db, name) => {
@@ -285,14 +281,14 @@ const getNextId = async (db) => {
 
 const getAnalyticsFacts = async (db) => {
   const analyticsFactsData = [];
-  
+
   // total groups
-  const totalGroupsQuery = "SELECT COUNT(*) as total_groups FROM group_lst";
+  const totalGroupsQuery = 'SELECT COUNT(*) as total_groups FROM group_lst';
   const [[totalGroupsResult]] = await db.execute(totalGroupsQuery);
   analyticsFactsData.push(['Total groups', totalGroupsResult.total_groups]);
 
   // total members
-  const totalMembersQuery = "SELECT COUNT(*) as total_memberships FROM group_members";
+  const totalMembersQuery = 'SELECT COUNT(*) as total_memberships FROM group_members';
   const [[totalMembersResult]] = await db.execute(totalMembersQuery);
   analyticsFactsData.push(['Total memberships', totalMembersResult.total_memberships]);
 
@@ -301,12 +297,12 @@ const getAnalyticsFacts = async (db) => {
   analyticsFactsData.push(['Average members per group', averageMembers]);
 
   // outstanding invitations
-  const totalInvitesQuery = "SELECT COUNT(*) as total_invites FROM invitations";
+  const totalInvitesQuery = 'SELECT COUNT(*) as total_invites FROM invitations';
   const [[totalInvitesResult]] = await db.execute(totalInvitesQuery);
   analyticsFactsData.push(['Total invitations', totalInvitesResult.total_invites]);
 
   // number of admins
-  const totalAdminsQuery = "SELECT COUNT(*) as total_admins FROM admin_lst";
+  const totalAdminsQuery = 'SELECT COUNT(*) as total_admins FROM admin_lst';
   const [[totalAdminsResult]] = await db.execute(totalAdminsQuery);
   analyticsFactsData.push(['Total admin roles', totalAdminsResult.total_admins]);
 
