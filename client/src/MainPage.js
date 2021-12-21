@@ -1,0 +1,90 @@
+import React, { useState } from 'react';
+import LoginPage from './login-page/LoginPage';
+import Home from './home-page/Home';
+import ProfilePage from './profile-page/ProfilePage';
+import Groups from './groups-page/Groups';
+import NotificationPage from './notifications-page/NotificationPage';
+import UpdatePassword from './profile-page/UpdatePassword';
+import ViewGroup from './view-group-page/ViewGroup';
+import InvitationPage from './invitations-page/InvitationPage';
+import DeactivateAccountPage from './profile-page/deactivate-account-page/DeactivateAccountPage';
+import Messages from './messages-page/Messages';
+import Conversation from './conversation-page/Conversation';
+import AnalyticsPage from './analytics-page/AnalyticsPage';
+import FlaggedPosts from './flagged-posts/FlaggedPosts';
+
+function MainPage() {
+  const [state, updateState] = useState(
+    {
+      link: '/',
+      userId: -1,
+      username: '',
+      viewingGroup: -1,
+      viewingConvo: { id: -1, otherUserId: -1 },
+    },
+  );
+
+  const changeState = (input) => {
+    if (typeof input.link !== 'undefined') window.history.pushState(null, '', input.link);
+    updateState((oldState) => ({
+      link: ((typeof input.link !== 'undefined') ? input.link : oldState.link),
+      userId: ((typeof input.userId !== 'undefined') ? input.userId : oldState.userId),
+      username: ((typeof input.username !== 'undefined') ? input.username : oldState.username),
+      viewingGroup: ((typeof input.viewingGroup !== 'undefined') ? input.viewingGroup : oldState.viewingGroup),
+      viewingConvo: ((typeof input.viewingConvo !== 'undefined') ? input.viewingConvo : oldState.viewingConvo),
+    }));
+  };
+
+  const conditionallyRender = (url) => {
+    if (url.includes('/profile')) {
+      return (<ProfilePage changeState={changeState} state={state} />);
+    }
+    if (url.includes('/home') || url.includes('/main')) {
+      return (<Home changeState={changeState} state={state} />);
+    }
+    if (url.includes('/groups')) {
+      return (<Groups changeState={changeState} state={state} />);
+    }
+    if (url.includes('/notifications')) {
+      return (<NotificationPage changeState={changeState} state={state} />);
+    }
+    if (url.includes('/messages') || url.includes('/messages/error') || url.includes('/messages/group') || url.includes('/messages/user') || url.includes('/messages/img') || url.includes('/messages/av')) {
+      return (<Messages changeState={changeState} state={state} />);
+    }
+    if (url.includes('/conversation') || url.includes('/conversation/img') || url.includes('/conversation/av')) {
+      return (<Conversation changeState={changeState} state={state} />);
+    }
+    if (url.includes('/changepassword')) {
+      return (<UpdatePassword changeState={changeState} state={state} userId={state.userId} />);
+    }
+    if (url.includes('/viewgroup') || url.includes('/viewgroup/error') || url.includes('/viewgroup/post/error') || url.includes('/viewgroup/admin')) {
+      return (<ViewGroup changeState={changeState} state={state} />);
+    }
+    if (url.includes('/invitations')) {
+      return (<InvitationPage changeState={changeState} state={state} />);
+    }
+    if (url.includes('/deactivate-account')) {
+      return (<DeactivateAccountPage changeState={changeState} state={state} />);
+    }
+    if (url.includes('/flaggedposts')) {
+      return (<FlaggedPosts changeState={changeState} state={state} />);
+    }
+    if (url.includes('/analytics')) {
+      return (<AnalyticsPage changeState={changeState} state={state} />);
+    }
+    const last = url.split('/').pop();
+    const first = url.split('/')[3];
+    if (url.includes('/loginchangepassword') || url.includes('/registration') || last === '' || url.includes('/registration/error') || first === 'error' || first === 'locked') {
+      return (<LoginPage changeState={changeState} state={state} />);
+    }
+    // TODO: change this to something meaningful
+    // will become a page that's like Oh this is not available!
+    return state;
+  };
+
+  return (
+    conditionallyRender(window.location.href)
+  );
+}
+
+export default MainPage;
